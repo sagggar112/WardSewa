@@ -18,6 +18,7 @@ class DatabaseSeeder extends Seeder
             WardSeeder::class,
             ServiceTypeSeeder::class,
             StaffSeeder::class,
+            CitizenSeeder::class,
             BillerSeeder::class,
         ]);
     }

@@ -81,9 +81,14 @@
                             {{ __('My Dashboard') }} &rarr;
                         </a>
                     @else
-                        <a href="{{ route('citizen.login') }}" class="inline-flex items-center px-4 py-2 bg-nepal-red hover:bg-nepal-crimson text-white text-sm font-semibold rounded-lg shadow-sm transition">
-                            {{ __('Citizen Login / Register') }}
-                        </a>
+                        <div class="flex items-center space-x-2">
+                            <a href="{{ route('citizen.login') }}" class="text-xs text-white hover:text-nepal-gold font-bold px-2 py-1.5 transition">
+                                {{ __('Citizen Login') }}
+                            </a>
+                            <a href="{{ route('citizen.register') }}" class="inline-flex items-center px-3.5 py-1.5 bg-nepal-crimson hover:bg-nepal-red text-white text-xs font-bold rounded-lg shadow-sm transition">
+                                {{ __('Register') }} &rarr;
+                            </a>
+                        </div>
                     @endauth
                 </div>
             </div>

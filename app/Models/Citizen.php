@@ -14,6 +14,7 @@ class Citizen extends Authenticatable
 
     protected $fillable = [
         'phone',
+        'password',
         'full_name',
         'citizenship_no',
         'national_id',
@@ -28,6 +29,7 @@ class Citizen extends Authenticatable
     ];
 
     protected $hidden = [
+        'password',
         'otp_code',
         'remember_token',
     ];
@@ -35,6 +37,7 @@ class Citizen extends Authenticatable
     protected function casts(): array
     {
         return [
+            'password' => 'hashed',
             'dob' => 'date',
             'otp_expires_at' => 'datetime',
             'is_verified' => 'boolean',
