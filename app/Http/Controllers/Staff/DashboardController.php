@@ -62,9 +62,15 @@ class DashboardController extends Controller
         $todayAppointments = (clone $appointmentQuery)
             ->with(['citizen', 'serviceType'])
             ->today()
-            ->take(5)
+            ->take(10)
             ->get();
 
-        return view('staff.dashboard', compact('staff', 'stats', 'recentApplications', 'todayAppointments'));
+        $teamStats = [
+            'total' => $staff->ward_id ? \App\Models\Staff::where('ward_id', $staff->ward_id)->where('is_active', true)->count() : 0,
+            'secretaries' => $staff->ward_id ? \App\Models\Staff::where('ward_id', $staff->ward_id)->where('role', 'secretary')->where('is_active', true)->count() : 0,
+            'clerks' => $staff->ward_id ? \App\Models\Staff::where('ward_id', $staff->ward_id)->where('role', 'clerk')->where('is_active', true)->count() : 0,
+        ];
+
+        return view('staff.dashboard', compact('staff', 'stats', 'recentApplications', 'todayAppointments', 'teamStats'));
     }
 }

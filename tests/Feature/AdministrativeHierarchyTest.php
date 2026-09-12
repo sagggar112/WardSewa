@@ -325,4 +325,159 @@ class AdministrativeHierarchyTest extends TestCase
 
         $duplicateResponse->assertSessionHasErrors(['ward_number']);
     }
+
+    public function test_ward_chair_can_create_and_edit_secretary_and_clerk(): void
+    {
+        $wardChair = Staff::where('email', 'chair@ward32.gov.np')->first();
+        $this->assertNotNull($wardChair);
+        $ward = $wardChair->ward;
+
+        // 1. Visit Ward Team Page
+        $this->actingAs($wardChair, 'staff')
+            ->get(route('staff.team.index'))
+            ->assertStatus(200)
+            ->assertSee('वडा कर्मचारी तथा कार्यविभाजन');
+
+        // 2. Ward Chair adds a new Secretary
+        $secResponse = $this->actingAs($wardChair, 'staff')
+            ->post(route('staff.team.store'), [
+                'name' => 'Bishnu Kumar Adhikari',
+                'email' => 'sec.test32@wardsewa.gov.np',
+                'phone' => '9841234567',
+                'role' => 'secretary',
+                'designation' => 'वडा सचिव (Nayab Subba)',
+                'password' => 'password123',
+            ]);
+
+        $secResponse->assertRedirect(route('staff.team.index'));
+        $this->assertDatabaseHas('staff', [
+            'email' => 'sec.test32@wardsewa.gov.np',
+            'role' => 'secretary',
+            'ward_id' => $ward->id,
+            'palika_id' => $ward->palika_id,
+        ]);
+
+        $secretary = Staff::where('email', 'sec.test32@wardsewa.gov.np')->first();
+
+        // 3. Ward Chair adds a Front Desk Clerk
+        $clerkResponse = $this->actingAs($wardChair, 'staff')
+            ->post(route('staff.team.store'), [
+                'name' => 'Gita Kumari Shrestha',
+                'email' => 'clerk.test32@wardsewa.gov.np',
+                'phone' => '9849876543',
+                'role' => 'clerk',
+                'designation' => 'फ्रन्ट डेस्क सहायक (Kharidar)',
+                'password' => 'password123',
+            ]);
+
+        $clerkResponse->assertRedirect(route('staff.team.index'));
+        $this->assertDatabaseHas('staff', [
+            'email' => 'clerk.test32@wardsewa.gov.np',
+            'role' => 'clerk',
+            'ward_id' => $ward->id,
+        ]);
+
+        // 4. Ward Chair edits the Secretary's details
+        $updateResponse = $this->actingAs($wardChair, 'staff')
+            ->put(route('staff.team.update', $secretary->id), [
+                'name' => 'Bishnu Kumar Adhikari (Promoted)',
+                'phone' => '9841999999',
+                'designation' => 'वरिष्ठ वडा सचिव',
+                'is_active' => 1,
+            ]);
+
+        $updateResponse->assertRedirect(route('staff.team.index'));
+        $this->assertDatabaseHas('staff', [
+            'id' => $secretary->id,
+            'name' => 'Bishnu Kumar Adhikari (Promoted)',
+            'phone' => '9841999999',
+            'designation' => 'वरिष्ठ वडा सचिव',
+        ]);
+
+        // Verify Audit Log recorded
+        $this->assertDatabaseHas('audit_logs', [
+            'action' => 'create_ward_staff',
+        ]);
+        $this->assertDatabaseHas('audit_logs', [
+            'action' => 'update_ward_staff',
+        ]);
+    }
+
+    public function test_municipal_admin_can_manage_ward_staff_in_own_palika(): void
+    {
+        $kmcAdmin = Staff::where('email', 'admin.kmc@wardsewa.gov.np')->first();
+        $this->assertNotNull($kmcAdmin);
+        $ward32 = Ward::where('palika_id', $kmcAdmin->palika_id)->where('ward_number', 32)->first();
+
+        // 1. Municipal Admin views Ward 32 Staff Directory
+        $this->actingAs($kmcAdmin, 'staff')
+            ->get(route('staff.localgovt.wards.staff', $ward32->id))
+            ->assertStatus(200)
+            ->assertSee('वडा कर्मचारी तथा पद विवरण तालिका');
+
+        // 2. Municipal Admin creates a staff member for Ward 32
+        $addResponse = $this->actingAs($kmcAdmin, 'staff')
+            ->post(route('staff.localgovt.wards.staff.store', $ward32->id), [
+                'name' => 'Municipal Assigned Officer',
+                'email' => 'officer.w32@wardsewa.gov.np',
+                'phone' => '9851122334',
+                'role' => 'secretary',
+                'designation' => 'कार्यवाहक सचिव',
+            ]);
+
+        $addResponse->assertRedirect(route('staff.localgovt.wards.staff', $ward32->id));
+        $this->assertDatabaseHas('staff', [
+            'email' => 'officer.w32@wardsewa.gov.np',
+            'ward_id' => $ward32->id,
+            'role' => 'secretary',
+        ]);
+
+        $newOfficer = Staff::where('email', 'officer.w32@wardsewa.gov.np')->first();
+
+        // 3. Municipal Admin updates staff details
+        $editResponse = $this->actingAs($kmcAdmin, 'staff')
+            ->put(route('staff.localgovt.wards.staff.update', ['id' => $ward32->id, 'staffId' => $newOfficer->id]), [
+                'name' => 'Municipal Assigned Officer (Updated)',
+                'phone' => '9851122339',
+                'designation' => 'शाखा अधिकृत',
+                'role' => 'secretary',
+                'is_active' => 1,
+            ]);
+
+        $editResponse->assertRedirect(route('staff.localgovt.wards.staff', $ward32->id));
+        $this->assertDatabaseHas('staff', [
+            'id' => $newOfficer->id,
+            'name' => 'Municipal Assigned Officer (Updated)',
+            'phone' => '9851122339',
+        ]);
+    }
+
+    public function test_role_tailored_responsibility_dashboards(): void
+    {
+        $wardChair = Staff::where('email', 'chair@ward32.gov.np')->first();
+        $secretary = Staff::where('email', 'secretary@ward32.gov.np')->first();
+        $clerk = Staff::where('email', 'clerk@ward32.gov.np')->first();
+
+        // 1. Ward Chairperson Dashboard shows Executive suite
+        $this->actingAs($wardChair, 'staff')
+            ->get(route('staff.dashboard'))
+            ->assertStatus(200)
+            ->assertSee('वडा अध्यक्ष कार्यजिम्मेवारी')
+            ->assertSee('अन्तिम प्रमाणीकरण, सिफारिस निर्णय तथा वडा सुपरिवेक्षण');
+
+        // 2. Ward Secretary Dashboard shows Scrutiny & Review suite
+        $this->actingAs($secretary, 'staff')
+            ->get(route('staff.dashboard'))
+            ->assertStatus(200)
+            ->assertSee('वडा सचिव कार्यजिम्मेवारी')
+            ->assertSee('कागजात रुजु, सिफारिस तयारी तथा प्राविधिक जाँच शाखा');
+
+        // 3. Front Desk Clerk Dashboard shows Intake & Counter Support suite
+        $this->actingAs($clerk, 'staff')
+            ->get(route('staff.dashboard'))
+            ->assertStatus(200)
+            ->assertSee('सहायक कर्मचारी कार्यजिम्मेवारी')
+            ->assertSee('नागरिक सोधपुछ, टोकन व्यवस्थापन तथा दर्ता सहायता');
+    }
 }
+

@@ -8,6 +8,7 @@ use App\Http\Controllers\Staff\LocalGovtAdminController;
 use App\Http\Controllers\Staff\NoticeController;
 use App\Http\Controllers\Staff\ReviewController;
 use App\Http\Controllers\Staff\SuperAdminController;
+use App\Http\Controllers\Staff\WardTeamController;
 use Illuminate\Support\Facades\Route;
 
 /*
@@ -61,12 +62,23 @@ Route::middleware('staff.auth')->group(function () {
         Route::get('/wards', [LocalGovtAdminController::class, 'wards'])->name('wards');
         Route::post('/wards', [LocalGovtAdminController::class, 'storeWard'])->name('wards.store');
         Route::put('/wards/{id}', [LocalGovtAdminController::class, 'updateWard'])->name('wards.update');
+        Route::get('/wards/{id}/staff', [LocalGovtAdminController::class, 'wardStaff'])->name('wards.staff');
+        Route::post('/wards/{id}/staff', [LocalGovtAdminController::class, 'storeWardStaff'])->name('wards.staff.store');
+        Route::put('/wards/{id}/staff/{staffId}', [LocalGovtAdminController::class, 'updateWardStaff'])->name('wards.staff.update');
         Route::get('/applications', [LocalGovtAdminController::class, 'applications'])->name('applications');
     });
 
     // =========================================================================
     // TIER 4: WARD ADMIN & OPERATIONAL WORKFLOW
     // =========================================================================
+    // Ward Team Management (Secretary & Clerk)
+    Route::middleware('staff.role:ward_chair,ward_admin,super_admin')->prefix('team')->name('team.')->group(function () {
+        Route::get('/', [WardTeamController::class, 'index'])->name('index');
+        Route::post('/', [WardTeamController::class, 'store'])->name('store');
+        Route::put('/{id}', [WardTeamController::class, 'update'])->name('update');
+        Route::delete('/{id}', [WardTeamController::class, 'destroy'])->name('destroy');
+    });
+
     // Applications Review Workflow
     Route::get('/applications', [ReviewController::class, 'index'])->name('applications.index');
     Route::get('/applications/{id}', [ReviewController::class, 'show'])->name('applications.show');

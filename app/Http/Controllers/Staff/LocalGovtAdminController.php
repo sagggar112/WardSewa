@@ -219,4 +219,111 @@ class LocalGovtAdminController extends Controller
 
         return view('staff.localgovt.applications', compact('staff', 'palika', 'applications', 'wards'));
     }
+
+    public function wardStaff($id)
+    {
+        $staff = auth('staff')->user();
+        $palika = $staff->palika ?? Palika::where('code', 'KMC')->first();
+
+        $ward = Ward::where('palika_id', $palika->id)->with('palika')->findOrFail($id);
+
+        $teamMembers = Staff::where('ward_id', $ward->id)
+            ->orderByRaw("CASE 
+                WHEN role = 'ward_chair' THEN 1 
+                WHEN role = 'ward_admin' THEN 2 
+                WHEN role = 'secretary' THEN 3 
+                WHEN role = 'clerk' THEN 4 
+                ELSE 5 END")
+            ->orderBy('name')
+            ->get();
+
+        return view('staff.localgovt.ward_staff', compact('staff', 'palika', 'ward', 'teamMembers'));
+    }
+
+    public function storeWardStaff(Request $request, $id)
+    {
+        $staff = auth('staff')->user();
+        $palika = $staff->palika ?? Palika::where('code', 'KMC')->first();
+
+        $ward = Ward::where('palika_id', $palika->id)->findOrFail($id);
+
+        $validated = $request->validate([
+            'name' => ['required', 'string', 'max:255'],
+            'email' => ['required', 'email', 'max:100', 'unique:staff,email'],
+            'phone' => ['required', 'string', 'max:30'],
+            'role' => ['required', 'string', Rule::in(['ward_chair', 'secretary', 'clerk', 'ward_admin'])],
+            'designation' => ['required', 'string', 'max:100'],
+            'password' => ['nullable', 'string', 'min:6'],
+        ], [
+            'email.unique' => 'यो इमेल प्रणालीमा पहिले नै दर्ता भइसकेको छ।',
+        ]);
+
+        $newStaff = Staff::create([
+            'name' => trim($validated['name']),
+            'email' => strtolower(trim($validated['email'])),
+            'phone' => trim($validated['phone']),
+            'password' => Hash::make(!empty($validated['password']) ? $validated['password'] : 'password123'),
+            'role' => $validated['role'],
+            'designation' => trim($validated['designation']),
+            'ward_id' => $ward->id,
+            'palika_id' => $palika->id,
+            'district_id' => $palika->district_id,
+            'is_active' => true,
+        ]);
+
+        AuditLog::record(
+            'create_ward_staff_by_palika',
+            "Municipal Admin ({$staff->name}) added {$newStaff->role_title}: {$newStaff->name} ({$newStaff->email}) to {$palika->name_en} Ward #{$ward->ward_number}",
+            $newStaff,
+            ['palika_id' => $palika->id, 'ward_id' => $ward->id, 'role' => $newStaff->role]
+        );
+
+        return redirect()->route('staff.localgovt.wards.staff', $ward->id)
+            ->with('success', "कर्मचारी '{$newStaff->name}' ({$newStaff->role_title}) सफलतापूर्वक दर्ता गरियो।");
+    }
+
+    public function updateWardStaff(Request $request, $id, $staffId)
+    {
+        $staff = auth('staff')->user();
+        $palika = $staff->palika ?? Palika::where('code', 'KMC')->first();
+
+        $ward = Ward::where('palika_id', $palika->id)->findOrFail($id);
+        $targetStaff = Staff::where('ward_id', $ward->id)->findOrFail($staffId);
+
+        $validated = $request->validate([
+            'name' => ['required', 'string', 'max:255'],
+            'phone' => ['required', 'string', 'max:30'],
+            'designation' => ['required', 'string', 'max:100'],
+            'role' => ['nullable', 'string', Rule::in(['ward_chair', 'secretary', 'clerk', 'ward_admin'])],
+            'is_active' => ['required', 'boolean'],
+            'password' => ['nullable', 'string', 'min:6'],
+        ]);
+
+        $oldData = $targetStaff->only(['name', 'phone', 'designation', 'role', 'is_active']);
+
+        $targetStaff->name = trim($validated['name']);
+        $targetStaff->phone = trim($validated['phone']);
+        $targetStaff->designation = trim($validated['designation']);
+        if (!empty($validated['role'])) {
+            $targetStaff->role = $validated['role'];
+        }
+        $targetStaff->is_active = (bool)$validated['is_active'];
+
+        if (!empty($validated['password'])) {
+            $targetStaff->password = Hash::make($validated['password']);
+        }
+
+        $targetStaff->save();
+
+        AuditLog::record(
+            'update_ward_staff_by_palika',
+            "Municipal Admin ({$staff->name}) updated details of {$targetStaff->name} ({$targetStaff->role_title}) in Ward #{$ward->ward_number}",
+            $targetStaff,
+            ['old' => $oldData, 'new' => $targetStaff->only(['name', 'phone', 'designation', 'role', 'is_active'])]
+        );
+
+        return redirect()->route('staff.localgovt.wards.staff', $ward->id)
+            ->with('success', "कर्मचारी '{$targetStaff->name}' को विवरण सफलतापूर्वक अद्यावधिक गरियो।");
+    }
 }
+
