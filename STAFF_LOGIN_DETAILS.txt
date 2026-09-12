@@ -1,0 +1,159 @@
+WardSewa Staff Portal Login Details
+===================================
+
+Staff portal:
+http://localhost:8000/staff/login
+
+Universal seeded password:
+password123
+
+IMPORTANT:
+These are local development/demo credentials from the StaffSeeder. Change them before production use.
+
+TIER 1 - SUPER ADMIN
+--------------------
+Role: super_admin
+
+superadmin@wardsewa.gov.np
+admin@wardsewa.gov.np
+
+Password for both:
+password123
+
+TIER 2 - DISTRICT ADMINS
+------------------------
+Role: district_admin
+
+Kathmandu District:
+admin.ktm@wardsewa.gov.np
+
+Lalitpur District:
+admin.lalitpur@wardsewa.gov.np
+
+Bhaktapur District:
+admin.bhaktapur@wardsewa.gov.np
+
+Password for all:
+password123
+
+TIER 3 - LOCAL GOVERNMENT ADMINS
+--------------------------------
+Role: local_government_admin
+
+Kathmandu Metropolitan City (KMC):
+admin.kmc@wardsewa.gov.np
+
+Chandragiri Municipality (CGM):
+admin.chandragiri@wardsewa.gov.np
+
+Budhanilkantha Municipality (BNM):
+admin.budhanilkantha@wardsewa.gov.np
+
+Tarakeshwor Municipality (TRM):
+admin.tarakeshwor@wardsewa.gov.np
+
+Tokha Municipality (TKM):
+admin.tokha@wardsewa.gov.np
+
+Kirtipur Municipality (KRM):
+admin.kirtipur@wardsewa.gov.np
+
+Nagarjun Municipality (NJM):
+admin.nagarjun@wardsewa.gov.np
+
+Dakshinkali Municipality (DKM):
+admin.dakshinkali@wardsewa.gov.np
+
+Gokarneshwor Municipality (GKM):
+admin.gokarneshwor@wardsewa.gov.np
+
+Kageshwori Manohara Municipality (KMM):
+admin.kageshwori@wardsewa.gov.np
+
+Shankharapur Municipality (SKM):
+admin.shankharapur@wardsewa.gov.np
+
+Lalitpur Metropolitan City (LMC):
+admin.lmc@wardsewa.gov.np
+
+Bhaktapur Municipality (BKM):
+admin.bkm@wardsewa.gov.np
+
+Password for all:
+password123
+
+TIER 4 - KMC WARD 32 PILOT TEAM
+--------------------------------
+
+Ward Chairperson:
+chair@ward32.gov.np
+
+Ward Secretary:
+secretary@ward32.gov.np
+
+Front Desk Clerk:
+clerk@ward32.gov.np
+
+Ward Administrator:
+admin.ward32@wardsewa.gov.np
+
+Password for all:
+password123
+
+TIER 4 - KATHMANDU DISTRICT WARD CHAIRS
+----------------------------------------
+Role: ward_chair
+
+The seeded Kathmandu ward-chair accounts use this exact pattern:
+chair.<palika-code-lowercase><ward-number>@wardsewa.gov.np
+
+Examples:
+chair.kmc1@wardsewa.gov.np
+chair.kmc2@wardsewa.gov.np
+chair.kmc31@wardsewa.gov.np
+chair.cgm1@wardsewa.gov.np
+chair.bnm1@wardsewa.gov.np
+chair.trm1@wardsewa.gov.np
+chair.tkm1@wardsewa.gov.np
+chair.krm1@wardsewa.gov.np
+chair.njm1@wardsewa.gov.np
+chair.dkm1@wardsewa.gov.np
+chair.gkm1@wardsewa.gov.np
+chair.kmm1@wardsewa.gov.np
+chair.skm1@wardsewa.gov.np
+
+Palika codes and ward ranges:
+KMC: 1-32
+CGM: 1-15
+BNM: 1-13
+TRM: 1-11
+TKM: 1-11
+KRM: 1-10
+NJM: 1-10
+DKM: 1-9
+GKM: 1-9
+KMM: 1-9
+SKM: 1-9
+
+KMC Ward 32 uses the dedicated pilot account above instead of the generated chair account.
+All generated ward-chair passwords:
+password123
+
+OTHER VALLEY WARD CHAIRS
+-------------------------
+Lalitpur Metropolitan City Ward 1:
+chair@lmc1.gov.np
+
+Bhaktapur Municipality Ward 1:
+chair@bkm1.gov.np
+
+Password for both:
+password123
+
+SOURCE
+------
+Authoritative source:
+database/seeders/StaffSeeder.php
+
+The database must be seeded for these accounts to exist:
+php artisan migrate:fresh --seed
