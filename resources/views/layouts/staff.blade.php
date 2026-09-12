@@ -5,7 +5,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <meta name="csrf-token" content="{{ csrf_token() }}">
 
-    <title>@yield('title', 'कर्मचारी ड्यासबोर्ड') - WardSewa Staff Portal</title>
+    <title>@yield('title', 'कर्मचारी ड्यासबोर्ड') - WardSewa Administrative Portal</title>
 
     <!-- Fonts -->
     <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -37,61 +37,160 @@
     </script>
 </head>
 <body class="bg-slate-100 text-slate-800 antialiased font-sans min-h-screen flex">
-    <!-- Sidebar -->
+    @php
+        $staff = auth('staff')->user();
+    @endphp
+
+    <!-- Dynamic 4-Tier Sidebar -->
     <aside class="w-64 bg-slate-900 text-slate-300 flex flex-col shrink-0 min-h-screen">
-        <!-- Logo & Ward Header -->
+        <!-- Brand & Geographic Jurisdiction -->
         <div class="p-4 border-b border-slate-800">
             <div class="flex items-center space-x-2">
-                <div class="w-8 h-8 rounded-lg bg-nepal-crimson text-white flex items-center justify-center font-bold text-lg">
+                <div class="w-8 h-8 rounded-lg bg-nepal-crimson text-white flex items-center justify-center font-bold text-lg shadow">
                     व
                 </div>
                 <div>
-                    <h1 class="text-white font-bold text-base leading-none">WardSewa Staff</h1>
-                    <span class="text-[11px] text-nepal-gold font-medium">वडा कार्य सम्पादन पोर्टल</span>
+                    <h1 class="text-white font-bold text-base leading-none">WardSewa</h1>
+                    <span class="text-[11px] text-nepal-gold font-medium">प्रशासनिक पोर्टल</span>
                 </div>
             </div>
 
-            <!-- Assigned Ward Info -->
+            <!-- Geographic Scope Banner -->
             <div class="mt-4 p-2.5 bg-slate-800/80 rounded-lg text-xs border border-slate-700">
-                <div class="text-slate-400 font-medium">कार्यरत कार्यालय:</div>
-                <div class="font-bold text-white mt-0.5">
-                    @if(auth('staff')->user()->ward)
-                        {{ auth('staff')->user()->ward->palika->name_ne ?? auth('staff')->user()->ward->palika->name_en }} - वडा नं. {{ auth('staff')->user()->ward->ward_number }}
+                <div class="text-slate-400 font-medium text-[10px] uppercase tracking-wider">कार्यक्षेत्र (Jurisdiction):</div>
+                <div class="font-bold text-white mt-0.5 text-xs truncate">
+                    @if($staff?->isSuperAdmin())
+                        नेपाल अधिराज्य (System-Wide)
+                    @elseif($staff?->isDistrictAdmin())
+                        {{ $staff->district->name_ne ?? 'काठमाडौँ' }} जिल्ला
+                    @elseif($staff?->isLocalGovtAdmin())
+                        {{ $staff->palika->name_ne ?? 'काठमाडौँ महानगरपालिका' }}
+                    @elseif($staff?->ward)
+                        {{ $staff->ward->palika->name_ne ?? '' }} - वडा नं. {{ $staff->ward->ward_number }}
                     @else
-                        {{ auth('staff')->user()->palika->name_ne ?? auth('staff')->user()->palika->name_en }} (पालिका स्तर)
+                        वडा कार्यक्षेत्र
                     @endif
                 </div>
-                <div class="mt-1 flex items-center space-x-1">
-                    <span class="inline-block w-2 h-2 rounded-full bg-emerald-400"></span>
-                    <span class="text-emerald-300 uppercase tracking-wider font-semibold text-[10px]">
-                        {{ str_replace('_', ' ', auth('staff')->user()->role) }}
-                    </span>
+                <div class="mt-1.5 flex items-center space-x-1.5">
+                    @if($staff?->isSuperAdmin())
+                        <span class="inline-block w-2 h-2 rounded-full bg-purple-400"></span>
+                        <span class="text-purple-300 uppercase tracking-wider font-bold text-[10px]">SUPER ADMIN</span>
+                    @elseif($staff?->isDistrictAdmin())
+                        <span class="inline-block w-2 h-2 rounded-full bg-indigo-400"></span>
+                        <span class="text-indigo-300 uppercase tracking-wider font-bold text-[10px]">DISTRICT ADMIN</span>
+                    @elseif($staff?->isLocalGovtAdmin())
+                        <span class="inline-block w-2 h-2 rounded-full bg-blue-400"></span>
+                        <span class="text-blue-300 uppercase tracking-wider font-bold text-[10px]">LOCAL GOVT ADMIN</span>
+                    @else
+                        <span class="inline-block w-2 h-2 rounded-full bg-emerald-400"></span>
+                        <span class="text-emerald-300 uppercase tracking-wider font-bold text-[10px]">{{ str_replace('_', ' ', $staff?->role ?? 'WARD STAFF') }}</span>
+                    @endif
                 </div>
             </div>
         </div>
 
-        <!-- Navigation Links -->
-        <nav class="p-3 space-y-1 text-sm flex-grow">
-            <a href="{{ route('staff.dashboard') }}" class="flex items-center space-x-3 px-3 py-2 rounded-lg transition {{ request()->routeIs('staff.dashboard') ? 'bg-nepal-blue text-white font-semibold' : 'text-slate-300 hover:bg-slate-800 hover:text-white' }}">
-                <svg class="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 12l2-2m0 0l7-7 7 7M5 10v10a1 1 0 001 1h3m10-11l2 2m-2-2v10a1 1 0 01-1 1h-3m-6 0a1 1 0 001-1v-4a1 1 0 011-1h2a1 1 0 011 1v4a1 1 0 001 1m-6 0h6" />
-                </svg>
-                <span>{{ __('Dashboard') }}</span>
-            </a>
+        <!-- Role-Specific Navigation Links (Section 6 Sidebar) -->
+        <nav class="p-3 space-y-1 text-xs font-medium flex-grow overflow-y-auto">
+            @if($staff?->isSuperAdmin())
+                <!-- ==================== 1. SUPER ADMIN SIDEBAR ==================== -->
+                <div class="text-[10px] font-bold text-slate-500 uppercase px-3 pt-2 pb-1">केन्द्रीय नियन्त्रण (SUPER ADMIN)</div>
+                <a href="{{ route('staff.superadmin.dashboard') }}" class="flex items-center space-x-2.5 px-3 py-2 rounded-lg transition {{ request()->routeIs('staff.superadmin.dashboard') ? 'bg-nepal-blue text-white font-semibold' : 'text-slate-300 hover:bg-slate-800 hover:text-white' }}">
+                    <svg class="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 12l2-2m0 0l7-7 7 7M5 10v10a1 1 0 001 1h3m10-11l2 2m-2-2v10a1 1 0 01-1 1h-3m-6 0a1 1 0 001-1v-4a1 1 0 011-1h2a1 1 0 011 1v4a1 1 0 001 1m-6 0h6"/></svg>
+                    <span>सिस्टम ड्यासबोर्ड (Overview)</span>
+                </a>
+                <a href="{{ route('staff.superadmin.geography') }}" class="flex items-center space-x-2.5 px-3 py-2 rounded-lg transition {{ request()->routeIs('staff.superadmin.geography*') ? 'bg-nepal-blue text-white font-semibold' : 'text-slate-300 hover:bg-slate-800 hover:text-white' }}">
+                    <svg class="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z"/><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 11a3 3 0 11-6 0 3 3 0 016 0z"/></svg>
+                    <span>भूगोल (जिल्ला, पालिका, वडा)</span>
+                </a>
+                <a href="{{ route('staff.superadmin.admins') }}" class="flex items-center space-x-2.5 px-3 py-2 rounded-lg transition {{ request()->routeIs('staff.superadmin.admins*') ? 'bg-nepal-blue text-white font-semibold' : 'text-slate-300 hover:bg-slate-800 hover:text-white' }}">
+                    <svg class="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4.354a4 4 0 110 5.292M15 21H3v-1a6 6 0 0112 0v1zm0 0h6v-1a6 6 0 00-9-5.197M13 7a4 4 0 11-8 0 4 4 0 018 0z"/></svg>
+                    <span>प्रशासक व्यवस्थापन (Admins)</span>
+                </a>
+                <a href="{{ route('staff.applications.index') }}" class="flex items-center space-x-2.5 px-3 py-2 rounded-lg transition {{ request()->routeIs('staff.applications.*') ? 'bg-nepal-blue text-white font-semibold' : 'text-slate-300 hover:bg-slate-800 hover:text-white' }}">
+                    <svg class="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"/></svg>
+                    <span>सम्पूर्ण निवेदनहरू (All Apps)</span>
+                </a>
+                <a href="{{ route('staff.appointments.index') }}" class="flex items-center space-x-2.5 px-3 py-2 rounded-lg transition {{ request()->routeIs('staff.appointments.*') ? 'bg-nepal-blue text-white font-semibold' : 'text-slate-300 hover:bg-slate-800 hover:text-white' }}">
+                    <svg class="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z"/></svg>
+                    <span>भेटघाट व्यवस्थापन (Appointments)</span>
+                </a>
+                <a href="{{ route('staff.notices.index') }}" class="flex items-center space-x-2.5 px-3 py-2 rounded-lg transition {{ request()->routeIs('staff.notices.*') ? 'bg-nepal-blue text-white font-semibold' : 'text-slate-300 hover:bg-slate-800 hover:text-white' }}">
+                    <svg class="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M11 5.882V19.24a1.76 1.76 0 01-3.417.592l-2.147-6.15M18 13a3 3 0 100-6M5.436 13.683A4.001 4.001 0 017 6h1.832c4.1 0 7.625-1.234 9.168-3v14c-1.543-1.766-5.067-3-9.168-3H7a3.988 3.988 0 01-1.564-.317z"/></svg>
+                    <span>सूचना व्यवस्थापन (Notices)</span>
+                </a>
+                <a href="{{ route('staff.superadmin.audit-logs') }}" class="flex items-center space-x-2.5 px-3 py-2 rounded-lg transition {{ request()->routeIs('staff.superadmin.audit-logs*') ? 'bg-nepal-blue text-white font-semibold' : 'text-slate-300 hover:bg-slate-800 hover:text-white' }}">
+                    <svg class="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m5.618-4.016A11.955 11.955 0 0112 2.944a11.955 11.955 0 01-8.618 3.04A12.02 12.02 0 003 9c0 5.591 3.824 10.29 9 11.622 5.176-1.332 9-6.03 9-11.622 0-1.042-.133-2.052-.382-3.016z"/></svg>
+                    <span>सुरक्षा तथा अडिट लग (Audit Logs)</span>
+                </a>
 
-            <a href="{{ route('staff.applications.index') }}" class="flex items-center space-x-3 px-3 py-2 rounded-lg transition {{ request()->routeIs('staff.applications.*') ? 'bg-nepal-blue text-white font-semibold' : 'text-slate-300 hover:bg-slate-800 hover:text-white' }}">
-                <svg class="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z" />
-                </svg>
-                <span>{{ __('Applications & Recommendations') }}</span>
-            </a>
+            @elseif($staff?->isDistrictAdmin())
+                <!-- ==================== 2. DISTRICT ADMIN SIDEBAR ==================== -->
+                <div class="text-[10px] font-bold text-slate-500 uppercase px-3 pt-2 pb-1">जिल्ला अनुगमन (DISTRICT ADMIN)</div>
+                <a href="{{ route('staff.district.dashboard') }}" class="flex items-center space-x-2.5 px-3 py-2 rounded-lg transition {{ request()->routeIs('staff.district.dashboard') ? 'bg-nepal-blue text-white font-semibold' : 'text-slate-300 hover:bg-slate-800 hover:text-white' }}">
+                    <svg class="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 12l2-2m0 0l7-7 7 7M5 10v10a1 1 0 001 1h3m10-11l2 2m-2-2v10a1 1 0 01-1 1h-3m-6 0a1 1 0 001-1v-4a1 1 0 011-1h2a1 1 0 011 1v4a1 1 0 001 1m-6 0h6"/></svg>
+                    <span>जिल्ला ड्यासबोर्ड (Overview)</span>
+                </a>
+                <a href="{{ route('staff.district.palikas') }}" class="flex items-center space-x-2.5 px-3 py-2 rounded-lg transition {{ request()->routeIs('staff.district.palikas*') ? 'bg-nepal-blue text-white font-semibold' : 'text-slate-300 hover:bg-slate-800 hover:text-white' }}">
+                    <svg class="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 21V5a2 2 0 00-2-2H7a2 2 0 00-2 2v16m14 0h2m-2 0h-5m-9 0H3m2 0h5M9 7h1m-1 4h1m4-4h1m-1 4h1m-5 10v-5a1 1 0 011-1h2a1 1 0 011 1v5m-4 0h4"/></svg>
+                    <span>स्थानीय तहहरू (Local Govts)</span>
+                </a>
+                <a href="{{ route('staff.district.applications') }}" class="flex items-center space-x-2.5 px-3 py-2 rounded-lg transition {{ request()->routeIs('staff.district.applications*') ? 'bg-nepal-blue text-white font-semibold' : 'text-slate-300 hover:bg-slate-800 hover:text-white' }}">
+                    <svg class="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"/></svg>
+                    <span>जिल्लाभरका निवेदनहरू</span>
+                </a>
+                <a href="{{ route('staff.appointments.index') }}" class="flex items-center space-x-2.5 px-3 py-2 rounded-lg transition {{ request()->routeIs('staff.appointments.*') ? 'bg-nepal-blue text-white font-semibold' : 'text-slate-300 hover:bg-slate-800 hover:text-white' }}">
+                    <svg class="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z"/></svg>
+                    <span>भेटघाट अनुगमन (Appointments)</span>
+                </a>
+                <a href="{{ route('staff.notices.index') }}" class="flex items-center space-x-2.5 px-3 py-2 rounded-lg transition {{ request()->routeIs('staff.notices.*') ? 'bg-nepal-blue text-white font-semibold' : 'text-slate-300 hover:bg-slate-800 hover:text-white' }}">
+                    <svg class="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M11 5.882V19.24a1.76 1.76 0 01-3.417.592l-2.147-6.15M18 13a3 3 0 100-6M5.436 13.683A4.001 4.001 0 017 6h1.832c4.1 0 7.625-1.234 9.168-3v14c-1.543-1.766-5.067-3-9.168-3H7a3.988 3.988 0 01-1.564-.317z"/></svg>
+                    <span>जिल्ला सूचना (Notices)</span>
+                </a>
 
-            <a href="{{ route('staff.notices.index') }}" class="flex items-center space-x-3 px-3 py-2 rounded-lg transition {{ request()->routeIs('staff.notices.*') ? 'bg-nepal-blue text-white font-semibold' : 'text-slate-300 hover:bg-slate-800 hover:text-white' }}">
-                <svg class="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M11 5.882V19.24a1.76 1.76 0 01-3.417.592l-2.147-6.15M18 13a3 3 0 100-6M5.436 13.683A4.001 4.001 0 017 6h1.832c4.1 0 7.625-1.234 9.168-3v14c-1.543-1.766-5.067-3-9.168-3H7a3.988 3.988 0 01-1.564-.317z" />
-                </svg>
-                <span>{{ __('Notice Management') }}</span>
-            </a>
+            @elseif($staff?->isLocalGovtAdmin())
+                <!-- ==================== 3. LOCAL GOVT ADMIN SIDEBAR ==================== -->
+                <div class="text-[10px] font-bold text-slate-500 uppercase px-3 pt-2 pb-1">पालिका व्यवस्थापन (LOCAL GOVT)</div>
+                <a href="{{ route('staff.localgovt.dashboard') }}" class="flex items-center space-x-2.5 px-3 py-2 rounded-lg transition {{ request()->routeIs('staff.localgovt.dashboard') ? 'bg-nepal-blue text-white font-semibold' : 'text-slate-300 hover:bg-slate-800 hover:text-white' }}">
+                    <svg class="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 12l2-2m0 0l7-7 7 7M5 10v10a1 1 0 001 1h3m10-11l2 2m-2-2v10a1 1 0 01-1 1h-3m-6 0a1 1 0 001-1v-4a1 1 0 011-1h2a1 1 0 011 1v4a1 1 0 001 1m-6 0h6"/></svg>
+                    <span>पालिका ड्यासबोर्ड (Overview)</span>
+                </a>
+                <a href="{{ route('staff.localgovt.wards') }}" class="flex items-center space-x-2.5 px-3 py-2 rounded-lg transition {{ request()->routeIs('staff.localgovt.wards*') ? 'bg-nepal-blue text-white font-semibold' : 'text-slate-300 hover:bg-slate-800 hover:text-white' }}">
+                    <svg class="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 21V5a2 2 0 00-2-2H7a2 2 0 00-2 2v16m14 0h2m-2 0h-5m-9 0H3m2 0h5M9 7h1m-1 4h1m4-4h1m-1 4h1m-5 10v-5a1 1 0 011-1h2a1 1 0 011 1v5m-4 0h4"/></svg>
+                    <span>वडा कार्यालयहरू (Wards)</span>
+                </a>
+                <a href="{{ route('staff.localgovt.applications') }}" class="flex items-center space-x-2.5 px-3 py-2 rounded-lg transition {{ request()->routeIs('staff.localgovt.applications*') ? 'bg-nepal-blue text-white font-semibold' : 'text-slate-300 hover:bg-slate-800 hover:text-white' }}">
+                    <svg class="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"/></svg>
+                    <span>पालिकाभरका निवेदनहरू</span>
+                </a>
+                <a href="{{ route('staff.appointments.index') }}" class="flex items-center space-x-2.5 px-3 py-2 rounded-lg transition {{ request()->routeIs('staff.appointments.*') ? 'bg-nepal-blue text-white font-semibold' : 'text-slate-300 hover:bg-slate-800 hover:text-white' }}">
+                    <svg class="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z"/></svg>
+                    <span>भेटघाट व्यवस्थापन (Appointments)</span>
+                </a>
+                <a href="{{ route('staff.notices.index') }}" class="flex items-center space-x-2.5 px-3 py-2 rounded-lg transition {{ request()->routeIs('staff.notices.*') ? 'bg-nepal-blue text-white font-semibold' : 'text-slate-300 hover:bg-slate-800 hover:text-white' }}">
+                    <svg class="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M11 5.882V19.24a1.76 1.76 0 01-3.417.592l-2.147-6.15M18 13a3 3 0 100-6M5.436 13.683A4.001 4.001 0 017 6h1.832c4.1 0 7.625-1.234 9.168-3v14c-1.543-1.766-5.067-3-9.168-3H7a3.988 3.988 0 01-1.564-.317z"/></svg>
+                    <span>पालिका सूचनाहरू (Notices)</span>
+                </a>
+
+            @else
+                <!-- ==================== 4. WARD ADMIN & STAFF SIDEBAR ==================== -->
+                <div class="text-[10px] font-bold text-slate-500 uppercase px-3 pt-2 pb-1">वडा कार्य सम्पादन (WARD LEVEL)</div>
+                <a href="{{ route('staff.dashboard') }}" class="flex items-center space-x-2.5 px-3 py-2 rounded-lg transition {{ request()->routeIs('staff.dashboard') ? 'bg-nepal-blue text-white font-semibold' : 'text-slate-300 hover:bg-slate-800 hover:text-white' }}">
+                    <svg class="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 12l2-2m0 0l7-7 7 7M5 10v10a1 1 0 001 1h3m10-11l2 2m-2-2v10a1 1 0 01-1 1h-3m-6 0a1 1 0 001-1v-4a1 1 0 011-1h2a1 1 0 011 1v4a1 1 0 001 1m-6 0h6"/></svg>
+                    <span>वडा ड्यासबोर्ड (Overview)</span>
+                </a>
+                <a href="{{ route('staff.applications.index') }}" class="flex items-center space-x-2.5 px-3 py-2 rounded-lg transition {{ request()->routeIs('staff.applications.*') ? 'bg-nepal-blue text-white font-semibold' : 'text-slate-300 hover:bg-slate-800 hover:text-white' }}">
+                    <svg class="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"/></svg>
+                    <span>निवेदन कार्यक्षेत्र (Applications Inbox)</span>
+                </a>
+                <a href="{{ route('staff.appointments.index') }}" class="flex items-center space-x-2.5 px-3 py-2 rounded-lg transition {{ request()->routeIs('staff.appointments.*') ? 'bg-nepal-blue text-white font-semibold' : 'text-slate-300 hover:bg-slate-800 hover:text-white' }}">
+                    <svg class="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z"/></svg>
+                    <span>वडा भेटघाट (Appointments)</span>
+                </a>
+                <a href="{{ route('staff.notices.index') }}" class="flex items-center space-x-2.5 px-3 py-2 rounded-lg transition {{ request()->routeIs('staff.notices.*') ? 'bg-nepal-blue text-white font-semibold' : 'text-slate-300 hover:bg-slate-800 hover:text-white' }}">
+                    <svg class="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M11 5.882V19.24a1.76 1.76 0 01-3.417.592l-2.147-6.15M18 13a3 3 0 100-6M5.436 13.683A4.001 4.001 0 017 6h1.832c4.1 0 7.625-1.234 9.168-3v14c-1.543-1.766-5.067-3-9.168-3H7a3.988 3.988 0 01-1.564-.317z"/></svg>
+                    <span>वडा सूचनाहरू (Notices)</span>
+                </a>
+            @endif
         </nav>
 
         <!-- Current User Profile & Logout -->
@@ -99,11 +198,11 @@
             <div class="flex items-center justify-between">
                 <div class="flex items-center space-x-2 truncate">
                     <div class="w-8 h-8 rounded-full bg-nepal-blue text-white flex items-center justify-center font-bold text-xs shrink-0">
-                        {{ substr(auth('staff')->user()->name, 0, 1) }}
+                        {{ substr($staff?->name ?? 'S', 0, 1) }}
                     </div>
                     <div class="truncate">
-                        <div class="text-xs font-semibold text-white truncate">{{ auth('staff')->user()->name }}</div>
-                        <div class="text-[10px] text-slate-400 truncate">{{ auth('staff')->user()->email }}</div>
+                        <div class="text-xs font-semibold text-white truncate">{{ $staff?->name ?? 'Staff' }}</div>
+                        <div class="text-[10px] text-slate-400 truncate">{{ $staff?->designation ?? $staff?->email ?? '' }}</div>
                     </div>
                 </div>
                 <form method="POST" action="{{ route('staff.logout') }}">
@@ -123,7 +222,7 @@
         <!-- Top Staff Header -->
         <header class="bg-white border-b border-slate-200 h-16 flex items-center justify-between px-6">
             <div class="flex items-center space-x-3">
-                <h2 class="text-lg font-bold text-slate-800">@yield('page_title', 'कर्मचारी पोर्टल')</h2>
+                <h2 class="text-lg font-bold text-slate-800">@yield('page_title', 'प्रशासनिक कार्यक्षेत्र')</h2>
             </div>
             <div class="flex items-center space-x-4">
                 <!-- Language Switcher -->

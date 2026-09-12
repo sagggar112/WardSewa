@@ -68,4 +68,9 @@ class Citizen extends Authenticatable
     {
         return $this->hasMany(BillPayment::class);
     }
+
+    public function appointments(): HasMany
+    {
+        return $this->hasMany(Appointment::class);
+    }
 }

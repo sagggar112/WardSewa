@@ -11,7 +11,14 @@ class AuthController extends Controller
     public function showLogin()
     {
         if (Auth::guard('staff')->check()) {
-            return redirect()->route('staff.dashboard');
+            $staff = Auth::guard('staff')->user();
+            $targetRoute = match(true) {
+                $staff->isSuperAdmin() => route('staff.superadmin.dashboard'),
+                $staff->isDistrictAdmin() => route('staff.district.dashboard'),
+                $staff->isLocalGovtAdmin() => route('staff.localgovt.dashboard'),
+                default => route('staff.dashboard'),
+            };
+            return redirect($targetRoute);
         }
 
         return view('staff.auth.login');
@@ -29,13 +36,25 @@ class AuthController extends Controller
             $staff = Auth::guard('staff')->user();
 
             if (!$staff->is_active) {
+                \App\Models\AuditLog::record('failed_login', "Inactive staff attempted login: {$staff->email}", $staff);
                 Auth::guard('staff')->logout();
                 return back()->with('error', 'Your account has been deactivated.');
             }
 
-            return redirect()->intended(route('staff.dashboard'))
+            \App\Models\AuditLog::record('login', "Staff logged in: {$staff->name} ({$staff->role})", $staff);
+
+            $targetRoute = match(true) {
+                $staff->isSuperAdmin() => route('staff.superadmin.dashboard'),
+                $staff->isDistrictAdmin() => route('staff.district.dashboard'),
+                $staff->isLocalGovtAdmin() => route('staff.localgovt.dashboard'),
+                default => route('staff.dashboard'),
+            };
+
+            return redirect()->intended($targetRoute)
                 ->with('success', "Welcome back, {$staff->name}!");
         }
+
+        \App\Models\AuditLog::record('failed_login', "Failed login attempt for email: {$request->email}");
 
         return back()->withErrors([
             'email' => 'The provided credentials do not match our records.',
@@ -44,6 +63,11 @@ class AuthController extends Controller
 
     public function logout(Request $request)
     {
+        $staff = Auth::guard('staff')->user();
+        if ($staff) {
+            \App\Models\AuditLog::record('logout', "Staff logged out: {$staff->name}", $staff);
+        }
+
         Auth::guard('staff')->logout();
         $request->session()->invalidate();
         $request->session()->regenerateToken();

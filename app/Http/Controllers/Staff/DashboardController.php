@@ -4,6 +4,7 @@ namespace App\Http\Controllers\Staff;
 
 use App\Http\Controllers\Controller;
 use App\Models\Application;
+use App\Models\Appointment;
 use App\Models\Complaint;
 use Illuminate\Support\Facades\Auth;
 
@@ -13,16 +14,32 @@ class DashboardController extends Controller
     {
         $staff = Auth::guard('staff')->user();
 
-        // Scope queries by ward or palika
+        // 1. Role-based routing to dedicated Tier dashboards
+        if ($staff->isSuperAdmin()) {
+            return redirect()->route('staff.superadmin.dashboard');
+        }
+
+        if ($staff->isDistrictAdmin()) {
+            return redirect()->route('staff.district.dashboard');
+        }
+
+        if ($staff->isLocalGovtAdmin()) {
+            return redirect()->route('staff.localgovt.dashboard');
+        }
+
+        // 2. Operational Ward Admin / Staff Dashboard (Tier 4)
         $appQuery = Application::query();
         $complaintQuery = Complaint::query();
+        $appointmentQuery = Appointment::query();
 
         if ($staff->ward_id) {
             $appQuery->where('ward_id', $staff->ward_id);
             $complaintQuery->where('ward_id', $staff->ward_id);
+            $appointmentQuery->where('ward_id', $staff->ward_id);
         } else {
             $appQuery->where('palika_id', $staff->palika_id);
             $complaintQuery->where('palika_id', $staff->palika_id);
+            $appointmentQuery->where('palika_id', $staff->palika_id);
         }
 
         $stats = [
@@ -32,6 +49,8 @@ class DashboardController extends Controller
             'approved' => (clone $appQuery)->where('status', 'approved')->count(),
             'rejected' => (clone $appQuery)->where('status', 'rejected')->count(),
             'open_complaints' => (clone $complaintQuery)->whereIn('status', ['open', 'in_progress'])->count(),
+            'today_appointments' => (clone $appointmentQuery)->today()->count(),
+            'upcoming_appointments' => (clone $appointmentQuery)->upcoming()->count(),
         ];
 
         $recentApplications = (clone $appQuery)
@@ -40,6 +59,12 @@ class DashboardController extends Controller
             ->take(10)
             ->get();
 
-        return view('staff.dashboard', compact('staff', 'stats', 'recentApplications'));
+        $todayAppointments = (clone $appointmentQuery)
+            ->with(['citizen', 'serviceType'])
+            ->today()
+            ->take(5)
+            ->get();
+
+        return view('staff.dashboard', compact('staff', 'stats', 'recentApplications', 'todayAppointments'));
     }
 }

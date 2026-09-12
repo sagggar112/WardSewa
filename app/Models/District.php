@@ -27,4 +27,14 @@ class District extends Model
     {
         return $this->hasMany(Palika::class);
     }
+
+    public function staff(): HasMany
+    {
+        return $this->hasMany(Staff::class);
+    }
+
+    public function districtAdmin(): ?Staff
+    {
+        return $this->staff()->where('role', 'district_admin')->first();
+    }
 }

@@ -85,5 +85,10 @@ Route::prefix('citizen')->name('citizen.')->group(function () {
         Route::get('/bills/{id}', [BillPaymentController::class, 'showBiller'])->name('bills.show');
         Route::post('/bills/{id}/pay', [BillPaymentController::class, 'processPayment'])->name('bills.pay');
         Route::get('/bills/receipt/{id}', [BillPaymentController::class, 'receipt'])->name('bills.receipt');
+
+        // Appointments (In-Person Ward Visits)
+        Route::get('/appointments', [\App\Http\Controllers\Citizen\AppointmentController::class, 'index'])->name('appointments.index');
+        Route::get('/appointments/book', [\App\Http\Controllers\Citizen\AppointmentController::class, 'create'])->name('appointments.create');
+        Route::post('/appointments', [\App\Http\Controllers\Citizen\AppointmentController::class, 'store'])->name('appointments.store');
     });
 });

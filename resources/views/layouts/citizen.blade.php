@@ -71,6 +71,9 @@
                     <a href="{{ route('citizen.bills.index') }}" class="{{ request()->routeIs('citizen.bills.*') ? 'text-nepal-crimson font-bold border-b-2 border-nepal-crimson' : 'text-slate-600 hover:text-slate-900' }} py-5">
                         {{ __('Utility Bills') }}
                     </a>
+                    <a href="{{ route('citizen.appointments.index') }}" class="{{ request()->routeIs('citizen.appointments.*') ? 'text-nepal-crimson font-bold border-b-2 border-nepal-crimson' : 'text-slate-600 hover:text-slate-900' }} py-5">
+                        {{ __('Appointments') }}
+                    </a>
                     <a href="{{ route('citizen.complaints.index') }}" class="{{ request()->routeIs('citizen.complaints.*') ? 'text-nepal-crimson font-bold border-b-2 border-nepal-crimson' : 'text-slate-600 hover:text-slate-900' }} py-5">
                         {{ __('Grievance') }}
                     </a>
@@ -121,6 +124,7 @@
             <a href="{{ route('citizen.applications.create') }}" class="block px-3 py-2 rounded-md text-sm font-medium bg-nepal-red text-white">{{ __('+ New Application') }}</a>
             <a href="{{ route('citizen.applications.index') }}" class="block px-3 py-2 rounded-md text-sm font-medium text-slate-700 hover:bg-slate-50">{{ __('My Applications') }}</a>
             <a href="{{ route('citizen.bills.index') }}" class="block px-3 py-2 rounded-md text-sm font-medium text-slate-700 hover:bg-slate-50">{{ __('Utility Bills') }}</a>
+            <a href="{{ route('citizen.appointments.index') }}" class="block px-3 py-2 rounded-md text-sm font-medium text-slate-700 hover:bg-slate-50">{{ __('Appointments') }}</a>
             <a href="{{ route('citizen.complaints.index') }}" class="block px-3 py-2 rounded-md text-sm font-medium text-slate-700 hover:bg-slate-50">{{ __('Grievance') }}</a>
             <a href="{{ route('citizen.profile') }}" class="block px-3 py-2 rounded-md text-sm font-medium text-slate-700 hover:bg-slate-50">{{ __('Profile') }}</a>
             <form method="POST" action="{{ route('citizen.logout') }}">

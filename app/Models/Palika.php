@@ -48,4 +48,14 @@ class Palika extends Model
     {
         return $this->hasMany(Notice::class);
     }
+
+    public function appointments(): HasMany
+    {
+        return $this->hasMany(Appointment::class);
+    }
+
+    public function localGovtAdmin(): ?Staff
+    {
+        return $this->staff()->where('role', 'local_government_admin')->first();
+    }
 }

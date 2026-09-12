@@ -48,4 +48,14 @@ class Ward extends Model
     {
         return $this->hasMany(Notice::class);
     }
+
+    public function appointments(): HasMany
+    {
+        return $this->hasMany(Appointment::class);
+    }
+
+    public function wardAdmin(): ?Staff
+    {
+        return $this->staff()->whereIn('role', ['ward_admin', 'ward_chair', 'secretary'])->first();
+    }
 }

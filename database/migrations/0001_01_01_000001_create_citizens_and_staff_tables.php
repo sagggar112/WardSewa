@@ -32,14 +32,20 @@ return new class extends Migration
             $table->string('email')->unique();
             $table->string('phone', 20)->nullable();
             $table->string('password');
-            $table->foreignId('palika_id')->constrained('palikas')->cascadeOnDelete();
+            $table->foreignId('district_id')->nullable()->constrained('districts')->nullOnDelete();
+            $table->foreignId('palika_id')->nullable()->constrained('palikas')->nullOnDelete();
             $table->foreignId('ward_id')->nullable()->constrained('wards')->nullOnDelete();
-            $table->enum('role', ['ward_chair', 'secretary', 'clerk', 'admin'])->default('clerk');
+            $table->string('role', 40)->default('ward_admin');
+            $table->string('designation')->nullable();
             $table->string('signature_image_path')->nullable();
             $table->string('stamp_image_path')->nullable();
             $table->boolean('is_active')->default(true);
             $table->rememberToken();
             $table->timestamps();
+
+            $table->index(['district_id', 'role']);
+            $table->index(['palika_id', 'role']);
+            $table->index(['ward_id', 'role']);
         });
 
         Schema::create('password_reset_tokens', function (Blueprint $table) {
