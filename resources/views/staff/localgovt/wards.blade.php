@@ -22,14 +22,34 @@
                         <span class="px-2.5 py-0.5 rounded text-xs font-bold bg-blue-100 text-nepal-blue">
                             वडा नं. {{ $ward->ward_number }}
                         </span>
-                        @if($ward->ward_number == 32 && $palika->code === 'KMC')
-                            <span class="px-2 py-0.5 rounded text-[10px] font-bold bg-rose-100 text-rose-700">पाइलट वडा</span>
-                        @endif
+                        <div class="flex items-center space-x-1.5">
+                            @if($ward->ward_number == 32 && $palika->code === 'KMC')
+                                <span class="px-2 py-0.5 rounded text-[10px] font-bold bg-rose-100 text-rose-700">पाइलट वडा</span>
+                            @endif
+                            <span class="inline-flex items-center px-2 py-0.5 rounded-full text-[10px] font-bold bg-emerald-100 text-emerald-800">
+                                <span class="w-1.5 h-1.5 rounded-full bg-emerald-500 mr-1"></span>
+                                सक्रिय
+                            </span>
+                        </div>
                     </div>
 
                     <h2 class="text-base font-bold text-slate-900 mt-1">{{ $ward->office_address }}</h2>
                     <p class="text-xs text-slate-500 mt-0.5 font-mono">फोन: {{ $ward->office_phone ?? '01-40000' . $ward->ward_number }}</p>
                     <p class="text-[11px] text-slate-400 font-mono mt-0.5">{{ $ward->office_email }}</p>
+
+                    @php
+                        $chair = $ward->staff->where('role', 'ward_chair')->first();
+                    @endphp
+                    @if($chair)
+                        <div class="mt-3 p-2.5 bg-blue-50/60 border border-blue-100 rounded-lg text-xs">
+                            <span class="text-[10px] font-bold text-nepal-blue uppercase tracking-wider block">वडा अध्यक्ष (Chairperson)</span>
+                            <div class="font-bold text-slate-900 mt-0.5">{{ $chair->name }}</div>
+                            <div class="text-[11px] text-slate-500 font-mono flex items-center justify-between mt-0.5">
+                                <span>{{ $chair->email }}</span>
+                                <span>{{ $chair->phone }}</span>
+                            </div>
+                        </div>
+                    @endif
 
                     <div class="mt-4 pt-3 border-t border-slate-100 grid grid-cols-2 gap-2 text-xs">
                         <div class="p-2 bg-slate-50 rounded">

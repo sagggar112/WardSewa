@@ -213,24 +213,6 @@ class StaffSeeder extends Seeder
                         'is_active' => true,
                     ]
                 );
-
-                // Alias Account
-                if (isset($palikaData['alias'])) {
-                    Staff::updateOrCreate(
-                        ['email' => $palikaData['alias']],
-                        [
-                            'name' => $palikaData['name'],
-                            'phone' => $palikaData['phone'],
-                            'password' => $password,
-                            'district_id' => $palika->district_id,
-                            'palika_id' => $palika->id,
-                            'ward_id' => null,
-                            'role' => 'local_government_admin',
-                            'designation' => $palikaData['designation'],
-                            'is_active' => true,
-                        ]
-                    );
-                }
             }
         }
 
@@ -248,20 +230,6 @@ class StaffSeeder extends Seeder
                     'ward_id' => null,
                     'role' => 'local_government_admin',
                     'designation' => 'Chief Administrative Officer (LMC)',
-                    'is_active' => true,
-                ]
-            );
-            Staff::updateOrCreate(
-                ['email' => 'admin@lalitpur.gov.np'],
-                [
-                    'name' => 'Lalitpur IT Administrator',
-                    'phone' => '9851100010',
-                    'password' => $password,
-                    'district_id' => $lmc->district_id,
-                    'palika_id' => $lmc->id,
-                    'ward_id' => null,
-                    'role' => 'local_government_admin',
-                    'designation' => 'Director of IT (LMC)',
                     'is_active' => true,
                 ]
             );
@@ -283,148 +251,136 @@ class StaffSeeder extends Seeder
                     'is_active' => true,
                 ]
             );
-            Staff::updateOrCreate(
-                ['email' => 'admin@bhaktapur.gov.np'],
-                [
-                    'name' => 'Bhaktapur IT Administrator',
-                    'phone' => '9851200010',
-                    'password' => $password,
-                    'district_id' => $bkm->district_id,
-                    'palika_id' => $bkm->id,
-                    'ward_id' => null,
-                    'role' => 'local_government_admin',
-                    'designation' => 'Director of IT (BKM)',
-                    'is_active' => true,
-                ]
-            );
         }
 
         // =========================================================================
-        // 4. TIER 4: WARD LEVEL STAFF ACROSS ALL 11 KATHMANDU PALIKAS
+        // 4. TIER 4: WARD LEVEL STAFF ACROSS ALL 138 WARDS IN KATHMANDU DISTRICT
         // =========================================================================
 
-        // 4.1 KMC Ward 32 (Pilot Ward - Full Staff Team)
-        $kmc = Palika::where('code', 'KMC')->first();
-        if ($kmc) {
-            $ward32 = Ward::where('palika_id', $kmc->id)->where('ward_number', 32)->first();
-            $ward32Id = $ward32?->id;
-
-            Staff::updateOrCreate(
-                ['email' => 'chair@ward32.gov.np'],
-                [
-                    'name' => 'Bharat Lal Shrestha',
-                    'phone' => '9851000001',
-                    'password' => $password,
-                    'district_id' => $kmc->district_id,
-                    'palika_id' => $kmc->id,
-                    'ward_id' => $ward32Id,
-                    'role' => 'ward_chair',
-                    'designation' => 'Ward Chairperson (वडा अध्यक्ष)',
-                    'is_active' => true,
-                ]
-            );
-
-            Staff::updateOrCreate(
-                ['email' => 'secretary@ward32.gov.np'],
-                [
-                    'name' => 'Sita Sharma',
-                    'phone' => '9851000002',
-                    'password' => $password,
-                    'district_id' => $kmc->district_id,
-                    'palika_id' => $kmc->id,
-                    'ward_id' => $ward32Id,
-                    'role' => 'secretary',
-                    'designation' => 'Ward Secretary (वडा सचिव)',
-                    'is_active' => true,
-                ]
-            );
-
-            Staff::updateOrCreate(
-                ['email' => 'clerk@ward32.gov.np'],
-                [
-                    'name' => 'Ramesh Adhikari',
-                    'phone' => '9851000003',
-                    'password' => $password,
-                    'district_id' => $kmc->district_id,
-                    'palika_id' => $kmc->id,
-                    'ward_id' => $ward32Id,
-                    'role' => 'clerk',
-                    'designation' => 'Front Desk Assistant (वडा सहायक)',
-                    'is_active' => true,
-                ]
-            );
-
-            Staff::updateOrCreate(
-                ['email' => 'admin.ward32@wardsewa.gov.np'],
-                [
-                    'name' => 'KMC Ward 32 Administrator',
-                    'phone' => '9851000032',
-                    'password' => $password,
-                    'district_id' => $kmc->district_id,
-                    'palika_id' => $kmc->id,
-                    'ward_id' => $ward32Id,
-                    'role' => 'ward_admin',
-                    'designation' => 'Ward Executive Officer',
-                    'is_active' => true,
-                ]
-            );
-        }
-
-        // 4.2 Seed Active Ward Chairs for each of the other 10 Kathmandu Palikas
-        $palikaWardChairs = [
-            'CGM' => ['name' => 'Ganesh Prasad Rijal', 'palika_name' => 'Chandragiri', 'email' => 'chair@cgm1.gov.np', 'alias' => 'chair@chandragiri1.gov.np'],
-            'BNM' => ['name' => 'Surendra Lama', 'palika_name' => 'Budhanilkantha', 'email' => 'chair@bnm1.gov.np', 'alias' => 'chair@budhanilkantha1.gov.np'],
-            'TRM' => ['name' => 'Shiva Prasad Aryal', 'palika_name' => 'Tarakeshwor', 'email' => 'chair@trm1.gov.np', 'alias' => 'chair@tarakeshwor1.gov.np'],
-            'TKM' => ['name' => 'Prakash Adhikari', 'palika_name' => 'Tokha', 'email' => 'chair@tkm1.gov.np', 'alias' => 'chair@tokha1.gov.np'],
-            'KRM' => ['name' => 'Hira Lal Maharjan', 'palika_name' => 'Kirtipur', 'email' => 'chair@krm1.gov.np', 'alias' => 'chair@kirtipur1.gov.np'],
-            'NJM' => ['name' => 'Mohan Bahadur Basnet', 'palika_name' => 'Nagarjun', 'email' => 'chair@njm1.gov.np', 'alias' => 'chair@nagarjun1.gov.np'],
-            'DKM' => ['name' => 'Krishna Prasad Shrestha', 'palika_name' => 'Dakshinkali', 'email' => 'chair@dkm1.gov.np', 'alias' => 'chair@dakshinkali1.gov.np'],
-            'GKM' => ['name' => 'Jayaram Thapa', 'palika_name' => 'Gokarneshwor', 'email' => 'chair@gkm1.gov.np', 'alias' => 'chair@gokarneshwor1.gov.np'],
-            'KMM' => ['name' => 'Nabin Shrestha', 'palika_name' => 'Kageshwori Manohara', 'email' => 'chair@kmm1.gov.np', 'alias' => 'chair@kageshwori1.gov.np'],
-            'SKM' => ['name' => 'Laxman Dangol', 'palika_name' => 'Shankharapur', 'email' => 'chair@skm1.gov.np', 'alias' => 'chair@shankharapur1.gov.np'],
+        $nepaliFirstNames = [
+            'Ram Krishna', 'Hari Bahadur', 'Sita Ram', 'Ganesh Prasad', 'Surendra',
+            'Shiva Prasad', 'Prakash', 'Hira Lal', 'Mohan Bahadur', 'Krishna Prasad',
+            'Jayaram', 'Nabin', 'Laxman', 'Bikram', 'Ramesh', 'Binod', 'Deepak',
+            'Suresh', 'Bishnu', 'Keshav', 'Sunil', 'Narayan', 'Madhav', 'Rajendra',
+            'Santosh', 'Prem', 'Dinesh', 'Mukesh', 'Arjun', 'Bhesh Raj', 'Sanat',
+            'Janak', 'Kiran', 'Govinda', 'Hemanta', 'Balaram', 'Devendra', 'Kamal',
+            'Rudra', 'Lokendra', 'Bhuban', 'Bhoj Raj', 'Manoj', 'Anil', 'Subash'
         ];
 
-        foreach ($palikaWardChairs as $code => $chairData) {
-            $palika = Palika::where('code', $code)->first();
-            if ($palika) {
-                $ward1 = Ward::where('palika_id', $palika->id)->where('ward_number', 1)->first();
-                if ($ward1) {
-                    Staff::updateOrCreate(
-                        ['email' => $chairData['email']],
-                        [
-                            'name' => $chairData['name'],
-                            'phone' => '98510' . str_pad((string)$ward1->id, 5, '0', STR_PAD_LEFT),
-                            'password' => $password,
-                            'district_id' => $palika->district_id,
-                            'palika_id' => $palika->id,
-                            'ward_id' => $ward1->id,
-                            'role' => 'ward_chair',
-                            'designation' => "Ward Chairperson ({$chairData['palika_name']} Ward 1)",
-                            'is_active' => true,
-                        ]
-                    );
+        $nepaliLastNames = [
+            'Shrestha', 'Rijal', 'Lama', 'Aryal', 'Adhikari', 'Maharjan', 'Basnet',
+            'Thapa', 'Dangol', 'Giri', 'Karki', 'Bhandari', 'Tamang', 'Gautam',
+            'Khadka', 'Poudel', 'Dahal', 'Bhattarai', 'Neupane', 'Subedi', 'Pradhan',
+            'Silwal', 'KC', 'Manandhar', 'Bohara', 'Baniya', 'Acharya', 'Chaulagain'
+        ];
 
-                    if (isset($chairData['alias'])) {
+        if ($ktmDistrict) {
+            $ktmPalikasCollection = Palika::where('district_id', $ktmDistrict->id)->get();
+            $wardChairIndex = 0;
+
+            foreach ($ktmPalikasCollection as $palika) {
+                $wards = Ward::where('palika_id', $palika->id)->orderBy('ward_number')->get();
+                $codeLower = strtolower($palika->code);
+
+                foreach ($wards as $ward) {
+                    $wardNum = $ward->ward_number;
+                    $isPilotWard = ($palika->code === 'KMC' && $wardNum === 32);
+
+                    if ($isPilotWard) {
+                        // KMC Ward 32 (Pilot Ward - Full Staff Team)
                         Staff::updateOrCreate(
-                            ['email' => $chairData['alias']],
+                            ['email' => 'chair@ward32.gov.np'],
                             [
-                                'name' => $chairData['name'],
-                                'phone' => '98510' . str_pad((string)$ward1->id, 5, '0', STR_PAD_LEFT),
+                                'name' => 'Bharat Lal Shrestha',
+                                'phone' => '9851000001',
                                 'password' => $password,
-                                'district_id' => $palika->district_id,
+                                'district_id' => $ktmDistrict->id,
                                 'palika_id' => $palika->id,
-                                'ward_id' => $ward1->id,
+                                'ward_id' => $ward->id,
                                 'role' => 'ward_chair',
-                                'designation' => "Ward Chairperson ({$chairData['palika_name']} Ward 1)",
+                                'designation' => 'Ward Chairperson (काठमाडौँ वडा नं. ३२ अध्यक्ष)',
+                                'is_active' => true,
+                            ]
+                        );
+
+                        Staff::updateOrCreate(
+                            ['email' => 'secretary@ward32.gov.np'],
+                            [
+                                'name' => 'Sita Sharma',
+                                'phone' => '9851000002',
+                                'password' => $password,
+                                'district_id' => $ktmDistrict->id,
+                                'palika_id' => $palika->id,
+                                'ward_id' => $ward->id,
+                                'role' => 'secretary',
+                                'designation' => 'Ward Secretary (वडा सचिव)',
+                                'is_active' => true,
+                            ]
+                        );
+
+                        Staff::updateOrCreate(
+                            ['email' => 'clerk@ward32.gov.np'],
+                            [
+                                'name' => 'Ramesh Adhikari',
+                                'phone' => '9851000003',
+                                'password' => $password,
+                                'district_id' => $ktmDistrict->id,
+                                'palika_id' => $palika->id,
+                                'ward_id' => $ward->id,
+                                'role' => 'clerk',
+                                'designation' => 'Front Desk Assistant (वडा सहायक)',
+                                'is_active' => true,
+                            ]
+                        );
+
+                        Staff::updateOrCreate(
+                            ['email' => 'admin.ward32@wardsewa.gov.np'],
+                            [
+                                'name' => 'KMC Ward 32 Administrator',
+                                'phone' => '9851000032',
+                                'password' => $password,
+                                'district_id' => $ktmDistrict->id,
+                                'palika_id' => $palika->id,
+                                'ward_id' => $ward->id,
+                                'role' => 'ward_admin',
+                                'designation' => 'Ward Executive Officer',
+                                'is_active' => true,
+                            ]
+                        );
+                    } else {
+                        // Generate deterministic realistic name
+                        $fn = $nepaliFirstNames[$wardChairIndex % count($nepaliFirstNames)];
+                        $ln = $nepaliLastNames[($wardChairIndex * 3 + intval($wardNum)) % count($nepaliLastNames)];
+                        $chairName = "{$fn} {$ln}";
+                        $chairPhone = '9851' . str_pad((string)$ward->id, 6, '0', STR_PAD_LEFT);
+
+                        // Primary standardized email: e.g. chair.kmc1@wardsewa.gov.np
+                        $primaryEmail = "chair.{$codeLower}{$wardNum}@wardsewa.gov.np";
+
+                        Staff::updateOrCreate(
+                            ['email' => $primaryEmail],
+                            [
+                                'name' => $chairName,
+                                'phone' => $chairPhone,
+                                'password' => $password,
+                                'district_id' => $ktmDistrict->id,
+                                'palika_id' => $palika->id,
+                                'ward_id' => $ward->id,
+                                'role' => 'ward_chair',
+                                'designation' => "Ward Chairperson ({$palika->name_en} Ward {$wardNum})",
                                 'is_active' => true,
                             ]
                         );
                     }
+
+                    $wardChairIndex++;
                 }
             }
         }
 
-        // Lalitpur & Bhaktapur Ward 1 Chairs
+        // =========================================================================
+        // 5. OTHER VALLEY WARDS (Lalitpur & Bhaktapur Pilot Wards)
+        // =========================================================================
         if ($lmc) {
             $lmcWard1 = Ward::where('palika_id', $lmc->id)->where('ward_number', 1)->first();
             if ($lmcWard1) {

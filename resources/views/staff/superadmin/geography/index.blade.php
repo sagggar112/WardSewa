@@ -71,12 +71,18 @@
                                 <!-- Collapsible Wards List -->
                                 <div x-show="showWards" x-cloak class="mt-3 pt-3 border-t border-slate-200 space-y-1.5 max-h-56 overflow-y-auto pr-1">
                                     @foreach($palika->wards as $w)
-                                        <div class="p-1.5 bg-white rounded border border-slate-100 text-[11px] flex items-center justify-between">
+                                        <div class="p-2 bg-white rounded border border-slate-100 text-[11px] flex items-center justify-between">
                                             <div>
-                                                <strong class="text-slate-900">वडा नं. {{ $w->ward_number }}</strong>
+                                                <div class="flex items-center space-x-1.5">
+                                                    <strong class="text-slate-900">वडा नं. {{ $w->ward_number }}</strong>
+                                                    <span class="w-1.5 h-1.5 rounded-full bg-emerald-500" title="सक्रिय कार्यालय"></span>
+                                                </div>
                                                 <span class="text-slate-400 block text-[10px] truncate max-w-[140px]">{{ $w->office_address }}</span>
                                             </div>
-                                            <span class="text-[10px] text-slate-400 font-mono">{{ $w->office_phone }}</span>
+                                            <div class="text-right">
+                                                <span class="text-[10px] text-slate-500 font-mono block">{{ $w->office_phone }}</span>
+                                                <span class="text-[9px] text-nepal-blue font-mono">chair.{{ strtolower($palika->code) }}{{ $w->ward_number }}@wardsewa</span>
+                                            </div>
                                         </div>
                                     @endforeach
                                 </div>

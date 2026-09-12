@@ -187,4 +187,43 @@ class AdministrativeHierarchyTest extends TestCase
             ->assertStatus(200)
             ->assertSee('11:00 AM - 12:00 PM');
     }
+
+    public function test_all_138_kathmandu_wards_are_active_with_chairperson_accounts(): void
+    {
+        $palikas = Palika::whereHas('district', fn($q) => $q->where('code', 'KTM'))->get();
+        $this->assertCount(11, $palikas);
+
+        $totalWards = 0;
+        foreach ($palikas as $palika) {
+            $wards = Ward::where('palika_id', $palika->id)->get();
+            $totalWards += $wards->count();
+
+            foreach ($wards as $ward) {
+                // Ensure chairperson exists for this ward
+                $chair = Staff::where('ward_id', $ward->id)->where('role', 'ward_chair')->first();
+                $this->assertNotNull($chair, "Ward {$ward->ward_number} in Palika {$palika->name_en} should have an active chair.");
+                $this->assertTrue($chair->is_active);
+                $this->assertEquals($palika->id, $chair->palika_id);
+            }
+        }
+
+        $this->assertEquals(138, $totalWards);
+
+        // Test login with both primary format and alias format
+        // 1. Chandragiri Ward 1 primary login
+        $resp1 = $this->post('/staff/login', [
+            'email' => 'chair.cgm1@wardsewa.gov.np',
+            'password' => 'password123',
+        ]);
+        $resp1->assertRedirect(route('staff.dashboard'));
+
+        // 2. Budhanilkantha Ward 5 alias login
+        $this->post(route('staff.logout'));
+
+        $resp2 = $this->post('/staff/login', [
+            'email' => 'chair@bnm5.gov.np',
+            'password' => 'password123',
+        ]);
+        $resp2->assertRedirect(route('staff.dashboard'));
+    }
 }

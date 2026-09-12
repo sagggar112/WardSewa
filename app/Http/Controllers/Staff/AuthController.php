@@ -27,11 +27,20 @@ class AuthController extends Controller
     public function login(Request $request)
     {
         $credentials = $request->validate([
-            'email' => ['required', 'email'],
+            'email' => ['required', 'string'],
             'password' => ['required', 'string'],
         ]);
 
-        if (Auth::guard('staff')->attempt($credentials, $request->boolean('remember'))) {
+        $resolvedEmail = $this->resolveEmail($credentials['email']);
+
+        // Attempt authentication with resolved email or original email
+        $attemptSuccess = Auth::guard('staff')->attempt(['email' => $resolvedEmail, 'password' => $credentials['password']], $request->boolean('remember'));
+
+        if (!$attemptSuccess && $resolvedEmail !== $credentials['email']) {
+            $attemptSuccess = Auth::guard('staff')->attempt(['email' => $credentials['email'], 'password' => $credentials['password']], $request->boolean('remember'));
+        }
+
+        if ($attemptSuccess) {
             $request->session()->regenerate();
             $staff = Auth::guard('staff')->user();
 
@@ -59,6 +68,40 @@ class AuthController extends Controller
         return back()->withErrors([
             'email' => 'The provided credentials do not match our records.',
         ])->onlyInput('email');
+    }
+
+    private function resolveEmail(string $email): string
+    {
+        $email = strtolower(trim($email));
+
+        if ($email === 'chair.kmc32@wardsewa.gov.np') {
+            return 'chair@ward32.gov.np';
+        }
+
+        if (preg_match('/^chair@([a-z]+)(\d+)\.gov\.np$/i', $email, $m)) {
+            if ($m[1] === 'ward' && $m[2] === '32') {
+                return 'chair@ward32.gov.np';
+            }
+            return "chair.{$m[1]}{$m[2]}@wardsewa.gov.np";
+        }
+
+        $palikaAdmins = [
+            'admin@kathmandu.gov.np' => 'admin.kmc@wardsewa.gov.np',
+            'admin@chandragiri.gov.np' => 'admin.chandragiri@wardsewa.gov.np',
+            'admin@budhanilkantha.gov.np' => 'admin.budhanilkantha@wardsewa.gov.np',
+            'admin@tarakeshwor.gov.np' => 'admin.tarakeshwor@wardsewa.gov.np',
+            'admin@tokha.gov.np' => 'admin.tokha@wardsewa.gov.np',
+            'admin@kirtipur.gov.np' => 'admin.kirtipur@wardsewa.gov.np',
+            'admin@nagarjun.gov.np' => 'admin.nagarjun@wardsewa.gov.np',
+            'admin@dakshinkali.gov.np' => 'admin.dakshinkali@wardsewa.gov.np',
+            'admin@gokarneshwor.gov.np' => 'admin.gokarneshwor@wardsewa.gov.np',
+            'admin@kageshwori.gov.np' => 'admin.kageshwori@wardsewa.gov.np',
+            'admin@shankharapur.gov.np' => 'admin.shankharapur@wardsewa.gov.np',
+            'admin@lalitpur.gov.np' => 'admin.lmc@wardsewa.gov.np',
+            'admin@bhaktapur.gov.np' => 'admin.bkm@wardsewa.gov.np',
+        ];
+
+        return $palikaAdmins[$email] ?? $email;
     }
 
     public function logout(Request $request)

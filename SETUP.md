@@ -73,25 +73,35 @@ Login Portal: **[http://localhost:8000/staff/login](http://localhost:8000/staff/
 | **Lalitpur Metropolitan City (LMC)** | `admin.lmc@wardsewa.gov.np` | `password123` | 29 Wards |
 | **Bhaktapur Municipality (BKM)** | `admin.bkm@wardsewa.gov.np` | `password123` | 10 Wards |
 
-### Tier 4: Ward Operational Staff (Kathmandu Valley Wards)
-| Role | Office | Email | Password | Permissions |
+### Tier 4: Ward Operational Staff (All 138 Wards in Kathmandu District Active)
+All 138 wards across all 11 Local Governments in Kathmandu District are seeded with active **Ward Chairperson (`ward_chair`)** accounts:
+
+- **Password (Universal):** `password123`
+- **Standard Primary Email Pattern:** `chair.<palika_code_lowercase><ward_number>@wardsewa.gov.np`
+- **Standard Alias Email Pattern:** `chair@<palika_code_lowercase><ward_number>.gov.np`
+
+| Local Government | Code | Total Wards | Primary Chairperson Email Range | Alias Range |
 | :--- | :--- | :--- | :--- | :--- |
-| **Ward Chair (वडा अध्यक्ष)** | KMC Ward 32 (Pilot) | `chair@ward32.gov.np` | `password123` | Full review, reject, digital signature stamping, PDF issuance |
-| **Ward Secretary (वडा सचिव)** | KMC Ward 32 (Pilot) | `secretary@ward32.gov.np` | `password123` | Application review, document requests, certificate signing |
-| **Front Desk Clerk (वडा सहायक)** | KMC Ward 32 (Pilot) | `clerk@ward32.gov.np` | `password123` | Triage, initial verification, document checks, appointments |
-| **Ward Admin (वडा व्यवस्थापक)** | KMC Ward 32 (Pilot) | `admin.ward32@wardsewa.gov.np` | `password123` | Ward staff configuration and notices |
-| **Ward 1 Chair (चन्द्रागिरि)** | Chandragiri Ward 1 | `chair@cgm1.gov.np` | `password123` | Chandragiri Ward 1 approvals & digital signing |
-| **Ward 1 Chair (बूढानीलकण्ठ)** | Budhanilkantha Ward 1 | `chair@bnm1.gov.np` | `password123` | Budhanilkantha Ward 1 approvals |
-| **Ward 1 Chair (तारकेश्वर)** | Tarakeshwor Ward 1 | `chair@trm1.gov.np` | `password123` | Tarakeshwor Ward 1 approvals |
-| **Ward 1 Chair (टोखा)** | Tokha Ward 1 | `chair@tkm1.gov.np` | `password123` | Tokha Ward 1 approvals |
-| **Ward 1 Chair (कीर्तिपुर)** | Kirtipur Ward 1 | `chair@krm1.gov.np` | `password123` | Kirtipur Ward 1 approvals |
-| **Ward 1 Chair (नागार्जुन)** | Nagarjun Ward 1 | `chair@njm1.gov.np` | `password123` | Nagarjun Ward 1 approvals |
-| **Ward 1 Chair (दक्षिणकाली)** | Dakshinkali Ward 1 | `chair@dkm1.gov.np` | `password123` | Dakshinkali Ward 1 approvals |
-| **Ward 1 Chair (गोकर्णेश्वर)** | Gokarneshwor Ward 1 | `chair@gkm1.gov.np` | `password123` | Gokarneshwor Ward 1 approvals |
-| **Ward 1 Chair (कागेश्वरी मनोहरा)**| Kageshwori Ward 1 | `chair@kmm1.gov.np` | `password123` | Kageshwori Ward 1 approvals |
-| **Ward 1 Chair (शंखरापुर)** | Shankharapur Ward 1 | `chair@skm1.gov.np` | `password123` | Shankharapur Ward 1 approvals |
-| **Ward 1 Chair (ललितपुर)** | Lalitpur Metro Ward 1 | `chair@lmc1.gov.np` | `password123` | Lalitpur Ward 1 approvals |
-| **Ward 1 Chair (भक्तपुर)** | Bhaktapur Ward 1 | `chair@bkm1.gov.np` | `password123` | Bhaktapur Ward 1 approvals |
+| **Kathmandu Metropolitan City** | `KMC` | 32 Wards | `chair.kmc1@wardsewa.gov.np` ... `chair.kmc32@wardsewa.gov.np` | `chair@kmc1.gov.np` ... `chair@ward32.gov.np` |
+| **Chandragiri Municipality** | `CGM` | 15 Wards | `chair.cgm1@wardsewa.gov.np` ... `chair.cgm15@wardsewa.gov.np` | `chair@cgm1.gov.np` ... `chair@cgm15.gov.np` |
+| **Budhanilkantha Municipality** | `BNM` | 13 Wards | `chair.bnm1@wardsewa.gov.np` ... `chair.bnm13@wardsewa.gov.np` | `chair@bnm1.gov.np` ... `chair@bnm13.gov.np` |
+| **Tarakeshwor Municipality** | `TRM` | 11 Wards | `chair.trm1@wardsewa.gov.np` ... `chair.trm11@wardsewa.gov.np` | `chair@trm1.gov.np` ... `chair@trm11.gov.np` |
+| **Tokha Municipality** | `TKM` | 11 Wards | `chair.tkm1@wardsewa.gov.np` ... `chair.tkm11@wardsewa.gov.np` | `chair@tkm1.gov.np` ... `chair@tkm11.gov.np` |
+| **Kirtipur Municipality** | `KRM` | 10 Wards | `chair.krm1@wardsewa.gov.np` ... `chair.krm10@wardsewa.gov.np` | `chair@krm1.gov.np` ... `chair@krm10.gov.np` |
+| **Nagarjun Municipality** | `NJM` | 10 Wards | `chair.njm1@wardsewa.gov.np` ... `chair.njm10@wardsewa.gov.np` | `chair@njm1.gov.np` ... `chair@njm10.gov.np` |
+| **Dakshinkali Municipality** | `DKM` | 9 Wards | `chair.dkm1@wardsewa.gov.np` ... `chair.dkm9@wardsewa.gov.np` | `chair@dkm1.gov.np` ... `chair@dkm9.gov.np` |
+| **Gokarneshwor Municipality** | `GKM` | 9 Wards | `chair.gkm1@wardsewa.gov.np` ... `chair.gkm9@wardsewa.gov.np` | `chair@gkm1.gov.np` ... `chair@gkm9.gov.np` |
+| **Kageshwori Manohara Municipality** | `KMM` | 9 Wards | `chair.kmm1@wardsewa.gov.np` ... `chair.kmm9@wardsewa.gov.np` | `chair@kmm1.gov.np` ... `chair@kmm9.gov.np` |
+| **Shankharapur Municipality** | `SKM` | 9 Wards | `chair.skm1@wardsewa.gov.np` ... `chair.skm9@wardsewa.gov.np` | `chair@skm1.gov.np` ... `chair@skm9.gov.np` |
+| **Total Kathmandu Wards Active** | **11 Palikas** | **138 Wards** | **138 Active Ward Chairperson Accounts** | **All with `password123`** |
+
+#### Dedicated Pilot Ward (KMC Ward 32 - Full Operational Team)
+| Role | Name | Email | Password | Scope |
+| :--- | :--- | :--- | :--- | :--- |
+| **Ward Chairperson (वडा अध्यक्ष)** | Bharat Lal Shrestha | `chair@ward32.gov.np` / `chair.kmc32@wardsewa.gov.np` | `password123` | Approvals & Digital Signing |
+| **Ward Secretary (वडा सचिव)** | Sita Sharma | `secretary@ward32.gov.np` | `password123` | Application review & verification |
+| **Front Desk Clerk (वडा सहायक)** | Ramesh Adhikari | `clerk@ward32.gov.np` | `password123` | Counter triage & citizen appointments |
+| **Ward Admin (वडा व्यवस्थापक)** | KMC Ward 32 Admin | `admin.ward32@wardsewa.gov.np` | `password123` | Local ward portal administration |
 
 ### Citizen Portal Accounts
 - **URL:** [http://localhost:8000/citizen/login](http://localhost:8000/citizen/login)
