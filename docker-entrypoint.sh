@@ -1,11 +1,9 @@
 #!/bin/bash
 set -e
 
-# Default port to 10000 if not provided by Render
-PORT="${PORT:-10000}"
-
-echo "==> Configuring Apache to listen on port ${PORT}..."
-sed -i "s/80/${PORT}/g" /etc/apache2/ports.conf /etc/apache2/sites-available/000-default.conf
+# Export APACHE_PORT so Apache's ${APACHE_PORT} in ports.conf and 000-default.conf picks it up
+export APACHE_PORT="${PORT:-10000}"
+echo "==> Render Port is set to: ${APACHE_PORT}"
 
 echo "==> Ensuring storage and cache directories exist..."
 mkdir -p storage/framework/cache/data storage/framework/sessions storage/framework/views storage/logs bootstrap/cache storage/app/public
@@ -20,23 +18,36 @@ if [ ! -L public/storage ]; then
     php artisan storage:link || true
 fi
 
+# If using PostgreSQL, wait up to 30s for the database to become reachable
+if [ -n "$DB_HOST" ] && [ "$DB_CONNECTION" = "pgsql" ]; then
+    echo "==> Checking database connection at ${DB_HOST}:${DB_PORT:-5432}..."
+    for i in $(seq 1 15); do
+        if nc -z -w 2 "$DB_HOST" "${DB_PORT:-5432}" 2>/dev/null; then
+            echo "==> Database port is reachable!"
+            break
+        fi
+        echo "==> Database not ready yet, waiting 2s ($i/15)..."
+        sleep 2
+    done
+fi
+
 # Run database migrations
 if [ "${RUN_MIGRATIONS:-true}" = "true" ]; then
     echo "==> Running database migrations..."
-    php artisan migrate --force || true
+    php artisan migrate --force || echo "==> Notice: Migration encountered an issue, continuing..."
 fi
 
-# Optional initial seed (if SEED_DATABASE is set to true)
+# Optional initial seed
 if [ "${SEED_DATABASE:-false}" = "true" ]; then
     echo "==> Seeding database..."
-    php artisan db:seed --force || true
+    php artisan db:seed --force || echo "==> Notice: Database seeding encountered an issue, continuing..."
 fi
 
-# Cache configuration, routes, and views for optimal performance
-echo "==> Caching application configuration..."
+# Cache configuration, routes, and views
+echo "==> Optimizing application configuration..."
 php artisan config:cache || true
 php artisan route:cache || true
 php artisan view:cache || true
 
-echo "==> Starting Apache..."
+echo "==> Starting Apache on port ${APACHE_PORT}..."
 exec apache2-foreground

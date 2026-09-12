@@ -7,10 +7,7 @@ WORKDIR /app
 COPY package*.json ./
 RUN npm install
 
-COPY vite.config.js tailwind.config.js postcss.config.js ./
-COPY resources ./resources
-COPY public ./public
-
+COPY . .
 RUN npm run build
 
 # ==========================================
@@ -25,14 +22,15 @@ RUN composer install \
     --no-interaction \
     --prefer-dist \
     --optimize-autoloader \
-    --no-scripts
+    --no-scripts \
+    --ignore-platform-reqs
 
 # ==========================================
 # Stage 3: Production PHP 8.2 Apache Image
 # ==========================================
 FROM php:8.2-apache AS app-runner
 
-# Install required system packages and PHP extension build dependencies
+# Install required system packages and PHP extension dependencies
 RUN apt-get update && apt-get install -y --no-install-recommends \
     libpq-dev \
     libzip-dev \
@@ -42,6 +40,7 @@ RUN apt-get update && apt-get install -y --no-install-recommends \
     libicu-dev \
     libonig-dev \
     libxml2-dev \
+    netcat-traditional \
     zip \
     unzip \
     curl \
@@ -57,21 +56,30 @@ RUN apt-get update && apt-get install -y --no-install-recommends \
         opcache \
     && apt-get clean && rm -rf /var/lib/apt/lists/*
 
+# Copy Composer binary from composer image
+COPY --from=composer:2 /usr/bin/composer /usr/bin/composer
+
 # Enable Apache mod_rewrite
 RUN a2enmod rewrite
 
-# Configure Apache DocumentRoot to point to Laravel's /public directory
-ENV APACHE_DOCUMENT_ROOT=/var/www/html/public
-RUN sed -ri -e 's!/var/www/html!${APACHE_DOCUMENT_ROOT}!g' /etc/apache2/sites-available/*.conf
-RUN sed -ri -e 's!/var/www/!${APACHE_DOCUMENT_ROOT}!g' /etc/apache2/apache2.conf /etc/apache2/conf-available/*.conf
+# Default port to 10000 for Render
+ENV APACHE_PORT=10000
+ENV PORT=10000
 
-# Allow .htaccess overrides
-RUN echo '<Directory /var/www/html/public>\n\
-    Options Indexes FollowSymLinks\n\
-    AllowOverride All\n\
-    Require all granted\n\
-</Directory>' > /etc/apache2/conf-available/laravel.conf \
-    && a2enconf laravel
+# Configure Apache virtual host and ports to use ${APACHE_PORT}
+RUN echo 'Listen ${APACHE_PORT}' > /etc/apache2/ports.conf
+
+RUN echo '<VirtualHost *:${APACHE_PORT}>\n\
+    ServerAdmin webmaster@localhost\n\
+    DocumentRoot /var/www/html/public\n\
+    <Directory /var/www/html/public>\n\
+        Options -Indexes +FollowSymLinks\n\
+        AllowOverride All\n\
+        Require all granted\n\
+    </Directory>\n\
+    ErrorLog ${APACHE_LOG_DIR}/error.log\n\
+    CustomLog ${APACHE_LOG_DIR}/access.log combined\n\
+</VirtualHost>' > /etc/apache2/sites-available/000-default.conf
 
 # Set working directory
 WORKDIR /var/www/html
@@ -84,6 +92,9 @@ COPY --from=composer-builder /app/vendor ./vendor
 
 # Copy built frontend assets from Node stage
 COPY --from=frontend-builder /app/public/build ./public/build
+
+# Regenerate complete optimized autoload classmap with app/ models & controllers
+RUN composer dump-autoload --optimize --no-dev
 
 # Copy and set entrypoint script
 COPY docker-entrypoint.sh /usr/local/bin/docker-entrypoint.sh
@@ -99,7 +110,6 @@ RUN mkdir -p storage/framework/cache/data \
     && chown -R www-data:www-data /var/www/html/storage /var/www/html/bootstrap/cache \
     && chmod -R 775 /var/www/html/storage /var/www/html/bootstrap/cache
 
-# Expose default Render port
 EXPOSE 10000
 
 ENTRYPOINT ["/usr/local/bin/docker-entrypoint.sh"]
