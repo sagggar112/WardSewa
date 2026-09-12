@@ -31,9 +31,9 @@ class AuthController extends Controller
     public function requestOtp(Request $request)
     {
         $request->validate([
-            'phone' => ['required', 'string', 'regex:/^(98|97)[0-9]{8}$/'],
+            'phone' => ['required', 'string', 'regex:/^(98|97|96)[0-9]{8}$/'],
         ], [
-            'phone.regex' => 'Please enter a valid 10-digit Nepali mobile number (starts with 98 or 97).',
+            'phone.regex' => 'Please enter a valid 10-digit Nepali mobile number (starts with 98, 97, or 96).',
         ]);
 
         $phone = $request->input('phone');
@@ -107,10 +107,26 @@ class AuthController extends Controller
 
     public function showWardSelect()
     {
+        /** @var \App\Models\Citizen $citizen */
         $citizen = Auth::guard('citizen')->user();
-        $palikas = Palika::with('wards')->get();
+        if ($citizen) {
+            $citizen->load('ward.palika.district');
+        }
 
-        return view('citizen.auth.ward-select', compact('citizen', 'palikas'));
+        $districts = \App\Models\District::whereIn('code', ['KTM', 'LAL', 'BKT'])
+            ->with([
+                'palikas' => function ($q) {
+                    $q->orderBy('type')->orderBy('name_en');
+                },
+                'palikas.wards' => function ($q) {
+                    $q->orderBy('ward_number');
+                }
+            ])
+            ->get();
+
+        $palikas = Palika::with(['wards', 'district'])->get();
+
+        return view('citizen.auth.ward-select', compact('citizen', 'districts', 'palikas'));
     }
 
     public function saveWardSelect(Request $request)

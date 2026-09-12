@@ -13,6 +13,21 @@
             </p>
         </div>
 
+        @if (session('dev_otp'))
+            <div class="mb-4 p-3 bg-amber-50 border border-amber-200 rounded-lg text-xs text-amber-800 flex items-center justify-between">
+                <span><strong>{{ __('Testing Code (Sandbox):') }}</strong> <code class="font-mono font-bold text-sm text-nepal-blue">{{ session('dev_otp') }}</code></span>
+                <button type="button" onclick="document.getElementById('otp').value='{{ session('dev_otp') }}'" class="text-[11px] underline font-medium hover:text-amber-950">
+                    {{ __('Auto-fill') }}
+                </button>
+            </div>
+        @endif
+
+        @if (session('sms_warning'))
+            <div class="mb-4 p-3 bg-rose-50 border border-rose-200 rounded-lg text-xs text-rose-700">
+                {{ session('sms_warning') }}
+            </div>
+        @endif
+
         <form method="POST" action="{{ route('citizen.otp.verify') }}" class="space-y-4">
             @csrf
             <div>

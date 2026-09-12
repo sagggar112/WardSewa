@@ -99,5 +99,22 @@
     "Notice Management": "सूचना व्यवस्थापन",
     "OTP Code Verification": "OTP कोड प्रमाणीकरण",
     "6-Digit Verification Code (OTP Code)": "६ अंकको प्रमाणीकरण कोड (OTP Code)",
-    "Resend Code": "पुनः कोड पठाउनुहोस्"
+    "Resend Code": "पुनः कोड पठाउनुहोस्",
+    "Government of Nepal | Bagmati Province | Kathmandu Valley (Kathmandu, Lalitpur, Bhaktapur)": "नेपाल सरकार | बागमती प्रदेश | काठमाडौँ उपत्यका (काठमाडौँ, ललितपुर, भक्तपुर)",
+    "Kathmandu Valley Coverage: 3 Districts, 21 Palikas, 247 Wards": "काठमाडौँ उपत्यकाव्यापी सेवा: ३ जिल्ला, २१ पालिका, २४७ वडाहरू",
+    "Real-Time SMS OTP to Mobile": "मोबाइलमै प्रत्यक्ष SMS OTP प्रमाणीकरण",
+    "View Valley Palikas & Wards": "उपत्यकाका पालिका तथा वडाहरू हेर्नुहोस्",
+    "Kathmandu Valley Local Body Coverage": "काठमाडौँ उपत्यकाका स्थानीय तहहरू",
+    "Citizens from any of the 21 metropolitan, municipal, and rural local governments across Kathmandu, Lalitpur, and Bhaktapur can register and access digital ward services.": "काठमाडौँ, ललितपुर र भक्तपुरका सम्पूर्ण २१ स्थानीय तहका नागरिकहरूले मोबाइल नम्बर दर्ता गरी डिजिटल वडा सेवा प्राप्त गर्न सक्नुहुनेछ।",
+    "Apply online for recommendation letters (Four Boundaries, Unmarried, Residence), birth registration, public grievances, and pay electricity/water bills instantly across Kathmandu, Lalitpur & Bhaktapur.": "काठमाडौँ, ललितपुर र भक्तपुरभरि घरैबाट सिफारिस पत्र (चारकिल्ला, अविवाहित, बसोबास), घटना दर्ता, नागरिक गुनासो र महसुल भुक्तानी गर्नुहोस्।",
+    "Apply Online (Citizen Login)": "अनलाइन सेवा लिनुहोस् (नागरिक लगइन)",
+    "Step 2: Ward Profile Setup": "चरण २: वडा प्रोफाइल सेटअप",
+    "Select Your Palika & Ward": "आफ्नो स्थानीय तह र वडा चयन गर्नुहोस्",
+    "Your applications, recommendations, and public service requests will be routed directly to your chosen Ward Office.": "तपाईँले पेश गर्ने सम्पूर्ण सिफारिस तथा सेवा निवेदनहरू सम्बन्धित वडा कार्यालयमा प्रेषित हुनेछन्।",
+    "Full Name (पूरा नाम)": "पूरा नाम",
+    "Citizenship No. (नागरिकता नं.)": "नागरिकता नम्बर",
+    "Tole / Street Address (टोल वा सडक ठेगाना)": "टोल वा सडक ठेगाना",
+    "Citizen Portal Login": "नागरिक पोर्टल लगइन",
+    "Testing Code (Sandbox):": "परीक्षण कोड (स्यान्डबक्स):",
+    "Auto-fill": "स्वतः भर्नुहोस्"
 }

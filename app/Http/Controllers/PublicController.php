@@ -15,8 +15,13 @@ class PublicController extends Controller
         $services = ServiceType::where('is_active', true)->get();
         $notices = Notice::active()->latest()->take(5)->get();
         $pilotWard = Ward::with('palika.district')->where('ward_number', 32)->first();
+        $valleyDistricts = \App\Models\District::whereIn('code', ['KTM', 'LAL', 'BKT'])
+            ->with(['palikas.wards'])
+            ->get();
+        $totalPalikas = \App\Models\Palika::count();
+        $totalWards = Ward::count();
 
-        return view('welcome', compact('services', 'notices', 'pilotWard'));
+        return view('welcome', compact('services', 'notices', 'pilotWard', 'valleyDistricts', 'totalPalikas', 'totalWards'));
     }
 
     public function notices()

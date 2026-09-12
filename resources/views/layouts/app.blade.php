@@ -43,7 +43,7 @@
             <div class="flex items-center justify-between py-3 border-b border-white/10 text-xs sm:text-sm">
                 <div class="flex items-center space-x-2">
                     <span class="inline-block w-2 h-2 rounded-full bg-red-400 animate-pulse"></span>
-                    <span>{{ __('Government of Nepal | Bagmati Province | Kathmandu Metropolitan City (Pilot Ward 32)') }}</span>
+                    <span>{{ __('Government of Nepal | Bagmati Province | Kathmandu Valley (Kathmandu, Lalitpur, Bhaktapur)') }}</span>
                 </div>
                 <div class="flex items-center space-x-4">
                     <!-- Language Switcher -->
