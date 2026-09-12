@@ -226,4 +226,103 @@ class AdministrativeHierarchyTest extends TestCase
         ]);
         $resp2->assertRedirect(route('staff.dashboard'));
     }
+
+    public function test_super_admin_can_add_districts_and_palikas_with_auto_provisioning(): void
+    {
+        $superAdmin = Staff::where('role', 'super_admin')->first();
+        $this->assertNotNull($superAdmin);
+
+        // 1. Super Admin adds a new District
+        $province = \App\Models\Province::first();
+        $districtResponse = $this->actingAs($superAdmin, 'staff')
+            ->post(route('staff.superadmin.districts.store'), [
+                'province_id' => $province->id,
+                'name_en' => 'New Himalayan District',
+                'name_ne' => 'नयाँ हिमाली जिल्ला',
+                'code' => 'NHD',
+                'admin_name' => 'NHD DCC Officer',
+            ]);
+
+        $districtResponse->assertRedirect(route('staff.superadmin.geography'));
+        $this->assertDatabaseHas('districts', [
+            'code' => 'NHD',
+            'name_en' => 'New Himalayan District',
+        ]);
+        $this->assertDatabaseHas('staff', [
+            'email' => 'admin.nhd@wardsewa.gov.np',
+            'role' => 'district_admin',
+        ]);
+
+        $newDistrict = \App\Models\District::where('code', 'NHD')->first();
+
+        // 2. Super Admin adds a new Local Government (e.g. Pokhara Metropolitan City)
+        $palikaResponse = $this->actingAs($superAdmin, 'staff')
+            ->post(route('staff.superadmin.palikas.store'), [
+                'district_id' => $newDistrict->id,
+                'name_en' => 'Pokhara Metropolitan City',
+                'name_ne' => 'पोखरा महानगरपालिका',
+                'type' => 'metropolitan',
+                'code' => 'POK',
+            ]);
+
+        $palikaResponse->assertRedirect(route('staff.superadmin.geography'));
+        $this->assertDatabaseHas('palikas', [
+            'code' => 'POK',
+            'type' => 'metropolitan',
+            'name_en' => 'Pokhara Metropolitan City',
+        ]);
+
+        // Auto-provisioned Municipal Admin
+        $this->assertDatabaseHas('staff', [
+            'email' => 'admin.pok@wardsewa.gov.np',
+            'role' => 'local_government_admin',
+        ]);
+
+        // Verify audit log recorded
+        $this->assertDatabaseHas('audit_logs', [
+            'action' => 'create_palika',
+        ]);
+    }
+
+    public function test_municipal_admin_can_add_wards_strictly_within_own_area(): void
+    {
+        $kmcAdmin = Staff::where('email', 'admin.kmc@wardsewa.gov.np')->first();
+        $this->assertNotNull($kmcAdmin);
+        $kmc = $kmcAdmin->palika;
+
+        // 1. KMC Admin adds Ward 33 to Kathmandu Metro
+        $response = $this->actingAs($kmcAdmin, 'staff')
+            ->post(route('staff.localgovt.wards.store'), [
+                'ward_number' => 33,
+                'office_address' => 'New Area, Kathmandu',
+                'office_phone' => '01-4609999',
+                'office_email' => 'ward33@kathmandu.gov.np',
+                'chairperson_name' => 'Gopal Krishna Shrestha',
+                'chairperson_phone' => '9851033333',
+            ]);
+
+        $response->assertRedirect(route('staff.localgovt.wards'));
+        $this->assertDatabaseHas('wards', [
+            'palika_id' => $kmc->id,
+            'ward_number' => 33,
+            'office_address' => 'New Area, Kathmandu',
+        ]);
+
+        // Auto-provisioned Ward Chair
+        $this->assertDatabaseHas('staff', [
+            'email' => 'chair.kmc33@wardsewa.gov.np',
+            'name' => 'Gopal Krishna Shrestha',
+            'role' => 'ward_chair',
+            'ward_id' => Ward::where('palika_id', $kmc->id)->where('ward_number', 33)->first()->id,
+        ]);
+
+        // 2. Duplicate ward number in same palika should fail validation
+        $duplicateResponse = $this->actingAs($kmcAdmin, 'staff')
+            ->post(route('staff.localgovt.wards.store'), [
+                'ward_number' => 33,
+                'office_address' => 'Duplicate Location',
+            ]);
+
+        $duplicateResponse->assertSessionHasErrors(['ward_number']);
+    }
 }

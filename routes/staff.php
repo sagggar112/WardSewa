@@ -37,6 +37,9 @@ Route::middleware('staff.auth')->group(function () {
     Route::middleware('staff.role:super_admin,admin')->prefix('superadmin')->name('superadmin.')->group(function () {
         Route::get('/dashboard', [SuperAdminController::class, 'dashboard'])->name('dashboard');
         Route::get('/geography', [SuperAdminController::class, 'geography'])->name('geography');
+        Route::post('/districts', [SuperAdminController::class, 'storeDistrict'])->name('districts.store');
+        Route::post('/palikas', [SuperAdminController::class, 'storePalika'])->name('palikas.store');
+        Route::put('/palikas/{id}', [SuperAdminController::class, 'updatePalika'])->name('palikas.update');
         Route::get('/admins', [SuperAdminController::class, 'admins'])->name('admins');
         Route::get('/audit-logs', [SuperAdminController::class, 'auditLogs'])->name('audit-logs');
     });
@@ -56,6 +59,8 @@ Route::middleware('staff.auth')->group(function () {
     Route::middleware('staff.role:local_government_admin,super_admin,admin')->prefix('localgovt')->name('localgovt.')->group(function () {
         Route::get('/dashboard', [LocalGovtAdminController::class, 'dashboard'])->name('dashboard');
         Route::get('/wards', [LocalGovtAdminController::class, 'wards'])->name('wards');
+        Route::post('/wards', [LocalGovtAdminController::class, 'storeWard'])->name('wards.store');
+        Route::put('/wards/{id}', [LocalGovtAdminController::class, 'updateWard'])->name('wards.update');
         Route::get('/applications', [LocalGovtAdminController::class, 'applications'])->name('applications');
     });
 
