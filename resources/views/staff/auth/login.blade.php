@@ -134,72 +134,184 @@
                     <button type="button" onclick="fillStaff('chair@ward32.gov.np')"
                             class="p-2.5 bg-slate-50 hover:bg-red-50 border border-slate-200 hover:border-nepal-crimson rounded-xl text-left transition group">
                         <div class="font-bold text-nepal-crimson flex items-center justify-between">
-                            <span>वडा अध्यक्ष (Ward Chair)</span>
-                            <span class="text-[10px] bg-red-100 text-red-800 px-1.5 py-0.2 rounded">KMC ३२</span>
+                            <span>काठमाडौँ वडा ३२ अध्यक्ष (Ward Chair)</span>
+                            <span class="text-[10px] bg-red-100 text-red-800 px-1.5 py-0.2 rounded font-bold">पाइलट</span>
                         </div>
                         <div class="text-[11px] text-slate-500 font-mono mt-0.5">chair@ward32.gov.np</div>
-                        <div class="text-[10px] text-emerald-700 font-semibold mt-1">अन्तिम स्वीकृति तथा डिजिटल हस्ताक्षर &rarr;</div>
+                        <div class="text-[10px] text-emerald-700 font-semibold mt-0.5">अन्तिम स्वीकृति तथा डिजिटल हस्ताक्षर &rarr;</div>
                     </button>
 
                     <button type="button" onclick="fillStaff('secretary@ward32.gov.np')"
                             class="p-2.5 bg-slate-50 hover:bg-blue-50 border border-slate-200 hover:border-nepal-blue rounded-xl text-left transition group">
                         <div class="font-bold text-nepal-blue flex items-center justify-between">
-                            <span>वडा सचिव (Ward Secretary)</span>
-                            <span class="text-[10px] bg-blue-100 text-blue-800 px-1.5 py-0.2 rounded">KMC ३२</span>
+                            <span>काठमाडौँ वडा ३२ सचिव (Secretary)</span>
+                            <span class="text-[10px] bg-blue-100 text-blue-800 px-1.5 py-0.2 rounded font-bold">KMC ३२</span>
                         </div>
                         <div class="text-[11px] text-slate-500 font-mono mt-0.5">secretary@ward32.gov.np</div>
-                        <div class="text-[10px] text-slate-600 font-semibold mt-1">कागजात अध्ययन तथा पेश &rarr;</div>
+                        <div class="text-[10px] text-slate-600 font-semibold mt-0.5">कागजात अध्ययन तथा पेश &rarr;</div>
                     </button>
 
-                    <button type="button" onclick="fillStaff('clerk@ward32.gov.np')"
-                            class="p-2.5 bg-slate-50 hover:bg-slate-100 border border-slate-200 rounded-xl text-left transition group">
+                    <button type="button" onclick="fillStaff('chair@cgm1.gov.np')"
+                            class="p-2.5 bg-slate-50 hover:bg-red-50 border border-slate-200 hover:border-nepal-crimson rounded-xl text-left transition group">
                         <div class="font-bold text-slate-800 flex items-center justify-between">
-                            <span>वडा सहायक (Front Clerk)</span>
-                            <span class="text-[10px] bg-slate-200 text-slate-700 px-1.5 py-0.2 rounded">KMC ३२</span>
+                            <span>चन्द्रागिरि वडा १ अध्यक्ष (Dahachok)</span>
+                            <span class="text-[10px] bg-slate-200 text-slate-700 px-1.5 py-0.2 rounded font-bold">CGM १</span>
                         </div>
-                        <div class="text-[11px] text-slate-500 font-mono mt-0.5">clerk@ward32.gov.np</div>
-                        <div class="text-[10px] text-slate-600 font-semibold mt-1">दर्ता, रुजु तथा भेटघाट तालिका &rarr;</div>
+                        <div class="text-[11px] text-slate-500 font-mono mt-0.5">chair@cgm1.gov.np</div>
+                        <div class="text-[10px] text-emerald-700 font-semibold mt-0.5">चन्द्रागिरि वडा १ कार्यसम्पादन &rarr;</div>
                     </button>
 
-                    <button type="button" onclick="fillStaff('admin.ward32@wardsewa.gov.np')"
-                            class="p-2.5 bg-slate-50 hover:bg-slate-100 border border-slate-200 rounded-xl text-left transition group">
+                    <button type="button" onclick="fillStaff('chair@bnm1.gov.np')"
+                            class="p-2.5 bg-slate-50 hover:bg-red-50 border border-slate-200 hover:border-nepal-crimson rounded-xl text-left transition group">
                         <div class="font-bold text-slate-800 flex items-center justify-between">
-                            <span>वडा प्रशासक (Ward Admin)</span>
-                            <span class="text-[10px] bg-slate-200 text-slate-700 px-1.5 py-0.2 rounded">KMC ३२</span>
+                            <span>बूढानीलकण्ठ वडा १ अध्यक्ष</span>
+                            <span class="text-[10px] bg-slate-200 text-slate-700 px-1.5 py-0.2 rounded font-bold">BNM १</span>
                         </div>
-                        <div class="text-[11px] text-slate-500 font-mono mt-0.5">admin.ward32@wardsewa.gov.np</div>
-                        <div class="text-[10px] text-slate-600 font-semibold mt-1">वडा कर्मचारी तथा सूचना व्यवस्थापन &rarr;</div>
+                        <div class="text-[11px] text-slate-500 font-mono mt-0.5">chair@bnm1.gov.np</div>
+                        <div class="text-[10px] text-emerald-700 font-semibold mt-0.5">बूढानीलकण्ठ वडा १ कार्यसम्पादन &rarr;</div>
+                    </button>
+
+                    <button type="button" onclick="fillStaff('chair@krm1.gov.np')"
+                            class="p-2.5 bg-slate-50 hover:bg-red-50 border border-slate-200 hover:border-nepal-crimson rounded-xl text-left transition group">
+                        <div class="font-bold text-slate-800 flex items-center justify-between">
+                            <span>कीर्तिपुर वडा १ अध्यक्ष (Baghbhairab)</span>
+                            <span class="text-[10px] bg-slate-200 text-slate-700 px-1.5 py-0.2 rounded font-bold">KRM १</span>
+                        </div>
+                        <div class="text-[11px] text-slate-500 font-mono mt-0.5">chair@krm1.gov.np</div>
+                        <div class="text-[10px] text-emerald-700 font-semibold mt-0.5">कीर्तिपुर वडा १ कार्यसम्पादन &rarr;</div>
+                    </button>
+
+                    <button type="button" onclick="fillStaff('chair@tkm1.gov.np')"
+                            class="p-2.5 bg-slate-50 hover:bg-red-50 border border-slate-200 hover:border-nepal-crimson rounded-xl text-left transition group">
+                        <div class="font-bold text-slate-800 flex items-center justify-between">
+                            <span>टोखा वडा १ अध्यक्ष (Baudeshwor)</span>
+                            <span class="text-[10px] bg-slate-200 text-slate-700 px-1.5 py-0.2 rounded font-bold">TKM १</span>
+                        </div>
+                        <div class="text-[11px] text-slate-500 font-mono mt-0.5">chair@tkm1.gov.np</div>
+                        <div class="text-[10px] text-emerald-700 font-semibold mt-0.5">टोखा वडा १ कार्यसम्पादन &rarr;</div>
                     </button>
                 </div>
 
-                <!-- Tier 3: Palika / Municipal Accounts -->
+                <!-- Tier 3: Palika / Municipal Accounts (All 11 Kathmandu District Palikas) -->
                 <div x-show="activeTier === 'palika'" class="grid grid-cols-1 sm:grid-cols-2 gap-2 text-xs" style="display: none;">
                     <button type="button" onclick="fillStaff('admin.kmc@wardsewa.gov.np')"
                             class="p-2.5 bg-slate-50 hover:bg-blue-50 border border-slate-200 hover:border-nepal-blue rounded-xl text-left transition">
-                        <div class="font-bold text-nepal-blue">काठमाडौँ महानगरपालिका (KMC)</div>
-                        <div class="text-[11px] text-slate-500 font-mono">admin.kmc@wardsewa.gov.np</div>
-                        <div class="text-[10px] text-slate-600 font-semibold mt-0.5">समग्र ३२ वडा व्यवस्थापन &rarr;</div>
-                    </button>
-
-                    <button type="button" onclick="fillStaff('admin.lmc@wardsewa.gov.np')"
-                            class="p-2.5 bg-slate-50 hover:bg-blue-50 border border-slate-200 hover:border-nepal-blue rounded-xl text-left transition">
-                        <div class="font-bold text-nepal-blue">ललितपुर महानगरपालिका (LMC)</div>
-                        <div class="text-[11px] text-slate-500 font-mono">admin.lmc@wardsewa.gov.np</div>
-                        <div class="text-[10px] text-slate-600 font-semibold mt-0.5">समग्र २९ वडा व्यवस्थापन &rarr;</div>
-                    </button>
-
-                    <button type="button" onclick="fillStaff('admin.bkm@wardsewa.gov.np')"
-                            class="p-2.5 bg-slate-50 hover:bg-blue-50 border border-slate-200 hover:border-nepal-blue rounded-xl text-left transition">
-                        <div class="font-bold text-nepal-blue">भक्तपुर नगरपालिका (BKM)</div>
-                        <div class="text-[11px] text-slate-500 font-mono">admin.bkm@wardsewa.gov.np</div>
-                        <div class="text-[10px] text-slate-600 font-semibold mt-0.5">समग्र १० वडा व्यवस्थापन &rarr;</div>
+                        <div class="font-bold text-nepal-blue flex items-center justify-between">
+                            <span>काठमाडौँ महानगरपालिका (KMC)</span>
+                            <span class="text-[10px] bg-blue-100 text-blue-800 px-1.5 py-0.2 rounded font-bold">३२ वडा</span>
+                        </div>
+                        <div class="text-[11px] text-slate-500 font-mono mt-0.5">admin.kmc@wardsewa.gov.np</div>
+                        <div class="text-[10px] text-slate-600 font-semibold mt-0.5">महानगरपालिका समग्र व्यवस्थापन &rarr;</div>
                     </button>
 
                     <button type="button" onclick="fillStaff('admin.chandragiri@wardsewa.gov.np')"
                             class="p-2.5 bg-slate-50 hover:bg-blue-50 border border-slate-200 hover:border-nepal-blue rounded-xl text-left transition">
-                        <div class="font-bold text-nepal-blue">चन्द्रागिरी नगरपालिका (CGM)</div>
-                        <div class="text-[11px] text-slate-500 font-mono">admin.chandragiri@wardsewa.gov.np</div>
-                        <div class="text-[10px] text-slate-600 font-semibold mt-0.5">समग्र १५ वडा व्यवस्थापन &rarr;</div>
+                        <div class="font-bold text-nepal-blue flex items-center justify-between">
+                            <span>चन्द्रागिरि नगरपालिका (CGM)</span>
+                            <span class="text-[10px] bg-blue-100 text-blue-800 px-1.5 py-0.2 rounded font-bold">१५ वडा</span>
+                        </div>
+                        <div class="text-[11px] text-slate-500 font-mono mt-0.5">admin.chandragiri@wardsewa.gov.np</div>
+                        <div class="text-[10px] text-slate-600 font-semibold mt-0.5">चन्द्रागिरि समग्र व्यवस्थापन &rarr;</div>
+                    </button>
+
+                    <button type="button" onclick="fillStaff('admin.budhanilkantha@wardsewa.gov.np')"
+                            class="p-2.5 bg-slate-50 hover:bg-blue-50 border border-slate-200 hover:border-nepal-blue rounded-xl text-left transition">
+                        <div class="font-bold text-nepal-blue flex items-center justify-between">
+                            <span>बूढानीलकण्ठ नगरपालिका (BNM)</span>
+                            <span class="text-[10px] bg-blue-100 text-blue-800 px-1.5 py-0.2 rounded font-bold">१३ वडा</span>
+                        </div>
+                        <div class="text-[11px] text-slate-500 font-mono mt-0.5">admin.budhanilkantha@wardsewa.gov.np</div>
+                        <div class="text-[10px] text-slate-600 font-semibold mt-0.5">बूढानीलकण्ठ समग्र व्यवस्थापन &rarr;</div>
+                    </button>
+
+                    <button type="button" onclick="fillStaff('admin.tarakeshwor@wardsewa.gov.np')"
+                            class="p-2.5 bg-slate-50 hover:bg-blue-50 border border-slate-200 hover:border-nepal-blue rounded-xl text-left transition">
+                        <div class="font-bold text-nepal-blue flex items-center justify-between">
+                            <span>तारकेश्वर नगरपालिका (TRM)</span>
+                            <span class="text-[10px] bg-blue-100 text-blue-800 px-1.5 py-0.2 rounded font-bold">११ वडा</span>
+                        </div>
+                        <div class="text-[11px] text-slate-500 font-mono mt-0.5">admin.tarakeshwor@wardsewa.gov.np</div>
+                        <div class="text-[10px] text-slate-600 font-semibold mt-0.5">तारकेश्वर समग्र व्यवस्थापन &rarr;</div>
+                    </button>
+
+                    <button type="button" onclick="fillStaff('admin.tokha@wardsewa.gov.np')"
+                            class="p-2.5 bg-slate-50 hover:bg-blue-50 border border-slate-200 hover:border-nepal-blue rounded-xl text-left transition">
+                        <div class="font-bold text-nepal-blue flex items-center justify-between">
+                            <span>टोखा नगरपालिका (TKM)</span>
+                            <span class="text-[10px] bg-blue-100 text-blue-800 px-1.5 py-0.2 rounded font-bold">११ वडा</span>
+                        </div>
+                        <div class="text-[11px] text-slate-500 font-mono mt-0.5">admin.tokha@wardsewa.gov.np</div>
+                        <div class="text-[10px] text-slate-600 font-semibold mt-0.5">टोखा समग्र व्यवस्थापन &rarr;</div>
+                    </button>
+
+                    <button type="button" onclick="fillStaff('admin.kirtipur@wardsewa.gov.np')"
+                            class="p-2.5 bg-slate-50 hover:bg-blue-50 border border-slate-200 hover:border-nepal-blue rounded-xl text-left transition">
+                        <div class="font-bold text-nepal-blue flex items-center justify-between">
+                            <span>कीर्तिपुर नगरपालिका (KRM)</span>
+                            <span class="text-[10px] bg-blue-100 text-blue-800 px-1.5 py-0.2 rounded font-bold">१० वडा</span>
+                        </div>
+                        <div class="text-[11px] text-slate-500 font-mono mt-0.5">admin.kirtipur@wardsewa.gov.np</div>
+                        <div class="text-[10px] text-slate-600 font-semibold mt-0.5">कीर्तिपुर समग्र व्यवस्थापन &rarr;</div>
+                    </button>
+
+                    <button type="button" onclick="fillStaff('admin.nagarjun@wardsewa.gov.np')"
+                            class="p-2.5 bg-slate-50 hover:bg-blue-50 border border-slate-200 hover:border-nepal-blue rounded-xl text-left transition">
+                        <div class="font-bold text-nepal-blue flex items-center justify-between">
+                            <span>नागार्जुन नगरपालिका (NJM)</span>
+                            <span class="text-[10px] bg-blue-100 text-blue-800 px-1.5 py-0.2 rounded font-bold">१० वडा</span>
+                        </div>
+                        <div class="text-[11px] text-slate-500 font-mono mt-0.5">admin.nagarjun@wardsewa.gov.np</div>
+                        <div class="text-[10px] text-slate-600 font-semibold mt-0.5">नागार्जुन समग्र व्यवस्थापन &rarr;</div>
+                    </button>
+
+                    <button type="button" onclick="fillStaff('admin.gokarneshwor@wardsewa.gov.np')"
+                            class="p-2.5 bg-slate-50 hover:bg-blue-50 border border-slate-200 hover:border-nepal-blue rounded-xl text-left transition">
+                        <div class="font-bold text-nepal-blue flex items-center justify-between">
+                            <span>गोकर्णेश्वर नगरपालिका (GKM)</span>
+                            <span class="text-[10px] bg-blue-100 text-blue-800 px-1.5 py-0.2 rounded font-bold">९ वडा</span>
+                        </div>
+                        <div class="text-[11px] text-slate-500 font-mono mt-0.5">admin.gokarneshwor@wardsewa.gov.np</div>
+                        <div class="text-[10px] text-slate-600 font-semibold mt-0.5">गोकर्णेश्वर समग्र व्यवस्थापन &rarr;</div>
+                    </button>
+
+                    <button type="button" onclick="fillStaff('admin.kageshwori@wardsewa.gov.np')"
+                            class="p-2.5 bg-slate-50 hover:bg-blue-50 border border-slate-200 hover:border-nepal-blue rounded-xl text-left transition">
+                        <div class="font-bold text-nepal-blue flex items-center justify-between">
+                            <span>कागेश्वरी मनोहरा (KMM)</span>
+                            <span class="text-[10px] bg-blue-100 text-blue-800 px-1.5 py-0.2 rounded font-bold">९ वडा</span>
+                        </div>
+                        <div class="text-[11px] text-slate-500 font-mono mt-0.5">admin.kageshwori@wardsewa.gov.np</div>
+                        <div class="text-[10px] text-slate-600 font-semibold mt-0.5">कागेश्वरी मनोहरा व्यवस्थापन &rarr;</div>
+                    </button>
+
+                    <button type="button" onclick="fillStaff('admin.shankharapur@wardsewa.gov.np')"
+                            class="p-2.5 bg-slate-50 hover:bg-blue-50 border border-slate-200 hover:border-nepal-blue rounded-xl text-left transition">
+                        <div class="font-bold text-nepal-blue flex items-center justify-between">
+                            <span>शंखरापुर नगरपालिका (SKM)</span>
+                            <span class="text-[10px] bg-blue-100 text-blue-800 px-1.5 py-0.2 rounded font-bold">९ वडा</span>
+                        </div>
+                        <div class="text-[11px] text-slate-500 font-mono mt-0.5">admin.shankharapur@wardsewa.gov.np</div>
+                        <div class="text-[10px] text-slate-600 font-semibold mt-0.5">शंखरापुर समग्र व्यवस्थापन &rarr;</div>
+                    </button>
+
+                    <button type="button" onclick="fillStaff('admin.dakshinkali@wardsewa.gov.np')"
+                            class="p-2.5 bg-slate-50 hover:bg-blue-50 border border-slate-200 hover:border-nepal-blue rounded-xl text-left transition">
+                        <div class="font-bold text-nepal-blue flex items-center justify-between">
+                            <span>दक्षिणकाली नगरपालिका (DKM)</span>
+                            <span class="text-[10px] bg-blue-100 text-blue-800 px-1.5 py-0.2 rounded font-bold">९ वडा</span>
+                        </div>
+                        <div class="text-[11px] text-slate-500 font-mono mt-0.5">admin.dakshinkali@wardsewa.gov.np</div>
+                        <div class="text-[10px] text-slate-600 font-semibold mt-0.5">दक्षिणकाली समग्र व्यवस्थापन &rarr;</div>
+                    </button>
+
+                    <button type="button" onclick="fillStaff('admin.lmc@wardsewa.gov.np')"
+                            class="p-2.5 bg-slate-50 hover:bg-blue-50 border border-slate-200 hover:border-nepal-blue rounded-xl text-left transition">
+                        <div class="font-bold text-nepal-blue flex items-center justify-between">
+                            <span>ललितपुर महानगरपालिका (LMC)</span>
+                            <span class="text-[10px] bg-blue-100 text-blue-800 px-1.5 py-0.2 rounded font-bold">२९ वडा</span>
+                        </div>
+                        <div class="text-[11px] text-slate-500 font-mono mt-0.5">admin.lmc@wardsewa.gov.np</div>
+                        <div class="text-[10px] text-slate-600 font-semibold mt-0.5">ललितपुर महानगर व्यवस्थापन &rarr;</div>
                     </button>
                 </div>
 
