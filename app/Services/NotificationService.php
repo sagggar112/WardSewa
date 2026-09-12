@@ -9,23 +9,6 @@ use Illuminate\Support\Facades\Log;
 class NotificationService
 {
     /**
-     * Send OTP code to citizen phone via real-time SMS.
-     */
-    public function sendOtp(string $phone, string $otp): bool
-    {
-        $message = "[WardSewa] Your verification code is: {$otp}. Valid for 10 minutes. Do not share this code.";
-
-        Log::info("OTP REQUEST for {$phone}: code={$otp}");
-
-        // In local, testing, or if SMS_DEBUG is enabled, preserve OTP in session for testing
-        if (app()->environment('local', 'testing') || config('services.sms.debug', false)) {
-            session()->flash('dev_otp', $otp);
-        }
-
-        return $this->sendSms($phone, $message);
-    }
-
-    /**
      * Dispatch SMS message to the given mobile number using configured provider.
      */
     public function sendSms(string $phone, string $message): bool

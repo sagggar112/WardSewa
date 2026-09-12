@@ -52,7 +52,6 @@
                         <span class="text-white/40">|</span>
                         <a href="{{ route('locale.switch', 'en') }}" class="{{ app()->getLocale() === 'en' ? 'font-bold text-nepal-gold' : 'text-slate-200 hover:text-white' }}">EN</a>
                     </div>
-                    <a href="{{ route('staff.login') }}" class="text-xs bg-white/10 hover:bg-white/20 text-white px-2.5 py-1 rounded transition">{{ __('Staff Portal (Staff)') }}</a>
                 </div>
             </div>
 
@@ -107,17 +106,6 @@
         <div class="max-w-7xl mx-auto px-4 mt-4 w-full">
             <div class="bg-rose-50 border border-rose-200 text-rose-800 px-4 py-3 rounded-lg flex items-center justify-between shadow-sm">
                 <span>{{ session('error') }}</span>
-            </div>
-        </div>
-    @endif
-    @if(session('dev_otp'))
-        <div class="max-w-7xl mx-auto px-4 mt-4 w-full">
-            <div class="bg-amber-50 border border-amber-300 text-amber-900 px-4 py-3 rounded-lg flex items-center justify-between shadow-sm">
-                <div>
-                    <strong class="font-bold">Sandbox Testing OTP: </strong>
-                    <span class="font-mono text-lg bg-amber-200 px-2 py-0.5 rounded font-bold">{{ session('dev_otp') }}</span>
-                    <span class="text-xs text-amber-700 ml-2">(Auto-displayed for quick local evaluation)</span>
-                </div>
             </div>
         </div>
     @endif

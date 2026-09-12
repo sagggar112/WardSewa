@@ -23,14 +23,11 @@ class Citizen extends Authenticatable
         'gender',
         'address',
         'ward_id',
-        'otp_code',
-        'otp_expires_at',
         'is_verified',
     ];
 
     protected $hidden = [
         'password',
-        'otp_code',
         'remember_token',
     ];
 
@@ -39,7 +36,6 @@ class Citizen extends Authenticatable
         return [
             'password' => 'hashed',
             'dob' => 'date',
-            'otp_expires_at' => 'datetime',
             'is_verified' => 'boolean',
         ];
     }

@@ -37,7 +37,7 @@
                         <div class="absolute inset-y-0 left-0 pl-3.5 flex items-center pointer-events-none text-slate-400">
                             <svg class="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z"/></svg>
                         </div>
-                        <input type="text" name="login" id="login" value="{{ old('login', '9841000000') }}" placeholder="98XXXXXXXX वा इमेल" required autofocus
+                        <input type="text" name="login" id="login" value="{{ old('login') }}" placeholder="98XXXXXXXX वा इमेल" required autofocus
                                class="block w-full pl-10 pr-3 py-3 border border-slate-300 rounded-lg text-slate-900 placeholder-slate-400 focus:outline-none focus:ring-2 focus:ring-nepal-blue focus:border-nepal-blue text-sm font-medium transition">
                     </div>
                     @error('login')
@@ -54,7 +54,7 @@
                         <div class="absolute inset-y-0 left-0 pl-3.5 flex items-center pointer-events-none text-slate-400">
                             <svg class="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 15v2m-6 4h12a2 2 0 002-2v-6a2 2 0 00-2-2H6a2 2 0 00-2 2v6a2 2 0 002 2zm10-10V7a4 4 0 00-8 0v4h8z"/></svg>
                         </div>
-                        <input type="password" name="password" id="password" value="password123" required placeholder="••••••••"
+                        <input type="password" name="password" id="password" value="" required placeholder="••••••••"
                                class="block w-full pl-10 pr-10 py-3 border border-slate-300 rounded-lg text-slate-900 placeholder-slate-400 focus:outline-none focus:ring-2 focus:ring-nepal-blue focus:border-nepal-blue text-sm transition">
                         <button type="button" onclick="togglePasswordVisibility('password')" class="absolute inset-y-0 right-0 pr-3 flex items-center text-slate-400 hover:text-slate-600">
                             <svg class="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z"/><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z"/></svg>
@@ -87,38 +87,6 @@
                     + {{ __('नयाँ नागरिक खाता दर्ता गर्नुहोस् (Register New Account)') }}
                 </a>
             </div>
-
-            <!-- Demo Citizen Logins Card -->
-            <div class="mt-6 bg-slate-50 border border-slate-200 rounded-xl p-3.5 text-xs">
-                <span class="font-bold text-slate-700 block mb-1.5 flex items-center gap-1">
-                    <svg class="w-3.5 h-3.5 text-emerald-600" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 10V3L4 14h7v7l9-11h-7z"/></svg>
-                    परीक्षण नागरिक खाता (1-Click Demo Logins):
-                </span>
-                <div class="grid grid-cols-1 sm:grid-cols-3 gap-2">
-                    <button type="button" onclick="fillCitizen('9841000000', 'password123')"
-                            class="p-2 bg-white hover:bg-blue-50 border border-slate-200 rounded-lg text-left transition">
-                        <div class="font-bold text-nepal-darkblue">काठमाडौँ</div>
-                        <div class="text-[10px] text-slate-500">9841000000</div>
-                    </button>
-                    <button type="button" onclick="fillCitizen('9851000000', 'password123')"
-                            class="p-2 bg-white hover:bg-blue-50 border border-slate-200 rounded-lg text-left transition">
-                        <div class="font-bold text-nepal-darkblue">ललितपुर</div>
-                        <div class="text-[10px] text-slate-500">9851000000</div>
-                    </button>
-                    <button type="button" onclick="fillCitizen('9861000000', 'password123')"
-                            class="p-2 bg-white hover:bg-blue-50 border border-slate-200 rounded-lg text-left transition">
-                        <div class="font-bold text-nepal-darkblue">भक्तपुर</div>
-                        <div class="text-[10px] text-slate-500">9861000000</div>
-                    </button>
-                </div>
-            </div>
-
-            <!-- Alternative SMS OTP Option -->
-            <div class="mt-4 text-center">
-                <a href="{{ route('citizen.login.otp') }}" class="text-xs text-slate-500 hover:text-nepal-blue hover:underline">
-                    {{ __('वा SMS OTP कोड मार्फत लगइन गर्नुहोस् (Or Login via SMS OTP)') }} &rarr;
-                </a>
-            </div>
         </div>
     </div>
 </div>
@@ -131,11 +99,6 @@ function togglePasswordVisibility(fieldId) {
     } else {
         input.type = 'password';
     }
-}
-
-function fillCitizen(phone, pass) {
-    document.getElementById('login').value = phone;
-    document.getElementById('password').value = pass;
 }
 </script>
 @endsection

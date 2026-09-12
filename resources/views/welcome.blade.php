@@ -5,16 +5,11 @@
 <div class="bg-gradient-to-b from-nepal-darkblue via-slate-900 to-slate-900 text-white py-16 md:py-24 relative overflow-hidden">
     <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
         <div class="text-center max-w-3xl mx-auto">
-            <!-- Coverage & SMS OTP Badge -->
-            <div class="inline-flex flex-wrap items-center justify-center gap-2 bg-white/10 backdrop-blur-md border border-white/20 px-4 py-1.5 rounded-full text-xs font-semibold text-slate-200 mb-6 shadow-sm">
+            <!-- Coverage Badge -->
+            <div class="inline-flex items-center justify-center gap-2 bg-white/10 backdrop-blur-md border border-white/20 px-4 py-1.5 rounded-full text-xs font-semibold text-slate-200 mb-6 shadow-sm">
                 <span class="flex items-center gap-1.5 text-emerald-400">
                     <span class="w-2 h-2 rounded-full bg-emerald-400 animate-pulse"></span>
                     <span>{{ __('Kathmandu Valley Coverage: 3 Districts, 21 Palikas, 247 Wards') }}</span>
-                </span>
-                <span class="text-white/30 hidden sm:inline">|</span>
-                <span class="text-nepal-gold flex items-center gap-1">
-                    <svg class="w-3.5 h-3.5" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 18h.01M8 21h8a2 2 0 002-2V5a2 2 0 00-2-2H8a2 2 0 00-2 2v14a2 2 0 002 2z"/></svg>
-                    <span>{{ __('Real-Time SMS OTP to Mobile') }}</span>
                 </span>
             </div>
 
@@ -54,8 +49,8 @@
             <div class="text-xs text-slate-500 font-medium mt-1">सम्पूर्ण वडा कार्यालय डिजिटल</div>
         </div>
         <div>
-            <div class="text-2xl md:text-3xl font-black text-nepal-gold">Real-Time SMS</div>
-            <div class="text-xs text-slate-500 font-medium mt-1">मोबाइलमै प्रत्यक्ष OTP प्रमाणीकरण</div>
+            <div class="text-2xl md:text-3xl font-black text-nepal-gold">डिजिटल प्रमाण</div>
+            <div class="text-xs text-slate-500 font-medium mt-1">QR-Verified Digital Certificates</div>
         </div>
     </div>
 </div>

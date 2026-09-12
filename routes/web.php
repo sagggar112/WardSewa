@@ -34,17 +34,11 @@ Route::get('/locale/{lang}', function ($lang) {
 */
 Route::prefix('citizen')->name('citizen.')->group(function () {
     Route::middleware('guest:citizen')->group(function () {
-        // Password Login & Registration (Primary)
+        // Password Login & Registration
         Route::get('/login', [AuthController::class, 'showLogin'])->name('login');
         Route::post('/login', [AuthController::class, 'login'])->name('login.submit');
         Route::get('/register', [AuthController::class, 'showRegister'])->name('register');
         Route::post('/register', [AuthController::class, 'register'])->name('register.submit');
-
-        // Optional SMS OTP Fallback
-        Route::get('/login/otp', [AuthController::class, 'showOtpLogin'])->name('login.otp');
-        Route::post('/login/otp', [AuthController::class, 'requestOtp'])->name('login.request');
-        Route::get('/verify-otp', [AuthController::class, 'showVerifyOtp'])->name('otp.show');
-        Route::post('/verify-otp', [AuthController::class, 'verifyOtp'])->name('otp.verify');
     });
 
     Route::post('/logout', [AuthController::class, 'logout'])->name('logout');
