@@ -17,7 +17,7 @@ services:
       - key: APP_KEY
         value: base64:v4d2yXmQkZ6tO7pA9sL3wR1eY8uI0oP5aB2cE4gH6jM=
       - key: APP_URL
-        value: https://wardsewa-web.onrender.com
+        value: https://wardsewa.xyz
       - key: APP_TIMEZONE
         value: Asia/Kathmandu
       - key: APP_LOCALE

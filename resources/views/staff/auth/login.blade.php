@@ -99,7 +99,7 @@
                 <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-1 mb-3">
                     <span class="text-xs font-bold text-slate-700 uppercase tracking-wider flex items-center gap-1.5">
                         <span class="w-2 h-2 rounded-full bg-emerald-500 animate-pulse"></span>
-                        परीक्षण / डेमो खाताहरू (Quick Fill Demo Credentials)
+                        परीक्षण / डेमो खाताहरू (१-क्लिक सिधा लगइन / 1-Click Instant Login)
                     </span>
                     <span class="text-[11px] text-slate-500 font-medium">Default password: <code class="bg-slate-100 px-1.5 py-0.5 rounded text-nepal-crimson font-mono font-bold">password123</code></span>
                 </div>
@@ -172,9 +172,22 @@ function togglePasswordVisibility(fieldId) {
 function fillCredentials(email, password) {
     const emailInput = document.getElementById('email');
     const passInput = document.getElementById('password');
+    const submitBtn = document.querySelector('#staffLoginForm button[type="submit"]');
+
     emailInput.value = email;
     passInput.value = password;
-    emailInput.focus();
+
+    if (submitBtn) {
+        submitBtn.disabled = true;
+        submitBtn.innerHTML = `
+            <svg class="animate-spin -ml-1 mr-2 h-4 w-4 text-white inline-block" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
+                <circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle>
+                <path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
+            </svg>
+            <span>लगइन हुँदैछ (Logging in as ${email})...</span>
+        `;
+    }
+    document.getElementById('staffLoginForm').submit();
 }
 </script>
 </body>
