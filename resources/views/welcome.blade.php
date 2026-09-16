@@ -28,6 +28,10 @@
                 <a href="#coverage" class="w-full sm:w-auto px-6 py-3.5 bg-white/10 hover:bg-white/20 text-white font-semibold rounded-xl transition text-base text-center border border-white/20">
                     {{ __('View Valley Palikas & Wards') }}
                 </a>
+                <a href="{{ route('staff.login') }}" class="w-full sm:w-auto px-5 py-3.5 bg-slate-800/90 hover:bg-slate-800 text-slate-200 hover:text-white font-semibold rounded-xl transition text-base text-center border border-slate-700 flex items-center justify-center gap-2">
+                    <svg class="w-4 h-4 text-nepal-gold" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 15v2m-6 4h12a2 2 0 002-2v-6a2 2 0 00-2-2H6a2 2 0 00-2 2v6a2 2 0 002 2zm10-10V7a4 4 0 00-8 0v4h8z"/></svg>
+                    <span>{{ __('Staff / Admin Portal') }}</span>
+                </a>
             </div>
         </div>
     </div>
@@ -189,9 +193,15 @@
             <p class="text-sm text-slate-600 mt-1"><strong>{{ __('Address:') }}</strong> {{ $pilotWard->office_address }} | <strong>{{ __('Phone:') }}</strong> {{ $pilotWard->office_phone }} | <strong>{{ __('Email:') }}</strong> {{ $pilotWard->office_email }}</p>
             <p class="text-xs text-slate-500 mt-2">{{ __('Office Hours: Sunday - Thursday: 10:00 - 17:00 | Friday: 10:00 - 15:00') }}</p>
         </div>
-        <a href="{{ route('citizen.login') }}" class="px-6 py-3 bg-nepal-blue hover:bg-nepal-darkblue text-white text-sm font-bold rounded-xl shrink-0 transition">
-            {{ __('Citizen Portal Login') }} &rarr;
-        </a>
+        <div class="flex flex-col sm:flex-row gap-3 shrink-0">
+            <a href="{{ route('citizen.login') }}" class="px-6 py-3 bg-nepal-blue hover:bg-nepal-darkblue text-white text-sm font-bold rounded-xl transition text-center">
+                {{ __('Citizen Portal Login') }} &rarr;
+            </a>
+            <a href="{{ route('staff.login') }}" class="px-5 py-3 bg-white hover:bg-slate-100 text-slate-800 border border-slate-300 text-sm font-bold rounded-xl transition text-center flex items-center justify-center gap-1.5 shadow-sm">
+                <svg class="w-4 h-4 text-nepal-gold" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 15v2m-6 4h12a2 2 0 002-2v-6a2 2 0 00-2-2H6a2 2 0 00-2 2v6a2 2 0 002 2zm10-10V7a4 4 0 00-8 0v4h8z"/></svg>
+                <span>{{ __('Staff Portal') }}</span>
+            </a>
+        </div>
     </div>
 </div>
 @endif

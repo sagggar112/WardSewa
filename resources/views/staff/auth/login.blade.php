@@ -93,6 +93,73 @@
                     <svg class="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M14 5l7 7m0 0l-7 7m7-7H3"/></svg>
                 </button>
             </form>
+
+            <!-- Quick Demo Credential Buttons -->
+            <div class="mt-8 pt-6 border-t border-slate-200">
+                <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-1 mb-3">
+                    <span class="text-xs font-bold text-slate-700 uppercase tracking-wider flex items-center gap-1.5">
+                        <span class="w-2 h-2 rounded-full bg-emerald-500 animate-pulse"></span>
+                        परीक्षण / डेमो खाताहरू (Quick Fill Demo Credentials)
+                    </span>
+                    <span class="text-[11px] text-slate-500 font-medium">Default password: <code class="bg-slate-100 px-1.5 py-0.5 rounded text-nepal-crimson font-mono font-bold">password123</code></span>
+                </div>
+
+                <div class="grid grid-cols-1 sm:grid-cols-2 gap-2">
+                    <button type="button" onclick="fillCredentials('superadmin@wardsewa.gov.np', 'password123')"
+                            class="text-left p-2.5 rounded-xl border border-slate-200 hover:border-nepal-blue hover:bg-blue-50/60 transition group cursor-pointer">
+                        <div class="flex items-center justify-between">
+                            <span class="text-xs font-bold text-slate-800 group-hover:text-nepal-blue">सुपर एडमिन (Super Admin)</span>
+                            <span class="text-[10px] px-1.5 py-0.5 bg-purple-100 text-purple-800 rounded font-semibold">Tier 1</span>
+                        </div>
+                        <p class="text-[11px] text-slate-500 truncate mt-0.5">superadmin@wardsewa.gov.np</p>
+                    </button>
+
+                    <button type="button" onclick="fillCredentials('admin.ktm@wardsewa.gov.np', 'password123')"
+                            class="text-left p-2.5 rounded-xl border border-slate-200 hover:border-nepal-blue hover:bg-blue-50/60 transition group cursor-pointer">
+                        <div class="flex items-center justify-between">
+                            <span class="text-xs font-bold text-slate-800 group-hover:text-nepal-blue">जिल्ला प्रशासक (Kathmandu)</span>
+                            <span class="text-[10px] px-1.5 py-0.5 bg-blue-100 text-blue-800 rounded font-semibold">Tier 2</span>
+                        </div>
+                        <p class="text-[11px] text-slate-500 truncate mt-0.5">admin.ktm@wardsewa.gov.np</p>
+                    </button>
+
+                    <button type="button" onclick="fillCredentials('admin.kmc@wardsewa.gov.np', 'password123')"
+                            class="text-left p-2.5 rounded-xl border border-slate-200 hover:border-nepal-blue hover:bg-blue-50/60 transition group cursor-pointer">
+                        <div class="flex items-center justify-between">
+                            <span class="text-xs font-bold text-slate-800 group-hover:text-nepal-blue">पालिका प्रशासक (KMC Metro)</span>
+                            <span class="text-[10px] px-1.5 py-0.5 bg-emerald-100 text-emerald-800 rounded font-semibold">Tier 3</span>
+                        </div>
+                        <p class="text-[11px] text-slate-500 truncate mt-0.5">admin.kmc@wardsewa.gov.np</p>
+                    </button>
+
+                    <button type="button" onclick="fillCredentials('chair.kmc32@wardsewa.gov.np', 'password123')"
+                            class="text-left p-2.5 rounded-xl border border-slate-200 hover:border-nepal-blue hover:bg-blue-50/60 transition group cursor-pointer">
+                        <div class="flex items-center justify-between">
+                            <span class="text-xs font-bold text-slate-800 group-hover:text-nepal-blue">वडा अध्यक्ष (Ward 32 Chair)</span>
+                            <span class="text-[10px] px-1.5 py-0.5 bg-amber-100 text-amber-800 rounded font-semibold">Tier 4</span>
+                        </div>
+                        <p class="text-[11px] text-slate-500 truncate mt-0.5">chair.kmc32@wardsewa.gov.np</p>
+                    </button>
+
+                    <button type="button" onclick="fillCredentials('secretary@ward32.gov.np', 'password123')"
+                            class="text-left p-2.5 rounded-xl border border-slate-200 hover:border-nepal-blue hover:bg-blue-50/60 transition group cursor-pointer">
+                        <div class="flex items-center justify-between">
+                            <span class="text-xs font-bold text-slate-800 group-hover:text-nepal-blue">वडा सचिव (Ward Secretary)</span>
+                            <span class="text-[10px] px-1.5 py-0.5 bg-slate-100 text-slate-800 rounded font-semibold">Staff</span>
+                        </div>
+                        <p class="text-[11px] text-slate-500 truncate mt-0.5">secretary@ward32.gov.np</p>
+                    </button>
+
+                    <button type="button" onclick="fillCredentials('clerk@ward32.gov.np', 'password123')"
+                            class="text-left p-2.5 rounded-xl border border-slate-200 hover:border-nepal-blue hover:bg-blue-50/60 transition group cursor-pointer">
+                        <div class="flex items-center justify-between">
+                            <span class="text-xs font-bold text-slate-800 group-hover:text-nepal-blue">वडा सहायक (Front Desk Clerk)</span>
+                            <span class="text-[10px] px-1.5 py-0.5 bg-slate-100 text-slate-800 rounded font-semibold">Staff</span>
+                        </div>
+                        <p class="text-[11px] text-slate-500 truncate mt-0.5">clerk@ward32.gov.np</p>
+                    </button>
+                </div>
+            </div>
         </div>
     </div>
 
@@ -100,6 +167,14 @@
 function togglePasswordVisibility(fieldId) {
     const input = document.getElementById(fieldId);
     input.type = input.type === 'password' ? 'text' : 'password';
+}
+
+function fillCredentials(email, password) {
+    const emailInput = document.getElementById('email');
+    const passInput = document.getElementById('password');
+    emailInput.value = email;
+    passInput.value = password;
+    emailInput.focus();
 }
 </script>
 </body>

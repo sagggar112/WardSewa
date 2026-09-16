@@ -27,6 +27,12 @@ Route::get('/locale/{lang}', function ($lang) {
     return redirect()->back(fallback: route('home'));
 })->name('locale.switch');
 
+// Convenient Redirects for Admin & Staff Portal
+Route::redirect('/admin', '/staff/login');
+Route::redirect('/admin/login', '/staff/login');
+Route::redirect('/staff', '/staff/login');
+
+
 /*
 |--------------------------------------------------------------------------
 | Citizen Authentication

@@ -75,7 +75,12 @@
                 </nav>
 
                 <div class="flex items-center space-x-3">
-                    @auth('citizen')
+                    @auth('staff')
+                        <a href="{{ route('staff.dashboard') }}" class="inline-flex items-center px-3.5 py-1.5 bg-nepal-darkblue hover:bg-slate-950 border border-slate-600 text-white text-xs font-bold rounded-lg shadow-sm transition">
+                            <span class="w-2 h-2 rounded-full bg-emerald-400 mr-1.5 inline-block animate-pulse"></span>
+                            {{ __('Staff Portal') }} &rarr;
+                        </a>
+                    @elseauth('citizen')
                         <a href="{{ route('citizen.dashboard') }}" class="inline-flex items-center px-4 py-2 bg-nepal-red hover:bg-nepal-crimson text-white text-sm font-semibold rounded-lg shadow-sm transition">
                             {{ __('My Dashboard') }} &rarr;
                         </a>
@@ -84,8 +89,12 @@
                             <a href="{{ route('citizen.login') }}" class="text-xs text-white hover:text-nepal-gold font-bold px-2 py-1.5 transition">
                                 {{ __('Citizen Login') }}
                             </a>
-                            <a href="{{ route('citizen.register') }}" class="inline-flex items-center px-3.5 py-1.5 bg-nepal-crimson hover:bg-nepal-red text-white text-xs font-bold rounded-lg shadow-sm transition">
+                            <a href="{{ route('citizen.register') }}" class="inline-flex items-center px-3 py-1.5 bg-nepal-crimson hover:bg-nepal-red text-white text-xs font-bold rounded-lg shadow-sm transition">
                                 {{ __('Register') }} &rarr;
+                            </a>
+                            <a href="{{ route('staff.login') }}" class="hidden sm:inline-flex items-center px-2.5 py-1.5 bg-slate-800/90 hover:bg-slate-700 text-slate-200 hover:text-white text-xs font-medium rounded-lg border border-slate-700 transition" title="Staff / Administrator Portal">
+                                <svg class="w-3.5 h-3.5 mr-1 text-nepal-gold" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 15v2m-6 4h12a2 2 0 002-2v-6a2 2 0 00-2-2H6a2 2 0 00-2 2v6a2 2 0 002 2zm10-10V7a4 4 0 00-8 0v4h8z"/></svg>
+                                <span>{{ __('Staff Login') }}</span>
                             </a>
                         </div>
                     @endauth
@@ -134,6 +143,12 @@
                     <li><a href="{{ route('home') }}#services" class="hover:text-white">{{ __('Unmarried Certificate') }}</a></li>
                     <li><a href="{{ route('home') }}#services" class="hover:text-white">{{ __('Residence Certificate') }}</a></li>
                     <li><a href="{{ route('home') }}#services" class="hover:text-white">{{ __('Birth Registration') }}</a></li>
+                    <li class="pt-2 border-t border-slate-800">
+                        <a href="{{ route('staff.login') }}" class="text-nepal-gold hover:text-white flex items-center gap-1 font-semibold">
+                            <svg class="w-3.5 h-3.5" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 15v2m-6 4h12a2 2 0 002-2v-6a2 2 0 00-2-2H6a2 2 0 00-2 2v6a2 2 0 002 2zm10-10V7a4 4 0 00-8 0v4h8z"/></svg>
+                            <span>{{ __('Staff / Admin Portal') }} (कर्मचारी लगइन)</span>
+                        </a>
+                    </li>
                 </ul>
             </div>
             <div>
