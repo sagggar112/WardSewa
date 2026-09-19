@@ -56,11 +56,14 @@
             <span class="text-[10px] text-emerald-700 font-semibold mt-1 inline-block">सम्पन्न</span>
         </div>
 
-        <div class="bg-white p-4 rounded-xl border border-slate-200 shadow-sm">
-            <span class="text-[10px] font-bold text-purple-600 block uppercase">भेटघाट (Appointments)</span>
+        <a href="{{ route('staff.appointments.index') }}" class="bg-white p-4 rounded-xl border border-slate-200 shadow-sm hover:border-nepal-blue transition block group">
+            <div class="flex items-center justify-between">
+                <span class="text-[10px] font-bold text-purple-600 block uppercase">भेटघाट (Appointments)</span>
+                <span class="text-[10px] text-nepal-blue font-bold group-hover:underline">सबै हेर्नुहोस् &rarr;</span>
+            </div>
             <div class="text-2xl font-black text-purple-600 mt-1">{{ $stats['total_appointments'] }}</div>
-            <span class="text-[10px] text-slate-500 mt-1 inline-block">{{ $stats['upcoming_appointments'] }} आगामी</span>
-        </div>
+            <span class="text-[10px] text-slate-500 mt-1 inline-block">{{ $stats['upcoming_appointments'] }} आगामी भेटघाट</span>
+        </a>
     </div>
 
     <!-- Wards Overview inside this Palika -->
@@ -119,6 +122,81 @@
                 </tbody>
             </table>
         </div>
+    </div>
+
+    <!-- Recent Appointments in this Palika -->
+    <div class="bg-white rounded-2xl border border-slate-200 p-6 shadow-sm">
+        <div class="flex items-center justify-between mb-4">
+            <div>
+                <h2 class="text-base font-bold text-slate-900">यस पालिका अन्तर्गतका नागरिक भेटघाटहरू (Appointments in {{ $palika->name_en }})</h2>
+                <p class="text-xs text-slate-500 mt-0.5">विभिन्न वडाहरूमा नागरिकहरूले बुक गरेका हालैका भेटघाट तथा सिफारिस समय तालिका</p>
+            </div>
+            <a href="{{ route('staff.appointments.index') }}" class="text-xs font-bold text-nepal-blue hover:underline">
+                सबै भेटघाट हेर्नुहोस् &rarr;
+            </a>
+        </div>
+
+        @if($recentAppointments->isEmpty())
+            <div class="p-8 text-center bg-slate-50 rounded-xl border border-dashed border-slate-200">
+                <p class="text-xs text-slate-500 font-bold">यस पालिका अन्तर्गत हाल कुनै पनि भेटघाट तालिका दर्ता भएको छैन।</p>
+                <p class="text-[11px] text-slate-400 mt-0.5">नागरिकहरूले अनलाइन अपोइन्टमेन्ट बुक गर्दा यहाँ देखिनेछ।</p>
+            </div>
+        @else
+            <div class="overflow-x-auto">
+                <table class="w-full text-left text-xs">
+                    <thead class="bg-slate-50 text-slate-600 border-b border-slate-200">
+                        <tr>
+                            <th class="p-3">अपोइन्टमेन्ट नं.</th>
+                            <th class="p-3">सेवाग्राही</th>
+                            <th class="p-3">सम्पर्क</th>
+                            <th class="p-3">वडा नं.</th>
+                            <th class="p-3">भ्रमण मिति तथा समय</th>
+                            <th class="p-3">सेवा / प्रयोजन</th>
+                            <th class="p-3">स्थिति</th>
+                            <th class="p-3 text-right">कार्य</th>
+                        </tr>
+                    </thead>
+                    <tbody class="divide-y divide-slate-100">
+                        @foreach($recentAppointments as $apt)
+                            <tr class="hover:bg-slate-50">
+                                <td class="p-3 font-mono font-bold text-slate-900">{{ $apt->appointment_number }}</td>
+                                <td class="p-3 font-semibold text-slate-900">{{ $apt->citizen->full_name }}</td>
+                                <td class="p-3 font-mono text-slate-600">{{ $apt->citizen->phone }}</td>
+                                <td class="p-3">
+                                    <span class="px-2 py-0.5 rounded font-bold bg-slate-100 text-slate-800 text-[11px]">
+                                        वडा नं. {{ $apt->ward->ward_number ?? '-' }}
+                                    </span>
+                                </td>
+                                <td class="p-3">
+                                    <div class="font-bold text-slate-800">{{ $apt->appointment_date->format('Y-m-d') }}</div>
+                                    <div class="text-[11px] text-nepal-blue font-semibold">{{ $apt->time_slot }}</div>
+                                </td>
+                                <td class="p-3">
+                                    <div class="font-medium text-slate-900">{{ $apt->serviceType->name_ne ?? 'सामान्य परामर्श' }}</div>
+                                    <div class="text-[10px] text-slate-400 truncate max-w-[150px]">{{ $apt->purpose }}</div>
+                                </td>
+                                <td class="p-3">
+                                    @if($apt->status === 'completed')
+                                        <span class="px-2 py-0.5 rounded-full text-[10px] font-bold bg-emerald-100 text-emerald-800">सम्पन्न</span>
+                                    @elseif($apt->status === 'cancelled')
+                                        <span class="px-2 py-0.5 rounded-full text-[10px] font-bold bg-rose-100 text-rose-800">रद्द</span>
+                                    @elseif($apt->status === 'confirmed')
+                                        <span class="px-2 py-0.5 rounded-full text-[10px] font-bold bg-blue-100 text-blue-800">स्वीकृत</span>
+                                    @else
+                                        <span class="px-2 py-0.5 rounded-full text-[10px] font-bold bg-amber-100 text-amber-800">प्रस्तावित</span>
+                                    @endif
+                                </td>
+                                <td class="p-3 text-right">
+                                    <a href="{{ route('staff.appointments.index') }}" class="px-2.5 py-1 bg-slate-100 hover:bg-slate-200 text-slate-800 rounded font-semibold transition">
+                                        विवरण &rarr;
+                                    </a>
+                                </td>
+                            </tr>
+                        @endforeach
+                    </tbody>
+                </table>
+            </div>
+        @endif
     </div>
 </div>
 @endsection

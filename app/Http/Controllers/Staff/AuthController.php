@@ -31,23 +31,45 @@ class AuthController extends Controller
             'password' => ['required', 'string'],
         ]);
 
-        $resolvedEmail = $this->resolveEmail($credentials['email']);
+        $input = trim($credentials['email']);
+        $resolvedEmail = $this->resolveEmail($input);
 
-        // Attempt authentication with resolved email or original email
-        $attemptSuccess = Auth::guard('staff')->attempt(['email' => $resolvedEmail, 'password' => $credentials['password']], $request->boolean('remember'));
+        // Attempt authentication with resolved email first
+        $attemptSuccess = Auth::guard('staff')->attempt(
+            ['email' => $resolvedEmail, 'password' => $credentials['password']],
+            $request->boolean('remember')
+        );
 
-        if (!$attemptSuccess && $resolvedEmail !== $credentials['email']) {
-            $attemptSuccess = Auth::guard('staff')->attempt(['email' => $credentials['email'], 'password' => $credentials['password']], $request->boolean('remember'));
+        // If not successful and original input was different, try with original input as email
+        if (!$attemptSuccess && strtolower($resolvedEmail) !== strtolower($input)) {
+            $attemptSuccess = Auth::guard('staff')->attempt(
+                ['email' => $input, 'password' => $credentials['password']],
+                $request->boolean('remember')
+            );
+        }
+
+        // Also check if input is a phone number
+        if (!$attemptSuccess) {
+            $phoneStaff = \App\Models\Staff::where('phone', $input)->first();
+            if ($phoneStaff) {
+                $attemptSuccess = Auth::guard('staff')->attempt(
+                    ['email' => $phoneStaff->email, 'password' => $credentials['password']],
+                    $request->boolean('remember')
+                );
+            }
         }
 
         if ($attemptSuccess) {
             $request->session()->regenerate();
+            // Clear any lingering cross-guard intended URLs
+            $request->session()->forget('url.intended');
+
             $staff = Auth::guard('staff')->user();
 
             if (!$staff->is_active) {
                 \App\Models\AuditLog::record('failed_login', "Inactive staff attempted login: {$staff->email}", $staff);
                 Auth::guard('staff')->logout();
-                return back()->with('error', 'Your account has been deactivated.');
+                return back()->with('error', 'तपाईँको खाता निष्क्रिय गरिएको छ। (Your account has been deactivated).');
             }
 
             \App\Models\AuditLog::record('login', "Staff logged in: {$staff->name} ({$staff->role})", $staff);
@@ -59,35 +81,81 @@ class AuthController extends Controller
                 default => route('staff.dashboard'),
             };
 
-            return redirect()->intended($targetRoute)
-                ->with('success', "Welcome back, {$staff->name}!");
+            return redirect($targetRoute)
+                ->with('success', "स्वागत छ, {$staff->name}!");
         }
 
-        \App\Models\AuditLog::record('failed_login', "Failed login attempt for email: {$request->email}");
+        \App\Models\AuditLog::record('failed_login', "Failed login attempt for input: {$request->email}");
 
         return back()->withErrors([
-            'email' => 'The provided credentials do not match our records.',
+            'email' => 'प्रविष्ट गरिएको विवरण मिलेन। कृपया आफ्नो इमेल/फोन र पासवर्ड जाँच गर्नुहोस्। (Invalid credentials).',
         ])->onlyInput('email');
     }
 
-    private function resolveEmail(string $email): string
+    private function resolveEmail(string $input): string
     {
-        $email = strtolower(trim($email));
+        $input = strtolower(trim($input));
 
-        if ($email === 'chair.kmc32@wardsewa.gov.np') {
+        // 1. Direct match in staff database
+        $directStaff = \App\Models\Staff::whereRaw('LOWER(email) = ?', [$input])->first();
+        if ($directStaff) {
+            return $directStaff->email;
+        }
+
+        // 2. Direct phone match
+        $phoneStaff = \App\Models\Staff::where('phone', $input)->first();
+        if ($phoneStaff) {
+            return $phoneStaff->email;
+        }
+
+        // 3. Short aliases
+        if ($input === 'superadmin' || $input === 'superadmin@wardsewa.gov.np') {
+            return 'superadmin@wardsewa.gov.np';
+        }
+
+        if ($input === 'chair.kmc32@wardsewa.gov.np' || $input === 'chair@ward32.gov.np' || $input === 'chair.ward32@wardsewa.gov.np') {
             return 'chair@ward32.gov.np';
         }
 
-        if (preg_match('/^chair@([a-z]+)(\d+)\.gov\.np$/i', $email, $m)) {
+        // 4. Pattern: chair@palika{n}.gov.np (e.g. chair@bnm5.gov.np, chair@ward32.gov.np)
+        if (preg_match('/^chair@([a-z]+)(\d+)\.gov\.np$/', $input, $m)) {
             if ($m[1] === 'ward' && $m[2] === '32') {
                 return 'chair@ward32.gov.np';
             }
             return "chair.{$m[1]}{$m[2]}@wardsewa.gov.np";
         }
 
+        // 5. Pattern: ward{n}@{palika}(mun)?.gov.np (e.g. ward1@chandragirimun.gov.np)
+        if (preg_match('/^ward(\d+)@([a-z]+?)(?:mun)?\.gov\.np$/', $input, $m)) {
+            $wNum = (int)$m[1];
+            $palikaSlug = $m[2];
+
+            $wNum = (int)$numPart;
+
+            $palika = \App\Models\Palika::whereRaw('LOWER(code) = ?', [$palikaSlug])
+                ->orWhereRaw('LOWER(name_en) LIKE ?', ["%{$palikaSlug}%"])
+                ->first();
+
+            if ($palika && $wNum > 0) {
+                $ward = \App\Models\Ward::where('palika_id', $palika->id)->where('ward_number', $wNum)->first();
+                if ($ward) {
+                    $staff = \App\Models\Staff::where('ward_id', $ward->id)
+                        ->whereIn('role', ['ward_chair', 'ward_admin', 'secretary', 'clerk'])
+                        ->first();
+                    if ($staff) {
+                        return $staff->email;
+                    }
+                }
+            }
+        }
+
+        // 6. Palika Admins map
         $palikaAdmins = [
             'admin@kathmandu.gov.np' => 'admin.kmc@wardsewa.gov.np',
+            'admin@kmc.gov.np' => 'admin.kmc@wardsewa.gov.np',
+            'admin.kmc' => 'admin.kmc@wardsewa.gov.np',
             'admin@chandragiri.gov.np' => 'admin.chandragiri@wardsewa.gov.np',
+            'admin@chandragirimun.gov.np' => 'admin.chandragiri@wardsewa.gov.np',
             'admin@budhanilkantha.gov.np' => 'admin.budhanilkantha@wardsewa.gov.np',
             'admin@tarakeshwor.gov.np' => 'admin.tarakeshwor@wardsewa.gov.np',
             'admin@tokha.gov.np' => 'admin.tokha@wardsewa.gov.np',
@@ -101,7 +169,27 @@ class AuthController extends Controller
             'admin@bhaktapur.gov.np' => 'admin.bkm@wardsewa.gov.np',
         ];
 
-        return $palikaAdmins[$email] ?? $email;
+        if (isset($palikaAdmins[$input])) {
+            return $palikaAdmins[$input];
+        }
+
+        // 7. Generic admin@{palika} search
+        if (preg_match('/^admin@([a-z]+?)(?:mun)?\.gov\.np$/', $input, $m)) {
+            $palikaSlug = $m[1];
+            $palika = \App\Models\Palika::whereRaw('LOWER(code) = ?', [$palikaSlug])
+                ->orWhereRaw('LOWER(name_en) LIKE ?', ["%{$palikaSlug}%"])
+                ->first();
+            if ($palika) {
+                $pAdmin = \App\Models\Staff::where('palika_id', $palika->id)
+                    ->where('role', 'local_government_admin')
+                    ->first();
+                if ($pAdmin) {
+                    return $pAdmin->email;
+                }
+            }
+        }
+
+        return $input;
     }
 
     public function logout(Request $request)

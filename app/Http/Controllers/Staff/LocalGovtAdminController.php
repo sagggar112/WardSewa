@@ -55,7 +55,13 @@ class LocalGovtAdminController extends Controller
             ->take(10)
             ->get();
 
-        return view('staff.localgovt.dashboard', compact('staff', 'palika', 'stats', 'wards', 'recentApplications'));
+        $recentAppointments = Appointment::with(['citizen', 'serviceType', 'ward'])
+            ->where('palika_id', $palika->id)
+            ->latest('appointment_date')
+            ->take(10)
+            ->get();
+
+        return view('staff.localgovt.dashboard', compact('staff', 'palika', 'stats', 'wards', 'recentApplications', 'recentAppointments'));
     }
 
     public function wards()

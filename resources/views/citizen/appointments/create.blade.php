@@ -37,15 +37,72 @@
             <form action="{{ route('citizen.appointments.store') }}" method="POST" class="space-y-5">
                 @csrf
 
-                <!-- Registered Ward Badge -->
-                <div class="bg-slate-50 rounded-xl p-3.5 border border-slate-200 flex items-center justify-between text-xs">
-                    <div>
-                        <span class="text-slate-500 block text-[11px]">तपाईँको तोकिएको वडा कार्यालय:</span>
-                        <span class="font-bold text-slate-800">
-                            {{ $citizen->ward->palika->name_ne ?? 'काठमाडौँ महानगरपालिका' }} - वडा नं. {{ $citizen->ward->ward_number ?? '३२' }}
-                        </span>
-                    </div>
-                    <span class="px-2 py-0.5 rounded bg-emerald-100 text-emerald-800 text-[10px] font-bold">स्वतः छनोट</span>
+                <!-- Target Palika & Ward Office Selection -->
+                <div x-data="{
+                    palikas: {{ Js::from($palikas->map(fn($p) => ['id' => $p->id, 'name_ne' => $p->name_ne, 'name_en' => $p->name_en, 'wards' => $p->wards->map(fn($w) => ['id' => $w->id, 'ward_number' => $w->ward_number])])) }},
+                    selectedPalika: '{{ old('palika_id', $citizen->ward?->palika_id ?? ($palikas->first()->id ?? 1)) }}',
+                    selectedWard: '{{ old('ward_id', $citizen->ward_id ?? ($palikas->first()?->wards->first()?->id ?? 32)) }}',
+                    customOffice: {{ !empty($citizen->ward_id) && empty(old('ward_id')) ? 'false' : 'true' }},
+                    updateWards() {
+                        const p = this.palikas.find(item => item.id == this.selectedPalika);
+                        if (p && p.wards.length > 0) {
+                            this.selectedWard = p.wards[0].id;
+                        } else {
+                            this.selectedWard = '';
+                        }
+                    },
+                    get currentWards() {
+                        const p = this.palikas.find(item => item.id == this.selectedPalika);
+                        return p ? p.wards : [];
+                    }
+                }" class="space-y-3">
+                    <input type="hidden" name="palika_id" :value="selectedPalika">
+                    <input type="hidden" name="ward_id" :value="selectedWard">
+
+                    <template x-if="!customOffice">
+                        <div class="bg-blue-50/70 rounded-xl p-3.5 border border-blue-200 flex items-center justify-between text-xs">
+                            <div>
+                                <span class="text-slate-500 block text-[11px]">तोकिएको वडा कार्यालय (Target Ward Office):</span>
+                                <span class="font-bold text-slate-900 text-sm">
+                                    {{ $citizen->ward->palika->name_ne ?? 'काठमाडौँ महानगरपालिका' }} - वडा नं. {{ $citizen->ward->ward_number ?? '३२' }}
+                                </span>
+                            </div>
+                            <button type="button" @click="customOffice = true" class="px-2.5 py-1 bg-white border border-slate-300 rounded text-nepal-blue font-bold hover:bg-slate-50 text-xs shadow-sm transition">
+                                अर्को वडा छनोट &rarr;
+                            </button>
+                        </div>
+                    </template>
+
+                    <template x-if="customOffice">
+                        <div class="bg-slate-50 p-3.5 rounded-xl border border-slate-200 space-y-3">
+                            <div class="flex items-center justify-between text-xs">
+                                <span class="font-bold text-slate-700 uppercase tracking-wider text-[11px]">भ्रमण गर्न चाहेको स्थानीय तह र वडा (Select Office)</span>
+                                @if(!empty($citizen->ward_id))
+                                    <button type="button" @click="customOffice = false; selectedPalika = '{{ $citizen->ward?->palika_id }}'; selectedWard = '{{ $citizen->ward_id }}'" class="text-[11px] text-nepal-blue font-bold hover:underline">
+                                        मेरो दर्ता भएको वडामा फर्कनुहोस्
+                                    </button>
+                                @endif
+                            </div>
+                            <div class="grid grid-cols-1 sm:grid-cols-2 gap-3 text-xs">
+                                <div>
+                                    <label class="block text-slate-600 font-semibold mb-1">स्थानीय तह (Municipality/Palika) *</label>
+                                    <select x-model="selectedPalika" @change="updateWards()" class="w-full text-xs rounded-lg border-slate-300 focus:border-nepal-blue focus:ring focus:ring-blue-100 p-2.5 border bg-white font-medium">
+                                        <template x-for="p in palikas" :key="p.id">
+                                            <option :value="p.id" x-text="p.name_ne + ' (' + p.name_en + ')'"></option>
+                                        </template>
+                                    </select>
+                                </div>
+                                <div>
+                                    <label class="block text-slate-600 font-semibold mb-1">वडा नम्बर (Ward No.) *</label>
+                                    <select x-model="selectedWard" class="w-full text-xs rounded-lg border-slate-300 focus:border-nepal-blue focus:ring focus:ring-blue-100 p-2.5 border bg-white font-medium">
+                                        <template x-for="w in currentWards" :key="w.id">
+                                            <option :value="w.id" x-text="'वडा नं. ' + w.ward_number"></option>
+                                        </template>
+                                    </select>
+                                </div>
+                            </div>
+                        </div>
+                    </template>
                 </div>
 
                 <!-- Purpose / Subject -->

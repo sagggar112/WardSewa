@@ -60,8 +60,16 @@ class DashboardController extends Controller
             ->get();
 
         $todayAppointments = (clone $appointmentQuery)
-            ->with(['citizen', 'serviceType'])
+            ->with(['citizen', 'serviceType', 'ward'])
             ->today()
+            ->take(10)
+            ->get();
+
+        $upcomingAppointments = (clone $appointmentQuery)
+            ->with(['citizen', 'serviceType', 'ward'])
+            ->where('appointment_date', '>=', now()->toDateString())
+            ->whereIn('status', ['scheduled', 'confirmed', 'rescheduled'])
+            ->orderBy('appointment_date')
             ->take(10)
             ->get();
 
@@ -71,6 +79,6 @@ class DashboardController extends Controller
             'clerks' => $staff->ward_id ? \App\Models\Staff::where('ward_id', $staff->ward_id)->where('role', 'clerk')->where('is_active', true)->count() : 0,
         ];
 
-        return view('staff.dashboard', compact('staff', 'stats', 'recentApplications', 'todayAppointments', 'teamStats'));
+        return view('staff.dashboard', compact('staff', 'stats', 'recentApplications', 'todayAppointments', 'upcomingAppointments', 'teamStats'));
     }
 }

@@ -75,7 +75,10 @@
                                     <div class="font-medium text-slate-900">{{ $apt->serviceType->name_ne ?? 'सामान्य परामर्श' }}</div>
                                     <div class="text-[10px] text-slate-400 truncate max-w-[150px]">{{ $apt->purpose }}</div>
                                 </td>
-                                <td class="p-3 text-slate-700 font-medium">वडा {{ $apt->ward->ward_number }}</td>
+                                <td class="p-3 text-slate-700 font-medium">
+                                    <div class="font-bold text-slate-800">{{ $apt->palika->name_ne ?? $apt->ward?->palika?->name_ne ?? '' }}</div>
+                                    <div class="text-[11px] text-slate-500 font-semibold">वडा नं. {{ $apt->ward->ward_number ?? '-' }}</div>
+                                </td>
                                 <td class="p-3">
                                     @if($apt->status === 'confirmed')
                                         <span class="px-2 py-0.5 rounded-full text-[10px] font-bold bg-blue-100 text-blue-800">स्वीकृत</span>

@@ -182,66 +182,83 @@
     <!-- ========================================================================= -->
     <!-- ROLE-SPECIFIC ACTION PANELS                                               -->
     <!-- ========================================================================= -->
-    @if($staff->isClerk())
-        <!-- CLERK SPECIFIC: TODAY'S APPOINTMENTS & TOKENS -->
-        <div class="bg-white rounded-2xl border border-slate-200 p-6 shadow-sm">
-            <div class="flex items-center justify-between mb-4">
-                <div>
-                    <h2 class="text-base font-bold text-slate-900">आजका नागरिक भेटघाट तथा टोकन (Today's Scheduled Appointments)</h2>
-                    <p class="text-xs text-slate-500">काउन्टरमा आउने सेवाग्राहीको टोकन रुजु तथा चेक-इन</p>
+    <!-- APPOINTMENTS & TOKENS PANEL (Visible to all Ward Staff: Chair, Secretary, Clerk, Admin) -->
+    <div class="bg-white rounded-2xl border border-slate-200 p-6 shadow-sm">
+        <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-2 mb-4">
+            <div>
+                <div class="flex items-center space-x-2">
+                    <h2 class="text-base font-bold text-slate-900">नागरिक भेटघाट तथा समय तालिका (Citizen Appointments)</h2>
+                    <span class="px-2 py-0.5 rounded-full text-[10px] font-bold bg-blue-100 text-nepal-blue">
+                        {{ $stats['today_appointments'] }} आज / {{ $stats['upcoming_appointments'] }} आगामी
+                    </span>
                 </div>
-                <a href="{{ route('staff.appointments.index') }}" class="text-xs text-nepal-blue font-semibold hover:underline">सबै भेटघाट &rarr;</a>
+                <p class="text-xs text-slate-500 mt-0.5">नागरिकहरूले यस वडाका लागि अनलाइन बुक गरेका प्रत्यक्ष भेटघाट तथा सिफारिस तालिका</p>
             </div>
-
-            @if($todayAppointments->isEmpty())
-                <div class="p-8 text-center bg-slate-50 rounded-xl border border-dashed border-slate-200">
-                    <p class="text-xs text-slate-500 font-bold">आजको लागि कुनै नागरिक भेटघाट तालिका छैन।</p>
-                    <p class="text-[11px] text-slate-400 mt-0.5">नयाँ सेवाग्राही आएमा प्रत्यक्ष काउन्टरबाट सहजीकरण गर्नुहोस्।</p>
-                </div>
-            @else
-                <div class="overflow-x-auto">
-                    <table class="w-full text-left text-xs">
-                        <thead class="bg-slate-50 text-slate-600 border-b border-slate-200">
-                            <tr>
-                                <th class="p-3">सेवाग्राही</th>
-                                <th class="p-3">सम्पर्क नम्बर</th>
-                                <th class="p-3">सेवाको नाम</th>
-                                <th class="p-3">समय तालिका (Time Slot)</th>
-                                <th class="p-3">उद्देश्य</th>
-                                <th class="p-3">स्थिति</th>
-                                <th class="p-3 text-right">कार्य</th>
-                            </tr>
-                        </thead>
-                        <tbody class="divide-y divide-slate-100">
-                            @foreach($todayAppointments as $apt)
-                                <tr class="hover:bg-slate-50">
-                                    <td class="p-3 font-semibold text-slate-900">{{ $apt->citizen->full_name }}</td>
-                                    <td class="p-3 font-mono text-slate-600">{{ $apt->citizen->phone }}</td>
-                                    <td class="p-3 text-slate-700">{{ $apt->serviceType->name_ne }}</td>
-                                    <td class="p-3 font-bold text-blue-700">{{ $apt->time_slot }}</td>
-                                    <td class="p-3 text-slate-500 truncate max-w-xs">{{ $apt->purpose }}</td>
-                                    <td class="p-3">
-                                        @if($apt->status === 'completed')
-                                            <span class="px-2 py-0.5 rounded-full text-[10px] font-bold bg-emerald-100 text-emerald-800">सम्पन्न</span>
-                                        @elseif($apt->status === 'cancelled')
-                                            <span class="px-2 py-0.5 rounded-full text-[10px] font-bold bg-rose-100 text-rose-800">रद्द</span>
-                                        @else
-                                            <span class="px-2 py-0.5 rounded-full text-[10px] font-bold bg-blue-100 text-blue-800">तालिकामा</span>
-                                        @endif
-                                    </td>
-                                    <td class="p-3 text-right">
-                                        <a href="{{ route('staff.appointments.index') }}" class="px-2.5 py-1 bg-slate-100 hover:bg-slate-200 text-slate-800 rounded text-xs font-semibold transition">
-                                            चेक-इन
-                                        </a>
-                                    </td>
-                                </tr>
-                            @endforeach
-                        </tbody>
-                    </table>
-                </div>
-            @endif
+            <a href="{{ route('staff.appointments.index') }}" class="text-xs text-nepal-blue font-bold hover:underline flex items-center gap-1">
+                <span>सबै भेटघाट व्यवस्थापन &rarr;</span>
+            </a>
         </div>
-    @endif
+
+        @php
+            $displayAppointments = $todayAppointments->isNotEmpty() ? $todayAppointments : $upcomingAppointments;
+        @endphp
+
+        @if($displayAppointments->isEmpty())
+            <div class="p-8 text-center bg-slate-50 rounded-xl border border-dashed border-slate-200">
+                <svg class="w-8 h-8 text-slate-400 mx-auto mb-2" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z"/></svg>
+                <p class="text-xs text-slate-500 font-bold">हाल कुनै पनि नागरिक भेटघाट तालिका दर्ता भएको छैन।</p>
+                <p class="text-[11px] text-slate-400 mt-0.5">नागरिक पोर्टलबाट नयाँ अपोइन्टमेन्ट बुक हुनासाथ यहाँ देखिनेछ।</p>
+            </div>
+        @else
+            <div class="overflow-x-auto">
+                <table class="w-full text-left text-xs">
+                    <thead class="bg-slate-50 text-slate-600 border-b border-slate-200">
+                        <tr>
+                            <th class="p-3">अपोइन्टमेन्ट नं.</th>
+                            <th class="p-3">सेवाग्राही</th>
+                            <th class="p-3">सम्पर्क नम्बर</th>
+                            <th class="p-3">भ्रमण मिति तथा समय</th>
+                            <th class="p-3">सेवाको नाम</th>
+                            <th class="p-3">उद्देश्य</th>
+                            <th class="p-3">स्थिति</th>
+                            <th class="p-3 text-right">कार्य</th>
+                        </tr>
+                    </thead>
+                    <tbody class="divide-y divide-slate-100">
+                        @foreach($displayAppointments as $apt)
+                            <tr class="hover:bg-slate-50">
+                                <td class="p-3 font-mono font-bold text-slate-900">{{ $apt->appointment_number }}</td>
+                                <td class="p-3 font-semibold text-slate-900">{{ $apt->citizen->full_name }}</td>
+                                <td class="p-3 font-mono text-slate-600">{{ $apt->citizen->phone }}</td>
+                                <td class="p-3">
+                                    <div class="font-bold text-slate-800">{{ $apt->appointment_date->format('Y-m-d') }}</div>
+                                    <div class="text-[11px] text-nepal-blue font-semibold">{{ $apt->time_slot }}</div>
+                                </td>
+                                <td class="p-3 text-slate-700">{{ $apt->serviceType->name_ne ?? 'सामान्य परामर्श' }}</td>
+                                <td class="p-3 text-slate-500 truncate max-w-xs">{{ $apt->purpose }}</td>
+                                <td class="p-3">
+                                    @if($apt->status === 'completed')
+                                        <span class="px-2 py-0.5 rounded-full text-[10px] font-bold bg-emerald-100 text-emerald-800">सम्पन्न</span>
+                                    @elseif($apt->status === 'cancelled')
+                                        <span class="px-2 py-0.5 rounded-full text-[10px] font-bold bg-rose-100 text-rose-800">रद्द</span>
+                                    @elseif($apt->status === 'confirmed')
+                                        <span class="px-2 py-0.5 rounded-full text-[10px] font-bold bg-blue-100 text-blue-800">स्वीकृत</span>
+                                    @else
+                                        <span class="px-2 py-0.5 rounded-full text-[10px] font-bold bg-amber-100 text-amber-800">प्रस्तावित</span>
+                                    @endif
+                                </td>
+                                <td class="p-3 text-right">
+                                    <a href="{{ route('staff.appointments.index') }}" class="px-2.5 py-1 bg-slate-100 hover:bg-slate-200 text-slate-800 rounded text-xs font-semibold transition">
+                                        व्यवस्थापन &rarr;
+                                    </a>
+                                </td>
+                            </tr>
+                        @endforeach
+                    </tbody>
+                </table>
+            </div>
+        @endif
+    </div>
 
     <!-- Recent Submissions Table (All Staff) -->
     <div class="bg-white rounded-2xl border border-slate-200 p-6 shadow-sm">
