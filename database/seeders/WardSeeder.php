@@ -464,6 +464,46 @@ class WardSeeder extends Seeder
             }
         }
 
-        $this->command?->info("Successfully seeded {$totalSeeded} wards across 21 palikas in Kathmandu, Lalitpur, and Bhaktapur.");
+        // ==========================================
+        // 4. NATIONWIDE COVERAGE: All other 732 palikas across Nepal
+        // ==========================================
+        $existingPalikaCodes = array_keys($palikaConfigs);
+        $otherPalikas = Palika::whereNotIn('code', $existingPalikaCodes)->get();
+
+        $typeWardCounts = [
+            'metropolitan' => 32,
+            'sub_metropolitan' => 19,
+            'municipality' => 11,
+            'rural_municipality' => 7,
+        ];
+
+        $nationwideWards = [];
+        $now = now();
+
+        foreach ($otherPalikas as $palika) {
+            $wardCount = $typeWardCounts[$palika->type] ?? 9;
+            $codeLower = strtolower($palika->code);
+
+            for ($w = 1; $w <= $wardCount; $w++) {
+                $nationwideWards[] = [
+                    'palika_id' => $palika->id,
+                    'ward_number' => $w,
+                    'office_address' => "वडा नं. {$w} कार्यालय, {$palika->name_ne}",
+                    'office_phone' => null,
+                    'office_email' => "ward{$w}@{$codeLower}.gov.np",
+                    'created_at' => $now,
+                    'updated_at' => $now,
+                ];
+            }
+        }
+
+        // Batch upsert in chunks of 500 for optimal performance
+        foreach (array_chunk($nationwideWards, 500) as $chunk) {
+            Ward::upsert($chunk, ['palika_id', 'ward_number'], ['office_address', 'office_email', 'updated_at']);
+            $totalSeeded += count($chunk);
+        }
+
+        $grandTotal = Ward::count();
+        $this->command?->info("Successfully seeded {$totalSeeded} wards. Total wards nationwide in database: {$grandTotal}.");
     }
 }

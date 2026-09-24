@@ -24,8 +24,13 @@ class AppointmentController extends Controller
     public function create()
     {
         $citizen = Auth::guard('citizen')->user();
+        if ($citizen) {
+            $citizen->load('ward.palika.district');
+        }
         $serviceTypes = ServiceType::where('is_active', true)->get();
-        $palikas = \App\Models\Palika::with(['wards' => fn($q) => $q->orderBy('ward_number')])
+        $districtId = $citizen->ward?->palika?->district_id ?? \App\Models\District::where('code', 'KTM')->value('id') ?? 1;
+        $palikas = \App\Models\Palika::where('district_id', $districtId)
+            ->with(['wards' => fn($q) => $q->orderBy('ward_number')])
             ->orderBy('name_en')
             ->get();
 

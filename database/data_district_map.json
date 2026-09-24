@@ -1,0 +1,464 @@
+{
+    "1": {
+        "code": "KAS",
+        "name_en": "Kaski",
+        "name_ne": "कास्की",
+        "province_id": 4
+    },
+    "2": {
+        "code": "CHI",
+        "name_en": "Chitwan",
+        "name_ne": "चितवन",
+        "province_id": 3
+    },
+    "3": {
+        "code": "PAR",
+        "name_en": "Parsa",
+        "name_ne": "पर्सा",
+        "province_id": 2
+    },
+    "4": {
+        "code": "MOR",
+        "name_en": "Morang",
+        "name_ne": "मोरङ",
+        "province_id": 1
+    },
+    "5": {
+        "code": "KTM",
+        "name_en": "Kathmandu",
+        "name_ne": "काठमाडौं",
+        "province_id": 3
+    },
+    "6": {
+        "code": "LAL",
+        "name_en": "Lalitpur",
+        "name_ne": "ललितपुर",
+        "province_id": 3
+    },
+    "7": {
+        "code": "DAN",
+        "name_en": "Dang",
+        "name_ne": "दाङ",
+        "province_id": 5
+    },
+    "8": {
+        "code": "BAR",
+        "name_en": "Bara",
+        "name_ne": "बारा",
+        "province_id": 2
+    },
+    "9": {
+        "code": "KAI",
+        "name_en": "Kailali",
+        "name_ne": "कैलाली",
+        "province_id": 7
+    },
+    "10": {
+        "code": "MAK",
+        "name_en": "Makwanpur",
+        "name_ne": "मकवानपुर",
+        "province_id": 3
+    },
+    "11": {
+        "code": "SUN",
+        "name_en": "Sunsari",
+        "name_ne": "सुनसरी",
+        "province_id": 1
+    },
+    "12": {
+        "code": "RUP",
+        "name_en": "Rupandehi",
+        "name_ne": "रुपन्देही",
+        "province_id": 5
+    },
+    "13": {
+        "code": "HUM",
+        "name_en": "Humla",
+        "name_ne": "हुम्ला",
+        "province_id": 6
+    },
+    "14": {
+        "code": "BAN",
+        "name_en": "Banke",
+        "name_ne": "बाँके",
+        "province_id": 5
+    },
+    "15": {
+        "code": "TAP",
+        "name_en": "Taplejung",
+        "name_ne": "ताप्लेजुङ",
+        "province_id": 1
+    },
+    "16": {
+        "code": "SAN",
+        "name_en": "Sankhuwasabha",
+        "name_ne": "संखुवासभा",
+        "province_id": 1
+    },
+    "17": {
+        "code": "SOL",
+        "name_en": "Solukhumbu",
+        "name_ne": "सोलुखुम्बु",
+        "province_id": 1
+    },
+    "18": {
+        "code": "OKH",
+        "name_en": "Okhaldhunga",
+        "name_ne": "ओखलढुङ्गा",
+        "province_id": 1
+    },
+    "19": {
+        "code": "KHO",
+        "name_en": "Khotang",
+        "name_ne": "खोटाङ",
+        "province_id": 1
+    },
+    "20": {
+        "code": "BHO",
+        "name_en": "Bhojpur",
+        "name_ne": "भोजपुर",
+        "province_id": 1
+    },
+    "21": {
+        "code": "DHA",
+        "name_en": "Dhankuta",
+        "name_ne": "धनकुटा",
+        "province_id": 1
+    },
+    "22": {
+        "code": "TER",
+        "name_en": "Terhathum",
+        "name_ne": "तेह्रथुम",
+        "province_id": 1
+    },
+    "23": {
+        "code": "PAC",
+        "name_en": "Pachthar",
+        "name_ne": "पाँचथर",
+        "province_id": 1
+    },
+    "24": {
+        "code": "ILA",
+        "name_en": "Ilam",
+        "name_ne": "इलाम",
+        "province_id": 1
+    },
+    "25": {
+        "code": "JHA",
+        "name_en": "Jhapa",
+        "name_ne": "झापा",
+        "province_id": 1
+    },
+    "26": {
+        "code": "UDA",
+        "name_en": "Udayapur",
+        "name_ne": "उदयपुर",
+        "province_id": 1
+    },
+    "27": {
+        "code": "SAP",
+        "name_en": "Saptari",
+        "name_ne": "सप्तरी",
+        "province_id": 2
+    },
+    "28": {
+        "code": "SIR",
+        "name_en": "Siraha",
+        "name_ne": "सिराहा",
+        "province_id": 2
+    },
+    "29": {
+        "code": "DHN",
+        "name_en": "Dhanusha",
+        "name_ne": "धनुषा",
+        "province_id": 2
+    },
+    "30": {
+        "code": "MAH",
+        "name_en": "Mahottari",
+        "name_ne": "महोत्तरी",
+        "province_id": 2
+    },
+    "31": {
+        "code": "SAR",
+        "name_en": "Sarlahi",
+        "name_ne": "सर्लाही",
+        "province_id": 2
+    },
+    "32": {
+        "code": "RAU",
+        "name_en": "Rautahat",
+        "name_ne": "रौतहट",
+        "province_id": 2
+    },
+    "33": {
+        "code": "DOL",
+        "name_en": "Dolakha",
+        "name_ne": "दोलखा",
+        "province_id": 3
+    },
+    "34": {
+        "code": "SIN",
+        "name_en": "Sindhupalchok",
+        "name_ne": "सिन्धुपाल्चोक",
+        "province_id": 3
+    },
+    "35": {
+        "code": "DHD",
+        "name_en": "Dhading",
+        "name_ne": "धादिङ",
+        "province_id": 3
+    },
+    "36": {
+        "code": "NUW",
+        "name_en": "Nuwakot",
+        "name_ne": "नुवाकोट",
+        "province_id": 3
+    },
+    "37": {
+        "code": "BKT",
+        "name_en": "Bhaktapur",
+        "name_ne": "भक्तपुर",
+        "province_id": 3
+    },
+    "38": {
+        "code": "KAV",
+        "name_en": "Kavrepalanchok",
+        "name_ne": "काभ्रेपलाञ्चोक",
+        "province_id": 3
+    },
+    "39": {
+        "code": "RAM",
+        "name_en": "Ramechhap",
+        "name_ne": "रामेछाप",
+        "province_id": 3
+    },
+    "40": {
+        "code": "SID",
+        "name_en": "Sindhuli",
+        "name_ne": "सिन्धुली",
+        "province_id": 3
+    },
+    "41": {
+        "code": "GOR",
+        "name_en": "Gorkha",
+        "name_ne": "गोरखा",
+        "province_id": 4
+    },
+    "42": {
+        "code": "MYA",
+        "name_en": "Myagdi",
+        "name_ne": "म्याग्दी",
+        "province_id": 4
+    },
+    "43": {
+        "code": "LAM",
+        "name_en": "Lamjung",
+        "name_ne": "लमजुङ",
+        "province_id": 4
+    },
+    "44": {
+        "code": "TAA",
+        "name_en": "Tanahu",
+        "name_ne": "तनहुँ",
+        "province_id": 4
+    },
+    "45": {
+        "code": "NAW",
+        "name_en": "Nawalparari East",
+        "name_ne": "नवलपरासी पूर्व",
+        "province_id": 4
+    },
+    "46": {
+        "code": "SYA",
+        "name_en": "Syangja",
+        "name_ne": "स्याङ्जा",
+        "province_id": 4
+    },
+    "47": {
+        "code": "PAB",
+        "name_en": "Parbat",
+        "name_ne": "पर्वत",
+        "province_id": 4
+    },
+    "48": {
+        "code": "BAG",
+        "name_en": "Baglung",
+        "name_ne": "बागलुङ",
+        "province_id": 4
+    },
+    "49": {
+        "code": "ROL",
+        "name_en": "Rolpa",
+        "name_ne": "रोल्पा",
+        "province_id": 5
+    },
+    "50": {
+        "code": "PYU",
+        "name_en": "Pyuthan",
+        "name_ne": "प्युठान",
+        "province_id": 5
+    },
+    "51": {
+        "code": "GUL",
+        "name_en": "Gulmi",
+        "name_ne": "गुल्मी",
+        "province_id": 5
+    },
+    "52": {
+        "code": "ARG",
+        "name_en": "Arghakhanchi",
+        "name_ne": "अर्घाखाँची",
+        "province_id": 5
+    },
+    "53": {
+        "code": "PAL",
+        "name_en": "Palpa",
+        "name_ne": "पाल्पा",
+        "province_id": 5
+    },
+    "54": {
+        "code": "NAA",
+        "name_en": "Nawalparasi West",
+        "name_ne": "नवलपरासी पश्चिम",
+        "province_id": 5
+    },
+    "55": {
+        "code": "KAL",
+        "name_en": "Kapilbastu",
+        "name_ne": "कपिलवस्तु",
+        "province_id": 5
+    },
+    "56": {
+        "code": "BAD",
+        "name_en": "Bardiya",
+        "name_ne": "बर्दिया",
+        "province_id": 5
+    },
+    "57": {
+        "code": "DOP",
+        "name_en": "Dolpa",
+        "name_ne": "डोल्पा",
+        "province_id": 6
+    },
+    "58": {
+        "code": "MUG",
+        "name_en": "Mugu",
+        "name_ne": "मुगु",
+        "province_id": 6
+    },
+    "59": {
+        "code": "JUM",
+        "name_en": "Jumla",
+        "name_ne": "जुम्ला",
+        "province_id": 6
+    },
+    "60": {
+        "code": "KAK",
+        "name_en": "Kalikot",
+        "name_ne": "कालिकोट",
+        "province_id": 6
+    },
+    "61": {
+        "code": "DAI",
+        "name_en": "Dailekh",
+        "name_ne": "दैलेख",
+        "province_id": 6
+    },
+    "62": {
+        "code": "JAJ",
+        "name_en": "Jajarkot",
+        "name_ne": "जाजरकोट",
+        "province_id": 6
+    },
+    "63": {
+        "code": "RUK",
+        "name_en": "Rukum West",
+        "name_ne": "रुकुम पश्चिम",
+        "province_id": 6
+    },
+    "64": {
+        "code": "SAL",
+        "name_en": "Salyan",
+        "name_ne": "सल्यान",
+        "province_id": 6
+    },
+    "65": {
+        "code": "SUR",
+        "name_en": "Surkhet",
+        "name_ne": "सुर्खेत",
+        "province_id": 6
+    },
+    "66": {
+        "code": "BAJ",
+        "name_en": "Bajura",
+        "name_ne": "बाजुरा",
+        "province_id": 7
+    },
+    "67": {
+        "code": "BAH",
+        "name_en": "Bajhang",
+        "name_ne": "बझाङ",
+        "province_id": 7
+    },
+    "68": {
+        "code": "DAR",
+        "name_en": "Darchula",
+        "name_ne": "दार्चुला",
+        "province_id": 7
+    },
+    "69": {
+        "code": "BAI",
+        "name_en": "Baitadi",
+        "name_ne": "बैतडी",
+        "province_id": 7
+    },
+    "70": {
+        "code": "DAD",
+        "name_en": "Dadeldhura",
+        "name_ne": "डडेलधुरा",
+        "province_id": 7
+    },
+    "71": {
+        "code": "DOT",
+        "name_en": "Doti",
+        "name_ne": "डोटी",
+        "province_id": 7
+    },
+    "72": {
+        "code": "ACH",
+        "name_en": "Achham",
+        "name_ne": "अछाम",
+        "province_id": 7
+    },
+    "73": {
+        "code": "KAN",
+        "name_en": "Kanchanpur",
+        "name_ne": "कञ्चनपुर",
+        "province_id": 7
+    },
+    "74": {
+        "code": "RAS",
+        "name_en": "Rasuwa",
+        "name_ne": "रसुवा",
+        "province_id": 3
+    },
+    "75": {
+        "code": "MAN",
+        "name_en": "Manang",
+        "name_ne": "मनाङ",
+        "province_id": 4
+    },
+    "76": {
+        "code": "MUS",
+        "name_en": "Mustang",
+        "name_ne": "मुस्ताङ",
+        "province_id": 4
+    },
+    "77": {
+        "code": "RUU",
+        "name_en": "Rukum East",
+        "name_ne": "रुकुम पूर्व",
+        "province_id": 5
+    }
+}

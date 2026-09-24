@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\Api\GeographyController;
 use App\Http\Controllers\Citizen\ApplicationController;
 use App\Http\Controllers\Citizen\AuthController;
 use App\Http\Controllers\Citizen\BillPaymentController;
@@ -17,6 +18,14 @@ use Illuminate\Support\Facades\Route;
 Route::get('/', [PublicController::class, 'index'])->name('home');
 Route::get('/notices', [PublicController::class, 'notices'])->name('notices.index');
 Route::get('/verify/{token}', [PublicController::class, 'verifyCertificate'])->name('verify.certificate');
+
+// Geography API (Cascading Province -> District -> Palika -> Ward)
+Route::prefix('api/geography')->name('api.geography.')->group(function () {
+    Route::get('/provinces', [GeographyController::class, 'provinces'])->name('provinces');
+    Route::get('/districts/{province}', [GeographyController::class, 'districts'])->name('districts');
+    Route::get('/palikas/{district}', [GeographyController::class, 'palikas'])->name('palikas');
+    Route::get('/wards/{palika}', [GeographyController::class, 'wards'])->name('wards');
+});
 
 // Locale Switcher
 Route::get('/locale/{lang}', function ($lang) {

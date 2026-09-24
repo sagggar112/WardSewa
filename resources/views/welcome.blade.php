@@ -9,7 +9,7 @@
             <div class="inline-flex items-center justify-center gap-2 bg-white/10 backdrop-blur-md border border-white/20 px-4 py-1.5 rounded-full text-xs font-semibold text-slate-200 mb-6 shadow-sm">
                 <span class="flex items-center gap-1.5 text-emerald-400">
                     <span class="w-2 h-2 rounded-full bg-emerald-400 animate-pulse"></span>
-                    <span>{{ __('Kathmandu Valley Coverage: 3 Districts, 21 Palikas, 247 Wards') }}</span>
+                    <span>{{ __('Nationwide Nepal Coverage: 7 Provinces, 77 Districts, 753 Palikas, 6,700+ Wards') }}</span>
                 </span>
             </div>
 
@@ -17,7 +17,7 @@
                 {{ __('All Ward Office Services Now') }} <span class="text-nepal-gold">{{ __('From The Comfort of Home') }}</span>
             </h1>
             <p class="mt-5 text-base md:text-lg text-slate-300 leading-relaxed">
-                {{ __('Apply online for recommendation letters (Four Boundaries, Unmarried, Residence), birth registration, public grievances, and pay electricity/water bills instantly across Kathmandu, Lalitpur & Bhaktapur.') }}
+                {{ __('Apply online for recommendation letters (Four Boundaries, Unmarried, Residence), birth registration, public grievances, and pay electricity/water bills instantly across all 753 local bodies of Nepal.') }}
             </p>
 
             <div class="mt-8 flex flex-col sm:flex-row items-center justify-center gap-4">
@@ -26,7 +26,7 @@
                     <svg class="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M14 5l7 7m0 0l-7 7m7-7H3"/></svg>
                 </a>
                 <a href="#coverage" class="w-full sm:w-auto px-6 py-3.5 bg-white/10 hover:bg-white/20 text-white font-semibold rounded-xl transition text-base text-center border border-white/20">
-                    {{ __('View Valley Palikas & Wards') }}
+                    {{ __('View 77 Districts & Palikas') }}
                 </a>
                 <a href="{{ route('staff.login') }}" class="w-full sm:w-auto px-5 py-3.5 bg-slate-800/90 hover:bg-slate-800 text-slate-200 hover:text-white font-semibold rounded-xl transition text-base text-center border border-slate-700 flex items-center justify-center gap-2">
                     <svg class="w-4 h-4 text-nepal-gold" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 15v2m-6 4h12a2 2 0 002-2v-6a2 2 0 00-2-2H6a2 2 0 00-2 2v6a2 2 0 002 2zm10-10V7a4 4 0 00-8 0v4h8z"/></svg>
@@ -41,16 +41,16 @@
 <div class="bg-white border-b border-slate-200 shadow-sm py-6">
     <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 grid grid-cols-2 md:grid-cols-4 gap-6 text-center">
         <div>
-            <div class="text-2xl md:text-3xl font-black text-nepal-crimson">३ जिल्ला</div>
-            <div class="text-xs text-slate-500 font-medium mt-1">काठमाडौँ, ललितपुर, भक्तपुर</div>
+            <div class="text-2xl md:text-3xl font-black text-nepal-crimson">{{ $totalDistricts ?? 77 }} जिल्ला</div>
+            <div class="text-xs text-slate-500 font-medium mt-1">७ वटै प्रदेशका सम्पूर्ण ७७ जिल्ला</div>
         </div>
         <div>
-            <div class="text-2xl md:text-3xl font-black text-nepal-blue">२१ पालिका</div>
-            <div class="text-xs text-slate-500 font-medium mt-1">२ महानगर, १६ नगर, ३ गाउँपालिका</div>
+            <div class="text-2xl md:text-3xl font-black text-nepal-blue">{{ $totalPalikas ?? 753 }} पालिका</div>
+            <div class="text-xs text-slate-500 font-medium mt-1">६ महानगर, ११ उपमहानगर, २७६ नगर, ४६० गाउँपालिका</div>
         </div>
         <div>
-            <div class="text-2xl md:text-3xl font-black text-emerald-600">२४७ वडा</div>
-            <div class="text-xs text-slate-500 font-medium mt-1">सम्पूर्ण वडा कार्यालय डिजिटल</div>
+            <div class="text-2xl md:text-3xl font-black text-emerald-600">{{ number_format($totalWards ?? 6665) }} वडा</div>
+            <div class="text-xs text-slate-500 font-medium mt-1">नेपालभरका सम्पूर्ण डिजिटल वडा कार्यालय</div>
         </div>
         <div>
             <div class="text-2xl md:text-3xl font-black text-nepal-gold">डिजिटल प्रमाण</div>
@@ -59,54 +59,49 @@
     </div>
 </div>
 
-<!-- Kathmandu Valley Coverage Section -->
+<!-- Nationwide Coverage Section -->
 <div id="coverage" class="bg-slate-100 py-16 border-b border-slate-200">
     <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div class="text-center max-w-3xl mx-auto mb-12">
-            <span class="text-xs font-bold text-nepal-crimson uppercase tracking-wider">विस्तारित भौगोलिक क्षेत्र</span>
+            <span class="text-xs font-bold text-nepal-crimson uppercase tracking-wider">नेपाल सरकारको संघीय संरचना</span>
             <h2 class="text-3xl font-extrabold text-slate-900 mt-1">
-                {{ __('Kathmandu Valley Local Body Coverage') }}
+                {{ __('Nationwide Nepal Local Government Coverage') }}
             </h2>
             <p class="mt-2 text-slate-600 text-sm">
-                {{ __('Citizens from any of the 21 metropolitan, municipal, and rural local governments across Kathmandu, Lalitpur, and Bhaktapur can register and access digital ward services.') }}
+                {{ __('Citizens from any of the 753 local bodies across all 7 provinces of Nepal can register and access official digital ward services online.') }}
             </p>
         </div>
 
-        <div class="grid grid-cols-1 lg:grid-cols-3 gap-6">
-            @if(isset($valleyDistricts))
-                @foreach($valleyDistricts as $dist)
-                    <div class="bg-white rounded-2xl border border-slate-200 shadow-sm p-6 flex flex-col justify-between">
+        <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-5">
+            @if(isset($provinces))
+                @foreach($provinces as $prov)
+                    <div class="bg-white rounded-2xl border border-slate-200 shadow-sm p-5 flex flex-col justify-between hover:shadow-md transition">
                         <div>
                             <div class="flex items-center justify-between pb-3 border-b border-slate-100">
                                 <div>
-                                    <h3 class="text-xl font-bold text-slate-900">{{ $dist->name_ne }}</h3>
-                                    <span class="text-xs text-slate-500 font-semibold">{{ $dist->name_en }} District</span>
+                                    <h3 class="text-lg font-bold text-slate-900">{{ $prov->name_ne }}</h3>
+                                    <span class="text-xs text-slate-500 font-medium">{{ $prov->name_en }}</span>
                                 </div>
                                 <span class="px-2.5 py-1 bg-nepal-blue/10 text-nepal-blue text-xs font-extrabold rounded-full">
-                                    {{ $dist->palikas->count() }} स्थानीय तह
+                                    {{ $prov->districts->count() }} जिल्ला
                                 </span>
                             </div>
 
-                            <div class="mt-4 space-y-2.5 max-h-72 overflow-y-auto pr-1">
-                                @foreach($dist->palikas as $palika)
-                                    <div class="p-2.5 bg-slate-50 hover:bg-blue-50/50 rounded-lg border border-slate-100 transition flex items-center justify-between">
-                                        <div>
-                                            <div class="text-xs font-bold text-slate-800">{{ $palika->name_ne }}</div>
-                                            <div class="text-[11px] text-slate-500">{{ $palika->name_en }}</div>
-                                        </div>
-                                        <div class="text-right">
-                                            <span class="inline-block px-2 py-0.5 bg-white border border-slate-200 rounded text-[11px] font-bold text-slate-700">
-                                                {{ $palika->wards->count() }} वडा
-                                            </span>
-                                        </div>
+                            <div class="mt-3 space-y-1.5 max-h-48 overflow-y-auto pr-1">
+                                @foreach($prov->districts as $dist)
+                                    <div class="p-2 bg-slate-50 rounded-lg border border-slate-100 flex items-center justify-between text-xs">
+                                        <div class="font-semibold text-slate-800">{{ $dist->name_ne }} ({{ $dist->name_en }})</div>
+                                        <span class="text-[11px] px-1.5 py-0.5 bg-white border border-slate-200 rounded font-bold text-slate-600">
+                                            {{ $dist->palikas_count }} पालिका
+                                        </span>
                                     </div>
                                 @endforeach
                             </div>
                         </div>
 
-                        <div class="mt-6 pt-4 border-t border-slate-100 text-xs text-slate-500 flex items-center justify-between">
-                            <span>कुल वडाहरू: <strong>{{ $dist->palikas->sum(fn($p) => $p->wards->count()) }}</strong></span>
-                            <a href="{{ route('citizen.login') }}" class="text-nepal-crimson font-bold hover:underline">वडा चयन गर्नुहोस् &rarr;</a>
+                        <div class="mt-4 pt-3 border-t border-slate-100 text-xs text-slate-500 flex items-center justify-between">
+                            <span>कुल पालिका: <strong>{{ $prov->districts->sum('palikas_count') }}</strong></span>
+                            <a href="{{ route('citizen.register') }}" class="text-nepal-crimson font-bold hover:underline">दर्ता हुनुहोस् &rarr;</a>
                         </div>
                     </div>
                 @endforeach

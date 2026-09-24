@@ -15,7 +15,7 @@ class DistrictAdminController extends Controller
     public function dashboard()
     {
         $staff = auth('staff')->user();
-        $district = $staff->district ?? District::where('code', 'KTM')->first();
+        $district = $staff->district ?? District::first();
 
         if (!$district) {
             return redirect()->route('staff.dashboard');
@@ -56,7 +56,7 @@ class DistrictAdminController extends Controller
     public function palikas()
     {
         $staff = auth('staff')->user();
-        $district = $staff->district ?? District::where('code', 'KTM')->first();
+        $district = $staff->district ?? District::first();
 
         $palikas = Palika::where('district_id', $district->id)
             ->withCount(['wards', 'applications', 'staff'])
@@ -69,7 +69,7 @@ class DistrictAdminController extends Controller
     public function applications(Request $request)
     {
         $staff = auth('staff')->user();
-        $district = $staff->district ?? District::where('code', 'KTM')->first();
+        $district = $staff->district ?? District::first();
         $palikaIds = $district->palikas->pluck('id');
 
         $query = Application::with(['citizen', 'serviceType', 'ward.palika'])

@@ -19,7 +19,7 @@ class LocalGovtAdminController extends Controller
     public function dashboard()
     {
         $staff = auth('staff')->user();
-        $palika = $staff->palika ?? Palika::where('code', 'KMC')->first();
+        $palika = $staff->palika ?? Palika::first();
 
         if (!$palika) {
             return redirect()->route('staff.dashboard');
@@ -67,7 +67,7 @@ class LocalGovtAdminController extends Controller
     public function wards()
     {
         $staff = auth('staff')->user();
-        $palika = $staff->palika ?? Palika::where('code', 'KMC')->first();
+        $palika = $staff->palika ?? Palika::first();
 
         $wards = Ward::where('palika_id', $palika->id)
             ->withCount(['applications', 'citizens'])
@@ -85,7 +85,7 @@ class LocalGovtAdminController extends Controller
     public function storeWard(Request $request)
     {
         $staff = auth('staff')->user();
-        $palika = $staff->palika ?? Palika::where('code', 'KMC')->first();
+        $palika = $staff->palika ?? Palika::first();
 
         if (!$palika) {
             return back()->with('error', 'कुनै पालिका तोकिएको छैन।');
@@ -152,7 +152,7 @@ class LocalGovtAdminController extends Controller
     public function updateWard(Request $request, $id)
     {
         $staff = auth('staff')->user();
-        $palika = $staff->palika ?? Palika::where('code', 'KMC')->first();
+        $palika = $staff->palika ?? Palika::first();
 
         // Multi-tenancy authorization check: ward must belong to this admin's palika
         $ward = Ward::where('palika_id', $palika->id)->findOrFail($id);
@@ -196,7 +196,7 @@ class LocalGovtAdminController extends Controller
     public function applications(Request $request)
     {
         $staff = auth('staff')->user();
-        $palika = $staff->palika ?? Palika::where('code', 'KMC')->first();
+        $palika = $staff->palika ?? Palika::first();
 
         $query = Application::with(['citizen', 'serviceType', 'ward'])
             ->where('palika_id', $palika->id);
@@ -229,7 +229,7 @@ class LocalGovtAdminController extends Controller
     public function wardStaff($id)
     {
         $staff = auth('staff')->user();
-        $palika = $staff->palika ?? Palika::where('code', 'KMC')->first();
+        $palika = $staff->palika ?? Palika::first();
 
         $ward = Ward::where('palika_id', $palika->id)->with('palika')->findOrFail($id);
 
@@ -249,7 +249,7 @@ class LocalGovtAdminController extends Controller
     public function storeWardStaff(Request $request, $id)
     {
         $staff = auth('staff')->user();
-        $palika = $staff->palika ?? Palika::where('code', 'KMC')->first();
+        $palika = $staff->palika ?? Palika::first();
 
         $ward = Ward::where('palika_id', $palika->id)->findOrFail($id);
 
@@ -291,7 +291,7 @@ class LocalGovtAdminController extends Controller
     public function updateWardStaff(Request $request, $id, $staffId)
     {
         $staff = auth('staff')->user();
-        $palika = $staff->palika ?? Palika::where('code', 'KMC')->first();
+        $palika = $staff->palika ?? Palika::first();
 
         $ward = Ward::where('palika_id', $palika->id)->findOrFail($id);
         $targetStaff = Staff::where('ward_id', $ward->id)->findOrFail($staffId);

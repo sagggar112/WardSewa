@@ -6,6 +6,7 @@ use App\Http\Controllers\Controller;
 use App\Models\Citizen;
 use App\Models\District;
 use App\Models\Palika;
+use App\Models\Province;
 use App\Models\Ward;
 use App\Services\NotificationService;
 use Illuminate\Http\Request;
@@ -87,18 +88,9 @@ class AuthController extends Controller
             return redirect()->route('citizen.dashboard');
         }
 
-        $districts = District::whereIn('code', ['KTM', 'LAL', 'BKT'])
-            ->with([
-                'palikas' => function ($q) {
-                    $q->orderBy('type')->orderBy('name_en');
-                },
-                'palikas.wards' => function ($q) {
-                    $q->orderBy('ward_number');
-                }
-            ])
-            ->get();
+        $provinces = Province::orderBy('id')->get(['id', 'name_en', 'name_ne', 'code']);
 
-        return view('citizen.auth.register', compact('districts'));
+        return view('citizen.auth.register', compact('provinces'));
     }
 
     /**
@@ -161,23 +153,12 @@ class AuthController extends Controller
         /** @var \App\Models\Citizen $citizen */
         $citizen = Auth::guard('citizen')->user();
         if ($citizen) {
-            $citizen->load('ward.palika.district');
+            $citizen->load('ward.palika.district.province');
         }
 
-        $districts = District::whereIn('code', ['KTM', 'LAL', 'BKT'])
-            ->with([
-                'palikas' => function ($q) {
-                    $q->orderBy('type')->orderBy('name_en');
-                },
-                'palikas.wards' => function ($q) {
-                    $q->orderBy('ward_number');
-                }
-            ])
-            ->get();
+        $provinces = Province::orderBy('id')->get(['id', 'name_en', 'name_ne', 'code']);
 
-        $palikas = Palika::with(['wards', 'district'])->get();
-
-        return view('citizen.auth.ward-select', compact('citizen', 'districts', 'palikas'));
+        return view('citizen.auth.ward-select', compact('citizen', 'provinces'));
     }
 
     public function saveWardSelect(Request $request)

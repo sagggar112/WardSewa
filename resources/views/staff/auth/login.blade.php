@@ -66,11 +66,14 @@
                 </div>
 
                 <div>
-                    <label for="password" class="block text-xs font-bold text-slate-700 uppercase tracking-wider mb-1.5">
-                        पासवर्ड (Password) *
-                    </label>
+                    <div class="flex items-center justify-between mb-1.5">
+                        <label for="password" class="block text-xs font-bold text-slate-700 uppercase tracking-wider">
+                            पासवर्ड (Password) *
+                        </label>
+                        <span class="text-[11px] text-slate-500 font-medium">डिफल्ट पासवर्ड: <code class="bg-slate-100 px-1.5 py-0.5 rounded text-nepal-crimson font-mono font-bold">password123</code></span>
+                    </div>
                     <div class="relative">
-                        <input type="password" name="password" id="password" value="" required
+                        <input type="password" name="password" id="password" value="" required placeholder="password123"
                                class="w-full px-4 py-3 border border-slate-300 rounded-xl text-sm focus:ring-2 focus:ring-nepal-blue focus:border-nepal-blue focus:outline-none font-mono text-slate-900 bg-slate-50 focus:bg-white transition">
                         <button type="button" onclick="togglePasswordVisibility('password')" class="absolute inset-y-0 right-0 pr-3.5 flex items-center text-slate-400 hover:text-slate-600">
                             <svg class="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z"/><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z"/></svg>

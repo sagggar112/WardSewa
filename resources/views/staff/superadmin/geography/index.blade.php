@@ -3,7 +3,7 @@
 @section('page_title', 'प्रशासनिक भूगोल व्यवस्थापन (Districts, Palikas & Wards)')
 
 @section('content')
-<div class="space-y-6" x-data="{ showDistrictModal: false, showPalikaModal: false }">
+<div class="space-y-6" x-data="{ showDistrictModal: false, showPalikaModal: false, selectedProvinceFilter: '', searchQuery: '' }">
     <!-- Header -->
     <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
         <div>
@@ -43,17 +43,37 @@
         </div>
     @endif
 
-    <!-- System Totals -->
-    <div class="flex items-center space-x-2 text-xs">
-        <span class="px-3 py-1 bg-purple-100 text-purple-800 font-bold rounded-lg">{{ $districts->count() }} जिल्ला</span>
-        <span class="px-3 py-1 bg-blue-100 text-blue-800 font-bold rounded-lg">{{ $districts->sum(fn($d) => $d->palikas->count()) }} स्थानीय तह</span>
-        <span class="px-3 py-1 bg-emerald-100 text-emerald-800 font-bold rounded-lg">{{ $districts->sum(fn($d) => $d->palikas->sum(fn($p) => $p->wards->count())) }} वडा कार्यालय</span>
+    <!-- System Totals & Filters -->
+    <div class="flex flex-col md:flex-row md:items-center justify-between gap-4 bg-white p-4 rounded-xl border border-slate-200 shadow-sm">
+        <div class="flex items-center space-x-2 text-xs">
+            <span class="px-3 py-1 bg-purple-100 text-purple-800 font-bold rounded-lg">{{ $districts->count() }} जिल्ला</span>
+            <span class="px-3 py-1 bg-blue-100 text-blue-800 font-bold rounded-lg">{{ $districts->sum(fn($d) => $d->palikas->count()) }} स्थानीय तह</span>
+            <span class="px-3 py-1 bg-emerald-100 text-emerald-800 font-bold rounded-lg">{{ $districts->sum(fn($d) => $d->palikas->sum(fn($p) => $p->wards->count())) }} वडा कार्यालय</span>
+        </div>
+
+        <div class="flex flex-wrap items-center gap-3">
+            <div class="flex items-center space-x-2">
+                <label class="text-xs font-semibold text-slate-600">प्रदेश:</label>
+                <select x-model="selectedProvinceFilter" class="text-xs rounded-lg border-slate-300 focus:ring-purple-500 focus:border-purple-500 py-1.5 px-2.5 border bg-slate-50 font-medium">
+                    <option value="">सबै प्रदेश (All 7)</option>
+                    @foreach($provinces as $prov)
+                        <option value="{{ $prov->id }}">{{ $prov->name_ne }}</option>
+                    @endforeach
+                </select>
+            </div>
+            <div class="w-48 sm:w-56">
+                <input type="text" x-model="searchQuery" placeholder="जिल्ला खोज्नुहोस्..."
+                       class="w-full text-xs rounded-lg border-slate-300 focus:ring-purple-500 focus:border-purple-500 py-1.5 px-2.5 border bg-slate-50">
+            </div>
+        </div>
     </div>
 
     <!-- Tree Structure by District -->
     <div class="space-y-8">
         @foreach($districts as $district)
-            <div id="district-{{ $district->id }}" class="bg-white rounded-2xl border border-slate-200 shadow-sm overflow-hidden">
+            <div id="district-{{ $district->id }}"
+                 x-show="(!selectedProvinceFilter || '{{ $district->province_id }}' === selectedProvinceFilter) && (!searchQuery || '{{ strtolower($district->name_en) }}'.includes(searchQuery.toLowerCase()) || '{{ $district->name_ne }}'.includes(searchQuery) || '{{ strtolower($district->code) }}'.includes(searchQuery.toLowerCase()))"
+                 class="bg-white rounded-2xl border border-slate-200 shadow-sm overflow-hidden">
                 <!-- District Header -->
                 <div class="bg-slate-900 text-white p-5 flex flex-col sm:flex-row sm:items-center justify-between gap-2">
                     <div>

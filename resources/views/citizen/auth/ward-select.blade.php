@@ -2,76 +2,30 @@
 
 @section('content')
 @php
-    $hierarchyData = $districts->map(function($d) {
-        return [
-            'id' => $d->id,
-            'code' => $d->code,
-            'name_en' => $d->name_en,
-            'name_ne' => $d->name_ne,
-            'palikas' => $d->palikas->map(function($p) {
-                return [
-                    'id' => $p->id,
-                    'code' => $p->code,
-                    'type' => $p->type,
-                    'name_en' => $p->name_en,
-                    'name_ne' => $p->name_ne,
-                    'wards' => $p->wards->map(function($w) {
-                        return [
-                            'id' => $w->id,
-                            'number' => $w->ward_number,
-                            'address' => $w->office_address,
-                            'phone' => $w->office_phone,
-                            'email' => $w->office_email,
-                        ];
-                    })->values(),
-                ];
-            })->values(),
-        ];
-    })->values();
-
     $defaultWardId = old('ward_id', $citizen->ward_id);
-    $defaultDistrictId = null;
-    $defaultPalikaId = null;
-
-    if ($citizen->ward) {
-        $defaultWardId = $citizen->ward->id;
-        $defaultPalikaId = $citizen->ward->palika_id;
-        $defaultDistrictId = $citizen->ward->palika?->district_id;
-    } else {
-        // Default to Kathmandu District (KTM) & Kathmandu Metro (KMC) Ward 32
-        $ktmDist = $districts->firstWhere('code', 'KTM');
-        if ($ktmDist) {
-            $defaultDistrictId = $ktmDist->id;
-            $kmcPalika = $ktmDist->palikas->firstWhere('code', 'KMC');
-            if ($kmcPalika) {
-                $defaultPalikaId = $kmcPalika->id;
-                $w32 = $kmcPalika->wards->firstWhere('ward_number', 32);
-                if ($w32 && !$defaultWardId) {
-                    $defaultWardId = $w32->id;
-                }
-            }
-        }
-    }
+    $defaultPalikaId = old('palika_id', $citizen->ward?->palika_id);
+    $defaultDistrictId = old('district_id', $citizen->ward?->palika?->district_id);
+    $defaultProvinceId = old('province_id', $citizen->ward?->palika?->district?->province_id ?? 3);
 @endphp
 
 <div class="min-h-[75vh] flex items-center justify-center px-4 py-10"
-     x-data="wardPicker(@js($hierarchyData), '{{ $defaultDistrictId }}', '{{ $defaultPalikaId }}', '{{ $defaultWardId }}')">
-    <div class="max-w-2xl w-full bg-white rounded-2xl border border-slate-200 shadow-xl overflow-hidden">
+     x-data="wardPicker(@js($provinces), '{{ $defaultProvinceId }}', '{{ $defaultDistrictId }}', '{{ $defaultPalikaId }}', '{{ $defaultWardId }}')">
+    <div class="max-w-3xl w-full bg-white rounded-2xl border border-slate-200 shadow-xl overflow-hidden">
         <!-- Header Banner -->
         <div class="bg-gradient-to-r from-nepal-darkblue via-nepal-blue to-nepal-darkblue text-white p-6 sm:p-8">
             <div class="flex items-center justify-between">
                 <span class="px-3 py-1 bg-nepal-crimson text-white text-xs font-bold rounded-full uppercase tracking-wider shadow-sm">
-                    {{ __('Step 2: Ward Profile Setup') }}
+                    {{ __('वडा तथा स्थान छनौट (Ward Profile Setup)') }}
                 </span>
                 <span class="text-xs text-slate-300">
-                    काठमाडौँ उपत्यका (३ जिल्ला, २१ पालिका)
+                    {{ __('नेपालभरका ७५३ स्थानीय तह') }}
                 </span>
             </div>
             <h2 class="text-2xl sm:text-3xl font-extrabold text-white mt-3">
-                {{ __('Select Your Palika & Ward') }}
+                {{ __('आफ्नो स्थानीय तह र वडा चयन गर्नुहोस्') }}
             </h2>
             <p class="text-xs sm:text-sm text-slate-200 mt-1">
-                {{ __('Your applications, recommendations, and public service requests will be routed directly to your chosen Ward Office.') }}
+                {{ __('तपाईँका सबै सिफारिस पत्र, घटना दर्ता र नागरिक सेवाहरू सिधै सम्बन्धित वडा कार्यालयमा पठाइनेछ।') }}
             </p>
         </div>
 
@@ -107,32 +61,46 @@
                             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z"/>
                             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 11a3 3 0 11-6 0 3 3 0 016 0z"/>
                         </svg>
-                        स्थान विवरण (District, Palika & Ward Selection)
+                        स्थान विवरण (Province, District, Palika & Ward Selection)
                     </h3>
-                    <span class="text-[11px] text-slate-500 font-medium">उपत्यकाका २४७ वडाहरू समावेश</span>
+                    <span class="text-[11px] text-slate-500 font-medium">नेपालभरका ६,७००+ वडाहरू</span>
                 </div>
 
-                <div class="grid grid-cols-1 sm:grid-cols-3 gap-3.5">
-                    <!-- 1. District Selector -->
+                <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-3.5">
+                    <!-- 1. Province Selector -->
+                    <div>
+                        <label for="province_select" class="block text-xs font-semibold text-slate-700 mb-1">
+                            १. प्रदेश (Province) *
+                        </label>
+                        <select id="province_select" x-model="selectedProvinceId" @change="onProvinceChange()"
+                                class="w-full px-3 py-2.5 bg-white border border-slate-300 rounded-lg text-xs sm:text-sm font-medium focus:ring-2 focus:ring-nepal-blue focus:outline-none">
+                            <option value="">-- प्रदेश छनौट --</option>
+                            <template x-for="prov in provinces" :key="prov.id">
+                                <option :value="prov.id" x-text="prov.name_ne + ' (' + prov.name_en + ')'"></option>
+                            </template>
+                        </select>
+                    </div>
+
+                    <!-- 2. District Selector -->
                     <div>
                         <label for="district_select" class="block text-xs font-semibold text-slate-700 mb-1">
-                            १. जिल्ला (District) *
+                            २. जिल्ला (District) *
                         </label>
-                        <select id="district_select" x-model="selectedDistrictId" @change="onDistrictChange()"
-                                class="w-full px-3 py-2.5 bg-white border border-slate-300 rounded-lg text-xs sm:text-sm font-medium focus:ring-2 focus:ring-nepal-blue focus:outline-none">
+                        <select id="district_select" x-model="selectedDistrictId" @change="onDistrictChange()" :disabled="!availableDistricts.length || loadingDistricts"
+                                class="w-full px-3 py-2.5 bg-white border border-slate-300 rounded-lg text-xs sm:text-sm font-medium focus:ring-2 focus:ring-nepal-blue focus:outline-none disabled:bg-slate-100 disabled:text-slate-400">
                             <option value="">-- जिल्ला छनौट --</option>
-                            <template x-for="dist in districts" :key="dist.id">
+                            <template x-for="dist in availableDistricts" :key="dist.id">
                                 <option :value="dist.id" x-text="dist.name_ne + ' (' + dist.name_en + ')'"></option>
                             </template>
                         </select>
                     </div>
 
-                    <!-- 2. Palika Selector -->
+                    <!-- 3. Palika Selector -->
                     <div>
                         <label for="palika_select" class="block text-xs font-semibold text-slate-700 mb-1">
-                            २. स्थानीय तह (Palika) *
+                            ३. स्थानीय तह (Palika) *
                         </label>
-                        <select id="palika_select" x-model="selectedPalikaId" @change="onPalikaChange()" :disabled="!availablePalikas.length"
+                        <select id="palika_select" x-model="selectedPalikaId" @change="onPalikaChange()" :disabled="!availablePalikas.length || loadingPalikas"
                                 class="w-full px-3 py-2.5 bg-white border border-slate-300 rounded-lg text-xs sm:text-sm font-medium focus:ring-2 focus:ring-nepal-blue focus:outline-none disabled:bg-slate-100 disabled:text-slate-400">
                             <option value="">-- स्थानीय तह छनौट --</option>
                             <template x-for="p in availablePalikas" :key="p.id">
@@ -141,16 +109,16 @@
                         </select>
                     </div>
 
-                    <!-- 3. Ward Selector -->
+                    <!-- 4. Ward Selector -->
                     <div>
                         <label for="ward_select" class="block text-xs font-semibold text-slate-700 mb-1">
-                            ३. वडा नं. (Ward) *
+                            ४. वडा नं. (Ward) *
                         </label>
-                        <select id="ward_select" x-model="selectedWardId" @change="onWardChange()" :disabled="!availableWards.length"
+                        <select id="ward_select" x-model="selectedWardId" @change="onWardChange()" :disabled="!availableWards.length || loadingWards"
                                 class="w-full px-3 py-2.5 bg-white border border-slate-300 rounded-lg text-xs sm:text-sm font-medium focus:ring-2 focus:ring-nepal-blue focus:outline-none disabled:bg-slate-100 disabled:text-slate-400">
                             <option value="">-- वडा छनौट --</option>
                             <template x-for="w in availableWards" :key="w.id">
-                                <option :value="w.id" x-text="'वडा नं. ' + w.number + ' (' + (w.address ? w.address.split(',')[0] : 'कार्यालय') + ')'"></option>
+                                <option :value="w.id" x-text="'वडा नं. ' + w.ward_number + (w.office_address ? ' (' + w.office_address.split(',')[0] + ')' : '')"></option>
                             </template>
                         </select>
                     </div>
@@ -165,13 +133,13 @@
                     <div>
                         <span class="font-bold text-nepal-blue flex items-center gap-1">
                             <svg class="w-3.5 h-3.5 text-nepal-crimson" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 21V5a2 2 0 00-2-2H7a2 2 0 00-2 2v16m14 0h2m-2 0h-5m-9 0H3m2 0h5M9 7h1m-1 4h1m4-4h1m-1 4h1m-5 10v-5a1 1 0 011-1h2a1 1 0 011 1v5m-4 0h4"/></svg>
-                            <span x-text="activePalika?.name_ne + ' - वडा नं. ' + activeWard?.number"></span>
+                            <span x-text="activePalika?.name_ne + ' - वडा नं. ' + activeWard?.ward_number"></span>
                         </span>
-                        <p class="text-slate-600 mt-0.5" x-text="'कार्यालय: ' + (activeWard?.address || 'वडा कार्यालय')"></p>
+                        <p class="text-slate-600 mt-0.5" x-text="'कार्यालय: ' + (activeWard?.office_address || 'वडा कार्यालय')"></p>
                     </div>
                     <div class="text-slate-500 text-[11px] sm:text-right space-y-0.5">
-                        <p x-show="activeWard?.phone" x-text="'फोन: ' + activeWard?.phone"></p>
-                        <p x-show="activeWard?.email" x-text="'इमेल: ' + activeWard?.email"></p>
+                        <p x-show="activeWard?.office_phone" x-text="'फोन: ' + activeWard?.office_phone"></p>
+                        <p x-show="activeWard?.office_email" x-text="'इमेल: ' + activeWard?.office_email"></p>
                     </div>
                 </div>
             </div>
@@ -181,7 +149,7 @@
                 <label for="address" class="block text-xs font-bold text-slate-700 uppercase tracking-wider mb-1.5">
                     {{ __('Tole / Street Address (टोल वा सडक ठेगाना)') }} *
                 </label>
-                <input type="text" name="address" id="address" value="{{ old('address', $citizen->address) }}" placeholder="उदा. कोटेश्वर, काठमाडौँ" required
+                <input type="text" name="address" id="address" value="{{ old('address', $citizen->address) }}" placeholder="उदा. कोटेश्वर, काठमाडौँ वा महेन्द्रनगर, कञ्चनपुर" required
                        class="w-full px-3.5 py-2.5 border border-slate-300 rounded-lg text-sm focus:ring-2 focus:ring-nepal-blue focus:border-nepal-blue focus:outline-none transition">
                 @error('address')<p class="text-rose-600 text-xs mt-1">{{ $message }}</p>@enderror
             </div>
@@ -199,78 +167,120 @@
 </div>
 
 <script>
-function wardPicker(districtsData, initialDistId, initialPalikaId, initialWardId) {
+function wardPicker(provincesData, initialProvId, initialDistId, initialPalikaId, initialWardId) {
     return {
-        districts: districtsData,
+        provinces: provincesData,
+        selectedProvinceId: initialProvId || '',
         selectedDistrictId: initialDistId || '',
         selectedPalikaId: initialPalikaId || '',
         selectedWardId: initialWardId || '',
+        availableDistricts: [],
         availablePalikas: [],
         availableWards: [],
         activePalika: null,
         activeWard: null,
+        loadingDistricts: false,
+        loadingPalikas: false,
+        loadingWards: false,
 
-        init() {
-            if (this.selectedDistrictId) {
-                this.updatePalikas();
-                if (this.selectedPalikaId) {
-                    this.updateWards();
-                    if (this.selectedWardId) {
-                        this.updateActiveWard();
+        async init() {
+            if (this.selectedProvinceId) {
+                await this.fetchDistricts();
+                if (this.selectedDistrictId) {
+                    await this.fetchPalikas();
+                    if (this.selectedPalikaId) {
+                        await this.fetchWards();
+                        if (this.selectedWardId) {
+                            this.updateActiveWard();
+                        }
                     }
-                }
-            } else if (this.districts.length > 0) {
-                // Default to first district (Kathmandu)
-                this.selectedDistrictId = this.districts[0].id;
-                this.updatePalikas();
-                if (this.availablePalikas.length > 0) {
-                    this.selectedPalikaId = this.availablePalikas[0].id;
-                    this.updateWards();
                 }
             }
         },
 
-        onDistrictChange() {
+        async onProvinceChange() {
+            this.selectedDistrictId = '';
             this.selectedPalikaId = '';
             this.selectedWardId = '';
+            this.availableDistricts = [];
+            this.availablePalikas = [];
+            this.availableWards = [];
             this.activePalika = null;
             this.activeWard = null;
-            this.updatePalikas();
+
+            if (this.selectedProvinceId) {
+                await this.fetchDistricts();
+            }
         },
 
-        onPalikaChange() {
+        async onDistrictChange() {
+            this.selectedPalikaId = '';
             this.selectedWardId = '';
+            this.availablePalikas = [];
+            this.availableWards = [];
+            this.activePalika = null;
             this.activeWard = null;
-            this.updateWards();
+
+            if (this.selectedDistrictId) {
+                await this.fetchPalikas();
+            }
+        },
+
+        async onPalikaChange() {
+            this.selectedWardId = '';
+            this.availableWards = [];
+            this.activeWard = null;
+            this.activePalika = this.availablePalikas.find(p => String(p.id) === String(this.selectedPalikaId)) || null;
+
+            if (this.selectedPalikaId) {
+                await this.fetchWards();
+            }
         },
 
         onWardChange() {
             this.updateActiveWard();
         },
 
-        updatePalikas() {
-            const dist = this.districts.find(d => String(d.id) === String(this.selectedDistrictId));
-            this.availablePalikas = dist ? dist.palikas : [];
-            this.availableWards = [];
-            if (this.availablePalikas.length > 0 && !this.selectedPalikaId) {
-                this.selectedPalikaId = this.availablePalikas[0].id;
-                this.updateWards();
+        async fetchDistricts() {
+            this.loadingDistricts = true;
+            try {
+                const res = await fetch('/api/geography/districts/' + this.selectedProvinceId);
+                this.availableDistricts = await res.json();
+            } catch (e) {
+                console.error('Error fetching districts:', e);
+            } finally {
+                this.loadingDistricts = false;
             }
         },
 
-        updateWards() {
-            const palika = this.availablePalikas.find(p => String(p.id) === String(this.selectedPalikaId));
-            this.activePalika = palika || null;
-            this.availableWards = palika ? palika.wards : [];
-            if (this.availableWards.length > 0 && !this.selectedWardId) {
-                this.selectedWardId = this.availableWards[0].id;
+        async fetchPalikas() {
+            this.loadingPalikas = true;
+            try {
+                const res = await fetch('/api/geography/palikas/' + this.selectedDistrictId);
+                this.availablePalikas = await res.json();
+                this.activePalika = this.availablePalikas.find(p => String(p.id) === String(this.selectedPalikaId)) || null;
+            } catch (e) {
+                console.error('Error fetching palikas:', e);
+            } finally {
+                this.loadingPalikas = false;
+            }
+        },
+
+        async fetchWards() {
+            this.loadingWards = true;
+            try {
+                const res = await fetch('/api/geography/wards/' + this.selectedPalikaId);
+                this.availableWards = await res.json();
                 this.updateActiveWard();
+            } catch (e) {
+                console.error('Error fetching wards:', e);
+            } finally {
+                this.loadingWards = false;
             }
         },
 
         updateActiveWard() {
-            const ward = this.availableWards.find(w => String(w.id) === String(this.selectedWardId));
-            this.activeWard = ward || null;
+            this.activeWard = this.availableWards.find(w => String(w.id) === String(this.selectedWardId)) || null;
         }
     };
 }
