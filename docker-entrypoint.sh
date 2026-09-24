@@ -37,6 +37,12 @@ if [ "${RUN_MIGRATIONS:-true}" = "true" ]; then
     php artisan migrate --force || echo "==> Notice: Migration encountered an issue, continuing..."
 fi
 
+# Ensure the super administrator accounts always exist and can log in.
+# Runs independently of SEED_DATABASE and of the heavy geography seeders,
+# so a slow or failed full seed can never lock admins out of the portal.
+echo "==> Ensuring super admin accounts exist..."
+php artisan wardsewa:ensure-admin || echo "==> Notice: ensure-admin encountered an issue, continuing..."
+
 # Optional initial seed
 if [ "${SEED_DATABASE:-false}" = "true" ]; then
     echo "==> Seeding database..."
