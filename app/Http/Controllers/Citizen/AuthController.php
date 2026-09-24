@@ -182,6 +182,61 @@ class AuthController extends Controller
             ->with('success', 'Your ward profile has been updated successfully!');
     }
 
+    public function showForgotPassword()
+    {
+        if (Auth::guard('citizen')->check()) {
+            return redirect()->route('citizen.dashboard');
+        }
+
+        return view('citizen.auth.forgot-password');
+    }
+
+    public function resetPassword(Request $request)
+    {
+        $request->validate([
+            'login' => ['required', 'string'],
+            'verification_field' => ['required', 'string'],
+            'password' => ['required', 'string', 'min:6', 'confirmed'],
+        ], [
+            'login.required' => 'कृपया आफ्नो दर्ता भएको मोबाइल नम्बर वा इमेल प्रविष्ट गर्नुहोस्।',
+            'verification_field.required' => 'कृपया पहिचान प्रमाणीकरणका लागि आफ्नो पूरा नाम वा नागरिकता नम्बर प्रविष्ट गर्नुहोस्।',
+            'password.required' => 'कृपया नयाँ पासवर्ड प्रविष्ट गर्नुहोस्।',
+            'password.min' => 'पासवर्ड कम्तिमा ६ अक्षरको हुनुपर्छ।',
+            'password.confirmed' => 'नयाँ पासवर्ड र पुष्टि पासवर्ड मिलेनन्।',
+        ]);
+
+        $input = trim($request->login);
+        $cleanPhone = $this->notificationService->normalizePhone($input);
+        $verificationInput = strtolower(trim($request->verification_field));
+
+        // Find citizen by phone or email
+        $citizen = Citizen::where('phone', $cleanPhone)
+            ->orWhere('phone', $input)
+            ->orWhereRaw('LOWER(email) = ?', [strtolower($input)])
+            ->first();
+
+        if (!$citizen) {
+            return back()->withInput($request->only('login'))
+                ->withErrors(['login' => 'यो विवरणसँग मेल खाने कुनै नागरिक खाता भेटिएन। (No account found).']);
+        }
+
+        // Verify identity: check full_name or citizenship_no
+        $nameMatch = str_contains(strtolower($citizen->full_name), $verificationInput) || str_contains($verificationInput, strtolower($citizen->full_name));
+        $citizenshipMatch = !empty($citizen->citizenship_no) && (strtolower(str_replace(['-', ' ', '/'], '', $citizen->citizenship_no)) === strtolower(str_replace(['-', ' ', '/'], '', $verificationInput)));
+
+        if (!$nameMatch && !$citizenshipMatch) {
+            return back()->withInput($request->only('login'))
+                ->withErrors(['verification_field' => 'नागरिक पहिचान विवरण मिलेन। कृपया दर्ता गर्दा राखेको पूरा नाम वा नागरिकता नम्बर जाँच गर्नुहोस्।']);
+        }
+
+        $citizen->update([
+            'password' => Hash::make($request->password),
+        ]);
+
+        return redirect()->route('citizen.login')
+            ->with('success', 'पासवर्ड सफलतापूर्वक परिवर्तन भयो! अब आफ्नो नयाँ पासवर्डबाट लगइन गर्नुहोस्। (Password reset successfully!)');
+    }
+
     public function logout(Request $request)
     {
         Auth::guard('citizen')->logout();

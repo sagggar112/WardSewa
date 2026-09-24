@@ -5,8 +5,8 @@
     <div class="max-w-md w-full bg-white rounded-2xl border border-slate-200 shadow-xl overflow-hidden">
         <!-- Card Header -->
         <div class="bg-gradient-to-r from-nepal-darkblue via-nepal-blue to-nepal-darkblue text-white p-6 text-center">
-            <div class="w-12 h-12 rounded-xl bg-white text-nepal-crimson flex items-center justify-center font-black text-2xl mx-auto shadow-md">
-                व
+            <div class="flex justify-center">
+                <x-logo size="lg" :showText="false" />
             </div>
             <h2 class="text-2xl font-extrabold text-white mt-3">{{ __('नागरिक पोर्टल लगइन (Citizen Login)') }}</h2>
             <p class="text-xs text-slate-200 mt-1">{{ __('Enter your mobile number or email and password') }}</p>
@@ -65,12 +65,15 @@
                     @enderror
                 </div>
 
-                <!-- Remember Me -->
+                <!-- Remember Me & Forgot Password -->
                 <div class="flex items-center justify-between text-xs pt-1">
                     <label class="flex items-center space-x-2 cursor-pointer">
                         <input type="checkbox" name="remember" class="rounded border-slate-300 text-nepal-blue focus:ring-nepal-blue">
                         <span class="text-slate-600">{{ __('मलाई सम्झनुहोस् (Remember Me)') }}</span>
                     </label>
+                    <a href="{{ route('citizen.password.request') }}" class="text-nepal-blue hover:text-nepal-crimson font-bold hover:underline transition">
+                        {{ __('पासवर्ड बिर्सनुभयो? (Forgot Password?)') }}
+                    </a>
                 </div>
 
                 <!-- Submit Button -->

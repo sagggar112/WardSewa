@@ -40,10 +40,10 @@
     <!-- Top Government Header Banner -->
     <header class="bg-gradient-to-r from-nepal-darkblue via-nepal-blue to-nepal-darkblue text-white shadow-md">
         <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-            <div class="flex items-center justify-between py-3 border-b border-white/10 text-xs sm:text-sm">
+            <div class="flex items-center justify-between py-2.5 border-b border-white/10 text-xs">
                 <div class="flex items-center space-x-2">
-                    <span class="inline-block w-2 h-2 rounded-full bg-red-400 animate-pulse"></span>
-                    <span>{{ __('Government of Nepal | Bagmati Province | Kathmandu Valley (Kathmandu, Lalitpur, Bhaktapur)') }}</span>
+                    <span class="inline-block w-2 h-2 rounded-full bg-emerald-400 animate-pulse"></span>
+                    <span class="font-medium tracking-wide">{{ __('Government of Nepal | Digital Ward Citizen Services (नेपालभरका सम्पूर्ण ७ प्रदेश, ७७ जिल्ला, ७५३ स्थानीय तह)') }}</span>
                 </div>
                 <div class="flex items-center space-x-4">
                     <!-- Language Switcher -->
@@ -56,15 +56,9 @@
             </div>
 
             <!-- Navbar -->
-            <div class="flex items-center justify-between py-4">
-                <a href="{{ route('home') }}" class="flex items-center space-x-3">
-                    <div class="w-10 h-10 rounded-full bg-white flex items-center justify-center shadow">
-                        <span class="text-nepal-crimson text-xl font-black">व</span>
-                    </div>
-                    <div>
-                        <span class="text-2xl font-bold tracking-tight text-white block leading-tight">WardSewa</span>
-                        <span class="text-xs text-nepal-gold block -mt-1 font-medium">{{ __('Digital Ward Citizen Services') }}</span>
-                    </div>
+            <div class="flex items-center justify-between py-3.5">
+                <a href="{{ route('home') }}" class="group">
+                    <x-logo size="md" />
                 </a>
 
                 <nav class="hidden md:flex items-center space-x-6 text-sm font-medium">
@@ -75,26 +69,17 @@
                 </nav>
 
                 <div class="flex items-center space-x-3">
-                    @auth('staff')
-                        <a href="{{ route('staff.dashboard') }}" class="inline-flex items-center px-3.5 py-1.5 bg-nepal-darkblue hover:bg-slate-950 border border-slate-600 text-white text-xs font-bold rounded-lg shadow-sm transition">
-                            <span class="w-2 h-2 rounded-full bg-emerald-400 mr-1.5 inline-block animate-pulse"></span>
-                            {{ __('Staff Portal') }} &rarr;
-                        </a>
-                    @elseauth('citizen')
-                        <a href="{{ route('citizen.dashboard') }}" class="inline-flex items-center px-4 py-2 bg-nepal-red hover:bg-nepal-crimson text-white text-sm font-semibold rounded-lg shadow-sm transition">
+                    @auth('citizen')
+                        <a href="{{ route('citizen.dashboard') }}" class="inline-flex items-center px-4 py-2 bg-nepal-crimson hover:bg-nepal-red text-white text-xs font-bold rounded-lg shadow-sm transition">
                             {{ __('My Dashboard') }} &rarr;
                         </a>
                     @else
                         <div class="flex items-center space-x-2">
-                            <a href="{{ route('citizen.login') }}" class="text-xs text-white hover:text-nepal-gold font-bold px-2 py-1.5 transition">
+                            <a href="{{ route('citizen.login') }}" class="text-xs text-white hover:text-nepal-gold font-bold px-3 py-1.5 transition">
                                 {{ __('Citizen Login') }}
                             </a>
-                            <a href="{{ route('citizen.register') }}" class="inline-flex items-center px-3 py-1.5 bg-nepal-crimson hover:bg-nepal-red text-white text-xs font-bold rounded-lg shadow-sm transition">
+                            <a href="{{ route('citizen.register') }}" class="inline-flex items-center px-3.5 py-1.5 bg-nepal-crimson hover:bg-nepal-red text-white text-xs font-bold rounded-lg shadow-sm transition">
                                 {{ __('Register') }} &rarr;
-                            </a>
-                            <a href="{{ route('staff.login') }}" class="hidden sm:inline-flex items-center px-2.5 py-1.5 bg-slate-800/90 hover:bg-slate-700 text-slate-200 hover:text-white text-xs font-medium rounded-lg border border-slate-700 transition" title="Staff / Administrator Portal">
-                                <svg class="w-3.5 h-3.5 mr-1 text-nepal-gold" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 15v2m-6 4h12a2 2 0 002-2v-6a2 2 0 00-2-2H6a2 2 0 00-2 2v6a2 2 0 002 2zm10-10V7a4 4 0 00-8 0v4h8z"/></svg>
-                                <span>{{ __('Staff Login') }}</span>
                             </a>
                         </div>
                     @endauth
@@ -128,27 +113,17 @@
     <footer class="bg-slate-900 text-slate-400 py-10 mt-16 border-t border-slate-800 text-sm">
         <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 grid grid-cols-1 md:grid-cols-4 gap-8">
             <div class="space-y-3">
-                <div class="flex items-center space-x-2">
-                    <div class="w-8 h-8 rounded-full bg-white flex items-center justify-center">
-                        <span class="text-nepal-crimson text-base font-black">व</span>
-                    </div>
-                    <span class="text-lg font-bold text-white">WardSewa</span>
-                </div>
-                <p class="text-xs text-slate-400">{{ __('WardSewa - Digital Ward Service Platform for Local Governments of Nepal') }}</p>
+                <x-logo size="sm" />
+                <p class="text-xs text-slate-400 leading-relaxed">{{ __('WardSewa - Digital Ward Service Platform for Local Governments of Nepal (स्थानीय तह डिजिटल वडा सेवा प्रणाली)') }}</p>
             </div>
             <div>
                 <h4 class="text-white font-semibold mb-3">{{ __('Quick Links') }}</h4>
                 <ul class="space-y-2 text-xs">
-                    <li><a href="{{ route('home') }}#services" class="hover:text-white">{{ __('Four Boundaries Recommendation') }}</a></li>
-                    <li><a href="{{ route('home') }}#services" class="hover:text-white">{{ __('Unmarried Certificate') }}</a></li>
-                    <li><a href="{{ route('home') }}#services" class="hover:text-white">{{ __('Residence Certificate') }}</a></li>
-                    <li><a href="{{ route('home') }}#services" class="hover:text-white">{{ __('Birth Registration') }}</a></li>
-                    <li class="pt-2 border-t border-slate-800">
-                        <a href="{{ route('staff.login') }}" class="text-nepal-gold hover:text-white flex items-center gap-1 font-semibold">
-                            <svg class="w-3.5 h-3.5" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 15v2m-6 4h12a2 2 0 002-2v-6a2 2 0 00-2-2H6a2 2 0 00-2 2v6a2 2 0 002 2zm10-10V7a4 4 0 00-8 0v4h8z"/></svg>
-                            <span>{{ __('Staff / Admin Portal') }} (कर्मचारी लगइन)</span>
-                        </a>
-                    </li>
+                    <li><a href="{{ route('home') }}#services" class="hover:text-white transition">{{ __('Four Boundaries Recommendation') }}</a></li>
+                    <li><a href="{{ route('home') }}#services" class="hover:text-white transition">{{ __('Unmarried Certificate') }}</a></li>
+                    <li><a href="{{ route('home') }}#services" class="hover:text-white transition">{{ __('Residence Certificate') }}</a></li>
+                    <li><a href="{{ route('home') }}#services" class="hover:text-white transition">{{ __('Birth Registration') }}</a></li>
+                    <li><a href="{{ route('notices.index') }}" class="hover:text-white transition">{{ __('Notice Board (सूचना पाटी)') }}</a></li>
                 </ul>
             </div>
             <div>

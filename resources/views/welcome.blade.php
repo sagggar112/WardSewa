@@ -21,16 +21,16 @@
             </p>
 
             <div class="mt-8 flex flex-col sm:flex-row items-center justify-center gap-4">
-                <a href="{{ route('citizen.login') }}" class="w-full sm:w-auto px-8 py-3.5 bg-nepal-crimson hover:bg-nepal-red text-white font-bold rounded-xl shadow-lg transition text-base text-center flex items-center justify-center gap-2">
-                    <span>{{ __('Apply Online (Citizen Login)') }}</span>
+                <a href="{{ route('citizen.login') }}" class="w-full sm:w-auto px-8 py-3.5 bg-nepal-crimson hover:bg-nepal-red text-white font-bold rounded-xl shadow-lg hover:shadow-xl transition text-base text-center flex items-center justify-center gap-2">
+                    <span>{{ __('नागरिक लगइन (Citizen Login)') }}</span>
                     <svg class="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M14 5l7 7m0 0l-7 7m7-7H3"/></svg>
                 </a>
-                <a href="#coverage" class="w-full sm:w-auto px-6 py-3.5 bg-white/10 hover:bg-white/20 text-white font-semibold rounded-xl transition text-base text-center border border-white/20">
-                    {{ __('View 77 Districts & Palikas') }}
+                <a href="{{ route('citizen.register') }}" class="w-full sm:w-auto px-7 py-3.5 bg-white/10 hover:bg-white/20 text-white font-bold rounded-xl transition text-base text-center border border-white/20 flex items-center justify-center gap-2">
+                    <span>{{ __('नयाँ नागरिक खाता दर्ता (Register)') }}</span>
+                    <svg class="w-4 h-4 text-nepal-gold" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M18 9v3m0 0v3m0-3h3m-3 0h-3m-2-5a4 4 0 11-8 0 4 4 0 018 0zM3 20a6 6 0 0112 0v1H3v-1z"/></svg>
                 </a>
-                <a href="{{ route('staff.login') }}" class="w-full sm:w-auto px-5 py-3.5 bg-slate-800/90 hover:bg-slate-800 text-slate-200 hover:text-white font-semibold rounded-xl transition text-base text-center border border-slate-700 flex items-center justify-center gap-2">
-                    <svg class="w-4 h-4 text-nepal-gold" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 15v2m-6 4h12a2 2 0 002-2v-6a2 2 0 00-2-2H6a2 2 0 00-2 2v6a2 2 0 002 2zm10-10V7a4 4 0 00-8 0v4h8z"/></svg>
-                    <span>{{ __('Staff / Admin Portal') }}</span>
+                <a href="#coverage" class="w-full sm:w-auto px-5 py-3.5 text-slate-300 hover:text-white font-semibold transition text-sm text-center">
+                    {{ __('७७ जिल्ला तथा ७५३ पालिका विवरण') }} &darr;
                 </a>
             </div>
         </div>
@@ -192,9 +192,8 @@
             <a href="{{ route('citizen.login') }}" class="px-6 py-3 bg-nepal-blue hover:bg-nepal-darkblue text-white text-sm font-bold rounded-xl transition text-center">
                 {{ __('Citizen Portal Login') }} &rarr;
             </a>
-            <a href="{{ route('staff.login') }}" class="px-5 py-3 bg-white hover:bg-slate-100 text-slate-800 border border-slate-300 text-sm font-bold rounded-xl transition text-center flex items-center justify-center gap-1.5 shadow-sm">
-                <svg class="w-4 h-4 text-nepal-gold" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 15v2m-6 4h12a2 2 0 002-2v-6a2 2 0 00-2-2H6a2 2 0 00-2 2v6a2 2 0 002 2zm10-10V7a4 4 0 00-8 0v4h8z"/></svg>
-                <span>{{ __('Staff Portal') }}</span>
+            <a href="{{ route('citizen.register') }}" class="px-6 py-3 bg-nepal-crimson hover:bg-nepal-red text-white text-sm font-bold rounded-xl transition text-center shadow-sm">
+                {{ __('Register Account') }} &rarr;
             </a>
         </div>
     </div>
