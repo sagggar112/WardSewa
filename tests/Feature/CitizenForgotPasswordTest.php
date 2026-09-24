@@ -40,7 +40,7 @@ class CitizenForgotPasswordTest extends TestCase
     {
         $response = $this->get(route('citizen.password.request'));
         $response->assertStatus(200);
-        $response->assertSee('पासवर्ड पुनःप्राप्ति (Forgot Password)');
+        $response->assertSee(__('Forgot Password?'));
     }
 
     public function test_citizen_can_reset_password_with_valid_details(): void

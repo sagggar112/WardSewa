@@ -211,14 +211,14 @@
         <tr>
             <td style="width: 40%; text-align: center; vertical-align: bottom;">
                 <div class="stamp-box">
-                    वडा कार्यालयको छाप<br>(OFFICIAL STAMP)
+                    वडा कार्यालयको छाप
                 </div>
             </td>
             <td style="width: 60%; vertical-align: bottom;" class="signature-box">
                 <div class="signature-name">
                     {{ $approver->name ?? 'भरत लाल श्रेष्ठ' }}<br>
                     <span class="signature-role">
-                        {{ $approver ? ucfirst(str_replace('_', ' ', $approver->role)) : 'वडा अध्यक्ष (Ward Chair)' }}
+                        {{ $approver ? ($approver->role === 'ward_chair' ? 'वडा अध्यक्ष' : ($approver->role === 'secretary' ? 'वडा सचिव' : ucfirst(str_replace('_', ' ', $approver->role)))) : 'वडा अध्यक्ष' }}
                     </span>
                     <br>
                     <span style="font-size: 9px; color: #718096;">Digitally Signed on {{ $application->approved_at ? $application->approved_at->format('Y-m-d H:i') : date('Y-m-d') }}</span>
@@ -241,7 +241,7 @@
                     @endif
                 </td>
                 <td style="width: 75%; vertical-align: middle; padding-left: 10px;">
-                    <div><strong>आधिकारिक अनलाइन प्रमाणीकरण (QR Verification):</strong></div>
+                    <div><strong>आधिकारिक डिजिटल प्रमाणीकरण:</strong></div>
                     <div style="font-family: monospace; font-size: 9px; margin-top: 2px;">
                         टोकन: {{ $application->qr_code_token }}
                     </div>

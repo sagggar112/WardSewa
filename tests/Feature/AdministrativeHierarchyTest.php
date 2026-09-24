@@ -120,7 +120,7 @@ class AdministrativeHierarchyTest extends TestCase
         $this->actingAs($localGovtAdmin, 'staff')
             ->get(route('staff.localgovt.dashboard'))
             ->assertStatus(200)
-            ->assertSee('Local Govt Admin');
+            ->assertSee(__('Local Govt Admin'));
 
         $this->actingAs($localGovtAdmin, 'staff')
             ->get(route('staff.localgovt.wards'))

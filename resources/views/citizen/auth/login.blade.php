@@ -8,8 +8,8 @@
             <div class="flex justify-center">
                 <x-logo size="lg" :showText="false" />
             </div>
-            <h2 class="text-2xl font-extrabold text-white mt-3">{{ __('नागरिक पोर्टल लगइन (Citizen Login)') }}</h2>
-            <p class="text-xs text-slate-200 mt-1">{{ __('Enter your mobile number or email and password') }}</p>
+            <h2 class="text-2xl font-extrabold text-white mt-3">{{ __('Citizen Login') }}</h2>
+            <p class="text-xs text-slate-200 mt-1">{{ app()->getLocale() === 'ne' ? 'आफ्नो मोबाइल नम्बर वा इमेल र पासवर्ड प्रविष्ट गर्नुहोस्' : 'Enter your mobile number or email and password' }}</p>
         </div>
 
         <div class="p-6 sm:p-8">
@@ -31,13 +31,14 @@
                 <!-- Mobile / Email -->
                 <div>
                     <label for="login" class="block text-xs font-bold text-slate-700 uppercase tracking-wider mb-1.5">
-                        {{ __('मोबाइल नम्बर वा इमेल (Mobile or Email)') }} *
+                        {{ __('Email Address or Phone Number') }} *
                     </label>
                     <div class="relative rounded-lg shadow-sm">
                         <div class="absolute inset-y-0 left-0 pl-3.5 flex items-center pointer-events-none text-slate-400">
                             <svg class="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z"/></svg>
                         </div>
-                        <input type="text" name="login" id="login" value="{{ old('login') }}" placeholder="98XXXXXXXX वा इमेल" required autofocus
+                        <input type="text" name="login" id="login" value="{{ old('login') }}" 
+                               placeholder="{{ app()->getLocale() === 'ne' ? '९८XXXXXXXX वा इमेल' : '98XXXXXXXX or email' }}" required autofocus
                                class="block w-full pl-10 pr-3 py-3 border border-slate-300 rounded-lg text-slate-900 placeholder-slate-400 focus:outline-none focus:ring-2 focus:ring-nepal-blue focus:border-nepal-blue text-sm font-medium transition">
                     </div>
                     @error('login')
@@ -48,7 +49,7 @@
                 <!-- Password -->
                 <div>
                     <label for="password" class="block text-xs font-bold text-slate-700 uppercase tracking-wider mb-1.5">
-                        {{ __('पासवर्ड (Password)') }} *
+                        {{ __('Password') }} *
                     </label>
                     <div class="relative rounded-lg shadow-sm">
                         <div class="absolute inset-y-0 left-0 pl-3.5 flex items-center pointer-events-none text-slate-400">
@@ -69,25 +70,25 @@
                 <div class="flex items-center justify-between text-xs pt-1">
                     <label class="flex items-center space-x-2 cursor-pointer">
                         <input type="checkbox" name="remember" class="rounded border-slate-300 text-nepal-blue focus:ring-nepal-blue">
-                        <span class="text-slate-600">{{ __('मलाई सम्झनुहोस् (Remember Me)') }}</span>
+                        <span class="text-slate-600">{{ __('Remember Me') }}</span>
                     </label>
                     <a href="{{ route('citizen.password.request') }}" class="text-nepal-blue hover:text-nepal-crimson font-bold hover:underline transition">
-                        {{ __('पासवर्ड बिर्सनुभयो? (Forgot Password?)') }}
+                        {{ __('Forgot Password?') }}
                     </a>
                 </div>
 
                 <!-- Submit Button -->
                 <button type="submit" class="w-full py-3.5 px-4 bg-nepal-blue hover:bg-nepal-darkblue text-white font-bold rounded-xl shadow-md hover:shadow-lg transition text-sm flex items-center justify-center gap-2">
-                    <span>{{ __('लगइन गर्नुहोस् (Log In)') }}</span>
+                    <span>{{ app()->getLocale() === 'ne' ? 'लगइन गर्नुहोस्' : 'Log In' }}</span>
                     <svg class="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M14 5l7 7m0 0l-7 7m7-7H3"/></svg>
                 </button>
             </form>
 
             <!-- Register New Account Link -->
             <div class="mt-6 pt-5 border-t border-slate-200 text-center">
-                <p class="text-xs text-slate-600 mb-2">{{ __('नयाँ नागरिक हुनुहुन्छ? (Don\'t have an account?)') }}</p>
+                <p class="text-xs text-slate-600 mb-2">{{ app()->getLocale() === 'ne' ? 'नयाँ नागरिक हुनुहुन्छ?' : "Don't have an account?" }}</p>
                 <a href="{{ route('citizen.register') }}" class="w-full inline-flex items-center justify-center py-2.5 px-4 bg-nepal-crimson hover:bg-nepal-red text-white text-xs font-bold rounded-lg shadow transition">
-                    + {{ __('नयाँ नागरिक खाता दर्ता गर्नुहोस् (Register New Account)') }}
+                    + {{ app()->getLocale() === 'ne' ? 'नयाँ नागरिक खाता दर्ता गर्नुहोस्' : 'Register New Account' }}
                 </a>
             </div>
         </div>

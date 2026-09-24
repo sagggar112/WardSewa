@@ -3,7 +3,7 @@
 <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
-    <title>कर्मचारी तथा प्रशासक पोर्टल लगइन - WardSewa</title>
+    <title>{{ __('Staff Login') }} - WardSewa</title>
     <link href="https://fonts.googleapis.com/css2?family=Mukta:wght@400;500;600;700;800&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
     <script src="https://cdn.tailwindcss.com"></script>
     <script defer src="https://cdn.jsdelivr.net/npm/alpinejs@3.x.x/dist/cdn.min.js"></script>
@@ -27,15 +27,24 @@
             }
         }
     </script>
+</head>
 <body class="bg-slate-900 text-slate-800 antialiased font-sans min-h-screen flex flex-col justify-center items-center px-4 py-8">
     <div class="max-w-2xl w-full bg-white rounded-3xl shadow-2xl overflow-hidden border border-slate-700">
         <!-- Header -->
-        <div class="bg-gradient-to-r from-nepal-darkblue via-slate-900 to-nepal-darkblue text-white p-6 sm:p-8 text-center border-b border-slate-800">
-            <div class="w-14 h-14 rounded-2xl bg-gradient-to-br from-nepal-crimson to-nepal-red text-white flex items-center justify-center font-black text-3xl mx-auto shadow-lg shadow-red-900/50">
-                व
+        <div class="bg-gradient-to-r from-nepal-darkblue via-slate-900 to-nepal-darkblue text-white p-6 sm:p-8 text-center border-b border-slate-800 relative">
+            <!-- Language switcher in header -->
+            <div class="absolute top-4 right-4 flex items-center space-x-1 bg-white/10 p-1 rounded-lg text-xs font-semibold">
+                <a href="{{ route('locale.switch', 'ne') }}" class="px-2 py-0.5 rounded transition {{ app()->getLocale() === 'ne' ? 'bg-nepal-crimson text-white font-bold' : 'text-slate-300 hover:text-white' }}">नेपाली</a>
+                <a href="{{ route('locale.switch', 'en') }}" class="px-2 py-0.5 rounded transition {{ app()->getLocale() === 'en' ? 'bg-nepal-crimson text-white font-bold' : 'text-slate-300 hover:text-white' }}">EN</a>
             </div>
-            <h1 class="text-2xl font-black text-white mt-3">वडा कर्मचारी तथा प्रशासक लगइन</h1>
-            <p class="text-xs text-nepal-gold font-medium mt-1">WardSewa 4-Tier Administrative & Operational Portal</p>
+
+            <x-logo class="w-12 h-12 mx-auto text-white mb-2" />
+            <h1 class="text-2xl font-black text-white mt-2">
+                {{ app()->getLocale() === 'ne' ? 'कर्मचारी तथा प्रशासक लगइन' : 'Staff & Administrator Login' }}
+            </h1>
+            <p class="text-xs text-nepal-gold font-medium mt-1">
+                {{ app()->getLocale() === 'ne' ? 'वार्डसेवा ४-तह प्रशासनिक तथा कार्य सञ्चालन पोर्टल' : 'WardSewa 4-Tier Administrative & Operations Portal' }}
+            </p>
         </div>
 
         <div class="p-6 sm:p-8">
@@ -57,10 +66,10 @@
 
                 <div>
                     <label for="email" class="block text-xs font-bold text-slate-700 uppercase tracking-wider mb-1.5">
-                        इमेल वा मोबाइल नम्बर (Email Address or Phone Number) *
+                        {{ __('Email Address or Phone Number') }} *
                     </label>
                     <input type="text" name="email" id="email" value="{{ old('email') }}" required autofocus
-                           placeholder="उदा: chair@ward32.gov.np वा admin.kmc@wardsewa.gov.np"
+                           placeholder="{{ app()->getLocale() === 'ne' ? 'उदा: chair@ward32.gov.np वा admin.kmc@wardsewa.gov.np' : 'E.g., chair@ward32.gov.np or admin.kmc@wardsewa.gov.np' }}"
                            class="w-full px-4 py-3 border border-slate-300 rounded-xl text-sm focus:ring-2 focus:ring-nepal-blue focus:border-nepal-blue focus:outline-none font-medium text-slate-900 bg-slate-50 focus:bg-white transition">
                     @error('email')<p class="text-rose-600 text-xs mt-1.5 font-semibold">{{ $message }}</p>@enderror
                 </div>
@@ -68,9 +77,11 @@
                 <div>
                     <div class="flex items-center justify-between mb-1.5">
                         <label for="password" class="block text-xs font-bold text-slate-700 uppercase tracking-wider">
-                            पासवर्ड (Password) *
+                            {{ __('Password') }} *
                         </label>
-                        <span class="text-[11px] text-slate-500 font-medium">डिफल्ट पासवर्ड: <code class="bg-slate-100 px-1.5 py-0.5 rounded text-nepal-crimson font-mono font-bold">password123</code></span>
+                        <span class="text-[11px] text-slate-500 font-medium">
+                            {{ app()->getLocale() === 'ne' ? 'डिफल्ट पासवर्ड:' : 'Default Password:' }} <code class="bg-slate-100 px-1.5 py-0.5 rounded text-nepal-crimson font-mono font-bold">password123</code>
+                        </span>
                     </div>
                     <div class="relative">
                         <input type="password" name="password" id="password" value="" required placeholder="password123"
@@ -85,15 +96,15 @@
                 <div class="flex items-center justify-between text-xs pt-1">
                     <label class="flex items-center space-x-2 cursor-pointer">
                         <input type="checkbox" name="remember" class="rounded border-slate-300 text-nepal-blue focus:ring-nepal-blue">
-                        <span class="text-slate-600">मलाई सम्झनुहोस् (Remember Me)</span>
+                        <span class="text-slate-600">{{ __('Remember Me') }}</span>
                     </label>
                     <a href="{{ route('home') }}" class="text-nepal-blue font-semibold hover:underline flex items-center gap-1">
-                        <span>सार्वजनिक पोर्टल &rarr;</span>
+                        <span>{{ __('View Public Portal') }} &rarr;</span>
                     </a>
                 </div>
 
                 <button type="submit" class="w-full py-3.5 bg-nepal-blue hover:bg-nepal-darkblue text-white font-bold rounded-xl shadow-md hover:shadow-lg transition text-sm flex items-center justify-center gap-2">
-                    <span>लगइन गर्नुहोस् (Log In to Workspace)</span>
+                    <span>{{ __('Log In to Workspace') }}</span>
                     <svg class="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M14 5l7 7m0 0l-7 7m7-7H3"/></svg>
                 </button>
             </form>

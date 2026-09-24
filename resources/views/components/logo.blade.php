@@ -74,7 +74,7 @@
                 </span>
             </div>
             <span class="{{ $dimensions['sub'] }} text-slate-300 font-semibold block tracking-wide">
-                {{ __('डिजिटल वडा सेवा प्रणाली (Citizen Portal)') }}
+                {{ __('Digital Ward Citizen Services') }}
             </span>
         </div>
     @endif

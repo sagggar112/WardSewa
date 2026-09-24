@@ -1,13 +1,17 @@
 @extends('layouts.staff')
 
-@section('page_title', $district->name_ne . ' जिल्लाभरका निवेदनहरू')
+@section('page_title', (app()->getLocale() === 'ne' ? ($district->name_ne ?? $district->name_en) : ($district->name_en ?? $district->name_ne)) . ' - ' . __('District-Wide Applications'))
 
 @section('content')
 <div class="space-y-6">
     <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
         <div>
-            <h1 class="text-2xl font-black text-slate-900">{{ $district->name_ne }} जिल्लाभरका निवेदनहरू</h1>
-            <p class="text-xs text-slate-500 mt-0.5">जिल्ला भित्रका सम्पूर्ण स्थानीय तहहरूबाट पेश भएका सिफारिस तथा सेवा निवेदनहरूको अनुगमन।</p>
+            <h1 class="text-2xl font-black text-slate-900">
+                {{ (app()->getLocale() === 'ne' ? ($district->name_ne ?? $district->name_en) : ($district->name_en ?? $district->name_ne)) }} - {{ __('District-Wide Applications') }}
+            </h1>
+            <p class="text-xs text-slate-500 mt-0.5">
+                {{ app()->getLocale() === 'ne' ? 'जिल्ला भित्रका सम्पूर्ण स्थानीय तहहरूबाट पेश भएका सिफारिस तथा सेवा निवेदनहरूको अनुगमन।' : 'Oversight and monitoring of citizen service applications across all local governments in the district.' }}
+            </p>
         </div>
     </div>
 
@@ -15,16 +19,17 @@
     <div class="bg-white rounded-2xl border border-slate-200 p-4 shadow-sm">
         <form method="GET" action="{{ route('staff.district.applications') }}" class="grid grid-cols-1 sm:grid-cols-4 gap-3 text-xs">
             <div class="sm:col-span-2">
-                <input type="text" name="search" value="{{ request('search') }}" placeholder="निवेदन नं., नागरिकको नाम वा फोन..."
+                <input type="text" name="search" value="{{ request('search') }}" 
+                       placeholder="{{ app()->getLocale() === 'ne' ? 'निवेदन नं., नागरिकको नाम वा फोन...' : 'Application No, Citizen Name or Phone...' }}"
                        class="w-full px-3 py-2 border border-slate-300 rounded-lg text-xs">
             </div>
 
             <div>
                 <select name="palika_id" onchange="this.form.submit()" class="w-full px-3 py-2 border border-slate-300 rounded-lg text-xs">
-                    <option value="">सबै स्थानीय तहहरू (All Palikas)</option>
+                    <option value="">{{ app()->getLocale() === 'ne' ? 'सबै स्थानीय तहहरू' : 'All Local Governments' }}</option>
                     @foreach($palikas as $p)
                         <option value="{{ $p->id }}" {{ request('palika_id') == $p->id ? 'selected' : '' }}>
-                            {{ $p->name_ne }} ({{ $p->code }})
+                            {{ app()->getLocale() === 'ne' ? ($p->name_ne ?? $p->name_en) : ($p->name_en ?? $p->name_ne) }}
                         </option>
                     @endforeach
                 </select>
@@ -32,11 +37,11 @@
 
             <div>
                 <select name="status" onchange="this.form.submit()" class="w-full px-3 py-2 border border-slate-300 rounded-lg text-xs">
-                    <option value="">सबै स्थिति (All Status)</option>
-                    <option value="submitted" {{ request('status') === 'submitted' ? 'selected' : '' }}>दर्ता भएको</option>
-                    <option value="under_review" {{ request('status') === 'under_review' ? 'selected' : '' }}>अध्ययनमा</option>
-                    <option value="approved" {{ request('status') === 'approved' ? 'selected' : '' }}>स्वीकृत</option>
-                    <option value="rejected" {{ request('status') === 'rejected' ? 'selected' : '' }}>अस्वीकृत</option>
+                    <option value="">{{ __('All Status') }}</option>
+                    <option value="submitted" {{ request('status') === 'submitted' ? 'selected' : '' }}>{{ __('Submitted') }}</option>
+                    <option value="under_review" {{ request('status') === 'under_review' ? 'selected' : '' }}>{{ __('Under Review') }}</option>
+                    <option value="approved" {{ request('status') === 'approved' ? 'selected' : '' }}>{{ __('Approved') }}</option>
+                    <option value="rejected" {{ request('status') === 'rejected' ? 'selected' : '' }}>{{ __('Rejected') }}</option>
                 </select>
             </div>
         </form>
@@ -45,19 +50,19 @@
     <!-- Applications Table -->
     <div class="bg-white rounded-2xl border border-slate-200 overflow-hidden shadow-sm">
         @if($applications->isEmpty())
-            <p class="p-8 text-center text-slate-400 text-xs">कुनै निवेदन फेला परेन।</p>
+            <p class="p-8 text-center text-slate-400 text-xs">{{ app()->getLocale() === 'ne' ? 'कुनै निवेदन फेला परेन।' : 'No applications found.' }}</p>
         @else
             <div class="overflow-x-auto">
                 <table class="w-full text-left text-xs">
                     <thead class="bg-slate-50 text-slate-600 border-b border-slate-200">
                         <tr>
-                            <th class="p-3">निवेदन नम्बर</th>
-                            <th class="p-3">नागरिकको नाम</th>
-                            <th class="p-3">स्थानीय तह तथा वडा</th>
-                            <th class="p-3">सेवाको प्रकार</th>
-                            <th class="p-3">मिति</th>
-                            <th class="p-3">स्थिति</th>
-                            <th class="p-3 text-right">कार्य</th>
+                            <th class="p-3">{{ __('Application Number') }}</th>
+                            <th class="p-3">{{ __('Full Name') }}</th>
+                            <th class="p-3">{{ app()->getLocale() === 'ne' ? 'स्थानीय तह तथा वडा' : 'Palika & Ward' }}</th>
+                            <th class="p-3">{{ app()->getLocale() === 'ne' ? 'सेवाको प्रकार' : 'Service Type' }}</th>
+                            <th class="p-3">{{ __('Date') }}</th>
+                            <th class="p-3">{{ __('Status') }}</th>
+                            <th class="p-3 text-right">{{ __('Action') }}</th>
                         </tr>
                     </thead>
                     <tbody class="divide-y divide-slate-100">
@@ -66,22 +71,26 @@
                                 <td class="p-3 font-mono font-bold text-slate-900">{{ $app->application_number }}</td>
                                 <td class="p-3 font-semibold text-slate-800">{{ $app->citizen->full_name }}</td>
                                 <td class="p-3 text-slate-700 font-medium">
-                                    {{ $app->ward->palika->name_ne ?? '' }} - वडा {{ $app->ward->ward_number }}
+                                    {{ (app()->getLocale() === 'ne' ? ($app->ward->palika->name_ne ?? $app->ward->palika->name_en) : ($app->ward->palika->name_en ?? $app->ward->palika->name_ne)) . ' - ' . __('Ward') . ' ' . $app->ward->ward_number }}
                                 </td>
-                                <td class="p-3 text-slate-700">{{ $app->serviceType->name_ne }}</td>
+                                <td class="p-3 text-slate-700">
+                                    {{ app()->getLocale() === 'ne' ? ($app->serviceType->name_ne ?? $app->serviceType->name_en) : ($app->serviceType->name_en ?? $app->serviceType->name_ne) }}
+                                </td>
                                 <td class="p-3 text-slate-500">{{ $app->created_at->format('M d, Y') }}</td>
                                 <td class="p-3">
                                     @if($app->status === 'approved')
-                                        <span class="px-2 py-0.5 rounded-full text-[10px] font-bold bg-emerald-100 text-emerald-800">स्वीकृत</span>
+                                        <span class="px-2 py-0.5 rounded-full text-[10px] font-bold bg-emerald-100 text-emerald-800">{{ __('Approved') }}</span>
                                     @elseif($app->status === 'under_review')
-                                        <span class="px-2 py-0.5 rounded-full text-[10px] font-bold bg-amber-100 text-amber-800">अध्ययनमा</span>
+                                        <span class="px-2 py-0.5 rounded-full text-[10px] font-bold bg-amber-100 text-amber-800">{{ __('Under Review') }}</span>
+                                    @elseif($app->status === 'rejected')
+                                        <span class="px-2 py-0.5 rounded-full text-[10px] font-bold bg-red-100 text-red-800">{{ __('Rejected') }}</span>
                                     @else
-                                        <span class="px-2 py-0.5 rounded-full text-[10px] font-bold bg-blue-100 text-blue-800">दर्ता</span>
+                                        <span class="px-2 py-0.5 rounded-full text-[10px] font-bold bg-blue-100 text-blue-800">{{ __('Submitted') }}</span>
                                     @endif
                                 </td>
                                 <td class="p-3 text-right">
                                     <a href="{{ route('staff.applications.show', $app->id) }}" class="text-nepal-blue font-bold hover:underline">
-                                        अनुगमन &rarr;
+                                        {{ app()->getLocale() === 'ne' ? 'अनुगमन' : 'View' }} &rarr;
                                     </a>
                                 </td>
                             </tr>

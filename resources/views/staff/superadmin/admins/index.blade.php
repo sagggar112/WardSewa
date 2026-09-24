@@ -1,13 +1,13 @@
 @extends('layouts.staff')
 
-@section('page_title', 'प्रशासक खाता व्यवस्थापन (Administrators Directory)')
+@section('page_title', __('Admins Management'))
 
 @section('content')
 <div class="space-y-6">
     <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
         <div>
-            <h1 class="text-2xl font-black text-slate-900">प्रशासक खाता व्यवस्थापन</h1>
-            <p class="text-xs text-slate-500 mt-0.5">केन्द्रीय, जिल्ला, पालिका तथा वडा स्तरका सबै प्रशासनिक प्रयोगकर्ताहरूको सूची।</p>
+            <h1 class="text-2xl font-black text-slate-900">{{ __('Admins Management') }}</h1>
+            <p class="text-xs text-slate-500 mt-0.5">{{ app()->getLocale() === 'ne' ? 'केन्द्रीय, जिल्ला, पालिका तथा वडा स्तरका सबै प्रशासनिक प्रयोगकर्ताहरूको सूची।' : 'Comprehensive directory of central, district, municipal, and ward-level administrators.' }}</p>
         </div>
     </div>
 
@@ -15,20 +15,21 @@
     <div class="bg-white rounded-2xl border border-slate-200 p-4 shadow-sm">
         <form method="GET" action="{{ route('staff.superadmin.admins') }}" class="grid grid-cols-1 sm:grid-cols-3 gap-3 text-xs">
             <div class="sm:col-span-2">
-                <input type="text" name="search" value="{{ request('search') }}" placeholder="नाम, इमेल वा फोनबाट खोज्नुहोस्..."
+                <input type="text" name="search" value="{{ request('search') }}" 
+                       placeholder="{{ app()->getLocale() === 'ne' ? 'नाम, इमेल वा फोनबाट खोज्नुहोस्...' : 'Search by name, email or phone...' }}"
                        class="w-full px-3 py-2 border border-slate-300 rounded-lg text-xs">
             </div>
 
             <div>
                 <select name="role" onchange="this.form.submit()" class="w-full px-3 py-2 border border-slate-300 rounded-lg text-xs">
-                    <option value="">सबै भूमिकाहरू (All Roles)</option>
-                    <option value="super_admin" {{ request('role') === 'super_admin' ? 'selected' : '' }}>Super Admin</option>
-                    <option value="district_admin" {{ request('role') === 'district_admin' ? 'selected' : '' }}>District Admin</option>
-                    <option value="local_government_admin" {{ request('role') === 'local_government_admin' ? 'selected' : '' }}>Local Govt Admin</option>
-                    <option value="ward_admin" {{ request('role') === 'ward_admin' ? 'selected' : '' }}>Ward Admin</option>
-                    <option value="ward_chair" {{ request('role') === 'ward_chair' ? 'selected' : '' }}>Ward Chairperson</option>
-                    <option value="secretary" {{ request('role') === 'secretary' ? 'selected' : '' }}>Ward Secretary</option>
-                    <option value="clerk" {{ request('role') === 'clerk' ? 'selected' : '' }}>Front Desk Clerk</option>
+                    <option value="">{{ app()->getLocale() === 'ne' ? 'सबै भूमिकाहरू' : 'All Roles' }}</option>
+                    <option value="super_admin" {{ request('role') === 'super_admin' ? 'selected' : '' }}>{{ __('Super Admin') }}</option>
+                    <option value="district_admin" {{ request('role') === 'district_admin' ? 'selected' : '' }}>{{ __('District Admin') }}</option>
+                    <option value="local_government_admin" {{ request('role') === 'local_government_admin' ? 'selected' : '' }}>{{ __('Local Govt Admin') }}</option>
+                    <option value="ward_admin" {{ request('role') === 'ward_admin' ? 'selected' : '' }}>{{ __('Ward Admin') }}</option>
+                    <option value="ward_chair" {{ request('role') === 'ward_chair' ? 'selected' : '' }}>{{ __('Ward Chairperson') }}</option>
+                    <option value="secretary" {{ request('role') === 'secretary' ? 'selected' : '' }}>{{ __('Ward Secretary') }}</option>
+                    <option value="clerk" {{ request('role') === 'clerk' ? 'selected' : '' }}>{{ __('Ward Clerk') }}</option>
                 </select>
             </div>
         </form>
@@ -40,11 +41,11 @@
             <table class="w-full text-left text-xs">
                 <thead class="bg-slate-50 text-slate-600 border-b border-slate-200">
                     <tr>
-                        <th class="p-3">प्रशासकको नाम</th>
-                        <th class="p-3">इमेल / फोन</th>
-                        <th class="p-3">प्रशासनिक तह (Tier)</th>
-                        <th class="p-3">तोकिएको कार्यक्षेत्र (Jurisdiction)</th>
-                        <th class="p-3">अवस्था</th>
+                        <th class="p-3">{{ app()->getLocale() === 'ne' ? 'प्रशासकको नाम' : 'Administrator' }}</th>
+                        <th class="p-3">{{ app()->getLocale() === 'ne' ? 'इमेल / फोन' : 'Email / Phone' }}</th>
+                        <th class="p-3">{{ app()->getLocale() === 'ne' ? 'प्रशासनिक तह' : 'Administrative Tier' }}</th>
+                        <th class="p-3">{{ __('Jurisdiction') }}</th>
+                        <th class="p-3">{{ __('Status') }}</th>
                     </tr>
                 </thead>
                 <tbody class="divide-y divide-slate-100">
@@ -60,15 +61,15 @@
                             </td>
                             <td class="p-3">
                                 @if($admin->role === 'super_admin')
-                                    <span class="px-2.5 py-0.5 rounded-full text-[10px] font-black uppercase bg-purple-100 text-purple-800">SUPER ADMIN</span>
+                                    <span class="px-2.5 py-0.5 rounded-full text-[10px] font-black uppercase bg-purple-100 text-purple-800">{{ __('Super Admin') }}</span>
                                 @elseif($admin->role === 'district_admin')
-                                    <span class="px-2.5 py-0.5 rounded-full text-[10px] font-black uppercase bg-indigo-100 text-indigo-800">DISTRICT ADMIN</span>
+                                    <span class="px-2.5 py-0.5 rounded-full text-[10px] font-black uppercase bg-indigo-100 text-indigo-800">{{ __('District Admin') }}</span>
                                 @elseif($admin->role === 'local_government_admin')
-                                    <span class="px-2.5 py-0.5 rounded-full text-[10px] font-black uppercase bg-blue-100 text-blue-800">LOCAL GOVT</span>
+                                    <span class="px-2.5 py-0.5 rounded-full text-[10px] font-black uppercase bg-blue-100 text-blue-800">{{ __('Local Govt Admin') }}</span>
                                 @elseif($admin->role === 'ward_chair')
-                                    <span class="px-2.5 py-0.5 rounded-full text-[10px] font-bold uppercase bg-rose-100 text-rose-800">WARD CHAIR</span>
+                                    <span class="px-2.5 py-0.5 rounded-full text-[10px] font-bold uppercase bg-rose-100 text-rose-800">{{ __('Ward Chairperson') }}</span>
                                 @elseif($admin->role === 'secretary')
-                                    <span class="px-2.5 py-0.5 rounded-full text-[10px] font-bold uppercase bg-emerald-100 text-emerald-800">SECRETARY</span>
+                                    <span class="px-2.5 py-0.5 rounded-full text-[10px] font-bold uppercase bg-emerald-100 text-emerald-800">{{ __('Ward Secretary') }}</span>
                                 @else
                                     <span class="px-2.5 py-0.5 rounded-full text-[10px] font-bold uppercase bg-slate-100 text-slate-700">{{ str_replace('_', ' ', $admin->role) }}</span>
                                 @endif
@@ -80,12 +81,12 @@
                                 @if($admin->is_active)
                                     <span class="inline-flex items-center text-emerald-600 font-bold text-[11px]">
                                         <span class="w-1.5 h-1.5 rounded-full bg-emerald-500 mr-1.5"></span>
-                                        सक्रिय (Active)
+                                        {{ app()->getLocale() === 'ne' ? 'सक्रिय' : 'Active' }}
                                     </span>
                                 @else
                                     <span class="inline-flex items-center text-rose-600 font-bold text-[11px]">
                                         <span class="w-1.5 h-1.5 rounded-full bg-rose-500 mr-1.5"></span>
-                                        निष्क्रिय (Inactive)
+                                        {{ app()->getLocale() === 'ne' ? 'निष्क्रिय' : 'Inactive' }}
                                     </span>
                                 @endif
                             </td>
